@@ -8,6 +8,8 @@ class JavaProject {
 
     String name
 
+    String repo
+
     def leadingWhitespace = Pattern.compile("^ *", Pattern.MULTILINE)
 
     def javaTemplate='''\
@@ -30,7 +32,7 @@ class JavaProject {
       #mvn -B deploy -DskipTests
     '''
 
-    def repo(name) { return "ssh://git@stash.digital.gov.uk:7999/mgv/" + name + ".git" }
+    def repo(name) { return "ssh://git@stash.digital.gov.uk:7999/mgv/" + repo + ".git" }
 
     def strip(str) { return leadingWhitespace.matcher(str).replaceAll(""); }
 

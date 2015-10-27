@@ -1,7 +1,13 @@
 import scot.mygov.jenkins.*
 
-new JavaProject(name: 'beta-config').build(this)
-new JavaProject(name: 'validation').build(this)
+new JavaProject(
+  name: 'Beta Config',
+  repo: 'beta-config'
+).build(this)
+new JavaProject(
+  name: 'Validation',
+  repo: 'unified_validation'
+).build(this)
 
 job("versions") {
   steps {
