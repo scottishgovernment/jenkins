@@ -1,9 +1,15 @@
 import scot.mygov.jenkins.*
 
 new JavaProject(
+  name: 'Authentication',
+  repo: 'basic-authentication'
+).build(this)
+
+new JavaProject(
   name: 'Beta Config',
   repo: 'beta-config'
 ).build(this)
+
 new JavaProject(
   name: 'Validation',
   repo: 'unified_validation'
