@@ -37,7 +37,7 @@ class JavaProject {
     def strip(str) { return leadingWhitespace.matcher(str).replaceAll(""); }
 
     def java(name) {
-      return "set -ex\nrepo=${name}\n" + strip(javaTemplate);
+      return "set -ex\nrepo=${repo}\n" + strip(javaTemplate);
     }
 
 

@@ -50,9 +50,7 @@ updateJob() {
 }
 
 updateJobs() {
-  local jobs
-  jobs="$(jobs)"
-  for job in $jobs; do
+  jobs | while read job; do
     updateJob "$job"
   done
 }
