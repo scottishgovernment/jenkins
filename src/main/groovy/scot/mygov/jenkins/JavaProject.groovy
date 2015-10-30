@@ -10,9 +10,11 @@ class JavaProject {
 
     String repo
 
-    def leadingWhitespace = Pattern.compile("^ *", Pattern.MULTILINE)
+    String snapshot
 
-    def javaTemplate='''\
+    def buildRelease=trim('''\
+      set -ex
+      repo=%repo%
       version="1.0.${BUILD_ID}"
 
       git clean -fdx
@@ -27,29 +29,51 @@ class JavaProject {
       mvn -B verify
       #git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
       #mvn -B -Prelease verify sonar:sonar deploy
+    ''')
 
-      #git checkout HEAD^
-      #mvn -B deploy -DskipTests
-    '''
+    def buildSnapshot=trim('''\
+        git checkout HEAD^
+        mvn -B source:jar install -am -pl %projects% -DskipTests
+        # mvn -B source:jar deploy -am -pl %projects% -DskipTests
+    ''')
 
-    def repo(name) { return "ssh://git@stash.digital.gov.uk:7999/mgv/" + repo + ".git" }
-
-    def strip(str) { return leadingWhitespace.matcher(str).replaceAll(""); }
-
-    def java(name) {
-      return "set -ex\nrepo=${repo}\n" + strip(javaTemplate);
+    def repo(name) {
+        return "ssh://git@stash.digital.gov.uk:7999/mgv/" + repo + ".git"
     }
 
+    def String java(name) {
+        def job = new StringBuilder()
+        job << buildRelease.replaceAll("%repo%", repo);
+        if (snapshot) {
+            job << '\n' << buildSnapshot.replace("%projects%", snapshot)
+        }
+        return job
+    }
 
     Job build(DslFactory dslFactory) {
         dslFactory.job(name) {
-          scm {
-            git(repo(name))
-          }
-          steps {
-            shell(java(name))
-          }
+            scm {
+                git {
+                    remote {
+                        name('origin')
+                        url(repo(name))
+                    }
+                    branch('refs/heads/master')
+                }
+            }
+            steps {
+                shell(java(name))
+            }
         }
+    }
+
+    def trim(str) {
+        def leadingWhitespace = Pattern.compile("\\s*")
+        def matcher = leadingWhitespace.matcher(str)
+        if (matcher.lookingAt()) {
+            return str.replaceAll(Pattern.quote(matcher.group()), "")
+        }
+        return str;
     }
 
 }
