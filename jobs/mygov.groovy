@@ -4,7 +4,9 @@ jobs = [
     [
         name: 'Authentication',
         repo: 'basic-authentication',
-        snapshot: 'authentication-client,authentication-spring'
+        snapshot: 'authentication-client,authentication-spring',
+        host: 'pubapp01',
+        envs: 'both'
     ],
     [
         name: 'Beta Config',
@@ -13,48 +15,70 @@ jobs = [
     ],
     [
         name: 'Business Rates',
-        repo: 'business-rates-service'
+        repo: 'business-rates-service',
+        host: 'pubapp01',
+        envs: 'mygov'
     ],
     [
         name: 'Decommission Tool',
-        repo: 'decommission-tool'
+        repo: 'decommission-tool',
+        host: 'pubapp01',
+        envs: 'both'
     ],
     [
         name: 'Doctor',
-        repo: 'doctor'
+        repo: 'doctor',
+        host: 'sitapp01',
+        envs: 'gov'
     ],
     [
         name: 'Feedback',
-        repo: 'feedback'
+        repo: 'feedback',
+        host: 'fbkapp01',
+        envs: 'both'
     ],
     [
         name: 'Funding Tool',
-        repo: 'funding-tool'
+        repo: 'funding-tool',
+        host: 'pubapp01',
+        envs: 'mygov'
     ],
     [
         name: 'GeoSearch',
-        repo: 'geo-search'
+        repo: 'geo-search',
+        host: 'sitapp01',
+        envs: 'mygov'
     ],
     [
         name: 'Health Check',
-        repo: 'health-check'
+        repo: 'health-check',
+        host: 'pubapp01',
+        envs: 'both'
     ],
     [
         name: 'Pictor',
-        repo: 'pictor'
+        repo: 'pictor',
+        host: 'sitapp01',
+        envs: 'gov'
     ],
     [
         name: 'Press Releases',
-        repo: 'press-releases'
+        repo: 'press-releases',
+        host: 'pubapp01',
+        envs: 'gov'
     ],
     [
         name: 'Publishing',
         repo: 'beta-publishing',
-        snapshot: 'publishing-api'
+        snapshot: 'publishing-api',
+        host: 'pubapp01',
+        envs: 'both'
     ],
     [
         name: 'Search',
-        repo: 'beta-web-site-search'
+        repo: 'beta-web-site-search',
+        host: 'sitapp01',
+        envs: 'both'
     ],
     [
         name: 'Utils',
@@ -69,7 +93,7 @@ jobs = [
 ]
 
 jobs.each {
-    new JavaProject(it).build(this)
+    new JavaProject(it).build(this, out)
 }
 
 job("versions") {

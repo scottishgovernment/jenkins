@@ -3,6 +3,7 @@ package scot.mygov.jenkins
 import java.util.regex.*
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
+import javaposse.jobdsl.dsl.helpers.properties.PropertiesContext
 
 class JavaProject {
 
@@ -11,6 +12,10 @@ class JavaProject {
     String repo
 
     String snapshot
+
+    String host
+
+    String envs
 
     def buildRelease=trim('''\
       set -ex
@@ -50,7 +55,30 @@ class JavaProject {
         return job
     }
 
-    Job build(DslFactory dslFactory) {
+
+    def deploy(PropertiesContext properties, def out) {
+        def envs = this.envs == 'both' ? [ 'gov', 'mygov' ] : [ this.envs ]
+        def prefixes = [ 'mygov': 'dev', 'gov': 'dgv' ]
+        def hosts = envs
+                .collect { prefixes.get(it) }
+                .collectEntries {[ it, it + host ]}
+        properties.promotions {
+            hosts.each { k, v ->
+                promotion {
+                    name(k)
+                    icon('star-gold')
+                    conditions {
+                        selfPromotion()
+                    }
+                    actions {
+                        shell("echo ${v};")
+                    }
+                }
+            }
+        }
+    }
+
+    Job build(DslFactory dslFactory, out) {
         dslFactory.job(name) {
             scm {
                 git {
@@ -63,6 +91,11 @@ class JavaProject {
             }
             steps {
                 shell(java(name))
+            }
+            properties {
+                if (host) {
+                    deploy(delegate, out)
+                }
             }
         }
     }
