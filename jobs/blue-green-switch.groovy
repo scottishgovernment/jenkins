@@ -7,9 +7,9 @@ job("blue-green-switch") {
     }
     steps {
         shell('''\
-            cd tools/management/
-            echo ./aws_blugrn_switch.sh ${env}
-            echo "INFO: Just switched to [PRDENV] ${env}" \
+cd tools/management/
+echo ./aws_blugrn_switch.sh ${env}
+echo "INFO: Just switched to [PRDENV] ${env}" \
             ''')
     }
     publishers {
