@@ -19,23 +19,6 @@ dependencies {
     compile 'org.jenkins-ci.plugins:job-dsl-core:1.39'
 }
 
-task run(dependsOn: 'classes', type: JavaExec) {
-  main = 'scot.mygov.jenkins.Run'
-  classpath sourceSets.main.runtimeClasspath
-  args 'mygov.groovy'
-  def props = new Properties(System.getProperties())
-  props.put('java.util.logging.SimpleFormatter.format',
-    '%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$s: %5$s%6$s%n')
-  systemProperties props
-}
-
-task rest(dependsOn: 'classes', type: JavaExec) {
-    main = 'scot.mygov.jenkins.RestApiScriptRunner'
-    classpath = sourceSets.main.runtimeClasspath
-    args 'mygov.groovy'
-    systemProperties System.getProperties()
-}
-
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
 }
