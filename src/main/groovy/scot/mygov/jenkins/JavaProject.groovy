@@ -15,7 +15,7 @@ class JavaProject {
 
     String host
 
-    String envs
+    String site
 
     def buildRelease=trim('''\
       set -ex
@@ -46,38 +46,6 @@ class JavaProject {
         return "ssh://git@stash.digital.gov.uk:7999/mgv/" + repo + ".git"
     }
 
-    def String java(name) {
-        def job = new StringBuilder()
-        job << buildRelease.replaceAll("%repo%", repo);
-        if (snapshot) {
-            job << '\n' << buildSnapshot.replace("%projects%", snapshot)
-        }
-        return job
-    }
-
-
-    def deploy(PropertiesContext properties, def out) {
-        def envs = this.envs == 'both' ? [ 'gov', 'mygov' ] : [ this.envs ]
-        def prefixes = [ 'mygov': 'dev', 'gov': 'dgv' ]
-        def hosts = envs
-                .collect { prefixes.get(it) }
-                .collectEntries {[ it, it + host ]}
-        properties.promotions {
-            hosts.each { k, v ->
-                promotion {
-                    name(k)
-                    icon('star-gold')
-                    conditions {
-                        selfPromotion()
-                    }
-                    actions {
-                        shell("echo ${v};")
-                    }
-                }
-            }
-        }
-    }
-
     Job build(DslFactory dslFactory, out) {
         dslFactory.job(name) {
             scm {
@@ -98,6 +66,81 @@ class JavaProject {
                 }
             }
         }
+    }
+
+    def String java(name) {
+        def job = new StringBuilder()
+        job << buildRelease.replaceAll("%repo%", repo);
+        if (snapshot) {
+            job << '\n' << buildSnapshot.replace("%projects%", snapshot)
+        }
+        return job
+    }
+
+    def deploy(PropertiesContext properties, def out) {
+        def sites = site == 'both' ? [ 'gov', 'mygov' ] : [ site ]
+        def prefixes = [ 'mygov': 'dev', 'gov': 'dgv' ]
+        def hosts = sites
+                .collect { prefixes.get(it) }
+                .collectEntries {[ it, it + host ]}
+        def mygov = [ 'int', 'exp', 'uat', 'per', 'blu', 'grn']
+        def gov = [ 'igv', 'egv']
+        def siteHosts = []
+        if (sites.contains('mygov')) {
+            siteHosts << mygov
+        }
+        if (sites.contains('gov')) {
+            siteHosts << gov
+        }
+        def envs = flatten(siteHosts)
+
+
+        def i = 0;
+        properties.promotions {
+            hosts.each { k, v ->
+                promotion {
+                    name(sprintf("%02d", i++) + " " + k)
+                    icon('star-gold')
+                    conditions {
+                        selfPromotion()
+                    }
+                    actions {
+                        shell("echo ${v};")
+                    }
+                }
+            }
+
+            envs.each { nm ->
+                promotion {
+                    name(sprintf("%02d", i++) + " " + nm)
+                    icon('star-gold')
+                    conditions {
+                        manual("")
+                    }
+                    actions {
+                        shell("echo ${nm};")
+                    }
+                }
+            }
+
+        }
+    }
+
+    /**
+     * Flattens a map of lists: [[ma, mb, mc], [ga, gb]] -> [ma, ga, mb, gb, mc]
+     */
+    def List<String> flatten(List<List<String>> lists) {
+        def len = lists.collect { it.size() }.inject { a, b -> Math.max(a,b) }
+        def result = []
+        (0..len - 1).each { i ->
+            (0..lists.size() - 1).each { j ->
+                def list = lists.get(j)
+                if (i < list.size()) {
+                  result << list.get(i)
+                }
+            }
+        }
+        return result;
     }
 
     def trim(str) {
