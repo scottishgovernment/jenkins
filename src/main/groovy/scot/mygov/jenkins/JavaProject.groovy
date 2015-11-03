@@ -1,9 +1,11 @@
 package scot.mygov.jenkins
 
-import java.util.regex.*
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.helpers.properties.PropertiesContext
+
+import static scot.mygov.jenkins.Utils.repo
+import static scot.mygov.jenkins.Utils.trim
 
 class JavaProject {
 
@@ -41,10 +43,6 @@ class JavaProject {
         mvn -B source:jar install -am -pl %projects% -DskipTests
         # mvn -B source:jar deploy -am -pl %projects% -DskipTests
     ''')
-
-    def repo(name) {
-        return "ssh://git@stash.digital.gov.uk:7999/mgv/" + repo + ".git"
-    }
 
     Job build(DslFactory dslFactory, out) {
         dslFactory.job(name) {
@@ -141,15 +139,6 @@ class JavaProject {
             }
         }
         return result;
-    }
-
-    def trim(str) {
-        def leadingWhitespace = Pattern.compile("\\s*")
-        def matcher = leadingWhitespace.matcher(str)
-        if (matcher.lookingAt()) {
-            return str.replaceAll(Pattern.quote(matcher.group()), "")
-        }
-        return str;
     }
 
 }
