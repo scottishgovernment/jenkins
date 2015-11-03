@@ -19,6 +19,8 @@ class JavaProject {
 
     String site
 
+    String maven
+
     def buildRelease=trim('''\
       set -ex
       repo=%repo%
@@ -44,13 +46,26 @@ class JavaProject {
         # mvn -B source:jar deploy -am -pl %projects% -DskipTests
     ''')
 
+    def deploySsh = trim('''\
+
+    ''')
+
     Job build(DslFactory dslFactory, out) {
-        dslFactory.job(name) {
+        try {
+            return buildJob(dslFactory, out)
+        } catch (Throwable t) {
+            t.printStackTrace(out)
+            throw t;
+        }
+    }
+
+    Job buildJob(DslFactory dslFactory, PrintStream out) {
+        return dslFactory.job(name) {
             scm {
                 git {
                     remote {
                         name('origin')
-                        url(repo(name))
+                        url(repo(this.repo))
                     }
                     branch('refs/heads/master')
                 }
@@ -75,7 +90,7 @@ class JavaProject {
         return job
     }
 
-    def deploy(PropertiesContext properties, def out) {
+    def deploy(PropertiesContext properties, PrintStream out) {
         def sites = site == 'both' ? [ 'gov', 'mygov' ] : [ site ]
         def prefixes = [ 'mygov': 'dev', 'gov': 'dgv' ]
         def hosts = sites
@@ -95,15 +110,15 @@ class JavaProject {
 
         def i = 0;
         properties.promotions {
-            hosts.each { k, v ->
+            hosts.each { env, host ->
                 promotion {
-                    name(sprintf("%02d", i++) + " " + k)
+                    name(sprintf("%02d", i++) + " " + env)
                     icon('star-gold')
                     conditions {
                         selfPromotion()
                     }
                     actions {
-                        shell("echo ${v};")
+                        shell(deploySshStep(host, out))
                     }
                 }
             }
@@ -122,6 +137,32 @@ class JavaProject {
             }
 
         }
+    }
+
+    def String deploySshStep(String host, PrintStream out) {
+        def colon = maven.indexOf(':')
+        def groupId = maven.substring(0, colon)
+        def artifactId = maven.substring(colon + 1)
+
+        def path = new StringBuilder()
+        def version = '1.0.${PROMOTED_ID}'
+        path << groupId.replace('.', '/') << '/'
+        path << artifactId << '/'
+        path << version << '/'
+        path << artifactId << '-' << version << '.deb'
+
+        def script = new StringBuilder("set -e\n")
+        script << trim("""\
+            name="${repo}"
+            path="${path}"
+            host="${host}"\n""")
+        script << trim('''\
+            repo=http://repo.digital.gov.uk/nexus/content/repositories/releases/
+            curl -sSf "${repo}/${path}" | \\
+              ssh -o StrictHostKeyChecking=no devops@${host} \\
+                "cat - >/tmp/${name}.deb; sudo dpkg -i /tmp/${name}.deb"
+        ''')
+        return script
     }
 
     /**

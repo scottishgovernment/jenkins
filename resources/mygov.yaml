@@ -1,74 +1,86 @@
 jobs:
   - name: 'Authentication'
-    repo: 'basic-authentication'
+    repo: basic-authentication
     snapshot: 'authentication-client,authentication-spring'
-    host: 'pubapp01'
-    site: 'both'
+    host: pubapp01
+    site: both
+    maven: org.mygovscot.beta:authentication-deb
 
   - name: 'Beta Config'
-    repo: 'beta-config'
-    snapshot: '.'
+    repo: beta-config
+    snapshot: .
 
   - name: 'Business Rates'
-    repo: 'business-rates-service'
-    host: 'pubapp01'
-    site: 'mygov'
+    repo: business-rates-service
+    host: pubapp01
+    site: mygov
+    maven: org.mygovscot.business-rates:business-rates-deb
 
   - name: 'Decommission Tool'
-    repo: 'decommission-tool'
-    host: 'pubapp01'
-    site: 'both'
+    repo: decommission-tool
+    host: pubapp01
+    site: both
+    maven: org.mygovscot.decommission-tool:decommission-tool-deb
 
   - name: 'Doctor'
-    repo: 'doctor'
-    host: 'sitapp01'
-    site: 'gov'
+    repo: doctor
+    host: sitapp01
+    site: gov
+    maven: scot.mygov.doctor:doctor-deb
 
   - name: 'Feedback'
-    repo: 'feedback'
-    host: 'fbkapp01'
-    site: 'both'
+    repo: feedback
+    host: fbkapp01
+    site: both
+    maven: org.mygovscot.feedback:feedback-deb
 
   - name: 'Funding Tool'
-    repo: 'funding-tool'
-    host: 'pubapp01'
-    site: 'mygov'
+    repo: funding-tool
+    host: pubapp01
+    site: mygov
+    maven: scot.mygov.business.funding:funding-deb
 
   - name: 'GeoSearch'
-    repo: 'geo-search'
-    host: 'sitapp01'
-    site: 'mygov'
+    repo: geo-search
+    host: sitapp01
+    site: mygov
+    maven: scot.mygov.geosearch:geo-deb
 
   - name: 'Health Check'
-    repo: 'health-check'
-    host: 'pubapp01'
-    site: 'both'
+    repo: health-check
+    host: pubapp01
+    site: both
+    maven: org.mygovscot.healthcheck:healthcheck-deb
 
   - name: 'Pictor'
-    repo: 'pictor'
-    host: 'sitapp01'
-    site: 'gov'
+    repo: pictor
+    host: sitapp01
+    site: gov
+    maven: scot.mygov.pictor:pictor-deb
 
   - name: 'Press Releases'
-    repo: 'press-releases'
-    host: 'pubapp01'
-    site: 'gov'
+    repo: press-releases
+    host: pubapp01
+    site: gov
+    maven: scot.mygov.pressreleases:pressreleases-deb
 
   - name: 'Publishing'
-    repo: 'beta-publishing'
-    snapshot: 'publishing-api'
-    host: 'pubapp01'
-    site: 'both'
+    repo: beta-publishing
+    snapshot: publishing-api
+    host: pubapp01
+    site: both
+    maven: org.mygovscot.publishing:publishing-deb
 
   - name: 'Search'
-    repo: 'beta-web-site-search'
-    host: 'sitapp01'
-    site: 'both'
+    repo: beta-web-site-search
+    host: sitapp01
+    site: both
+    maven: org.mygovscot.search:search-debian
 
   - name: 'Utils'
-    repo: 'mygovscot_utils'
-    snapshot: '.'
+    repo: mygovscot_utils
+    snapshot: .
 
   - name: 'Validation'
-    repo: 'unified_validation'
-    snapshot: '.'
+    repo: unified_validation
+    snapshot: .
