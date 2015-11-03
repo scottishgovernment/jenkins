@@ -1,10 +1,12 @@
-job("puppet-apply") {
+import static scot.mygov.jenkins.Utils.repo
+
+job("Puppet Apply") {
     parameters {
         choiceParam('env', ['int', 'exp', 'uat', 'per', 'grn', 'blu'], 'mygov.scot environment')
         choiceParam('dbrestore', ['false', 'true'], 'restore databases')
     }
     scm {
-        git('ssh://git@stash.digital.gov.uk:7999/mgv/aws.git')
+        git(repo('aws'))
     }
     steps {
         shell(readFileFromWorkspace('resources/puppet-apply.sh'))
