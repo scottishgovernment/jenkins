@@ -23,6 +23,8 @@ jobs.collect {
         project = new JavaProject(it)
     } else if (type == 'shell') {
         project = new ShellProject(it)
+    } else if (type == 'node') {
+        project = new NodeProject(it)
     }
     project.build(this, out)
 }

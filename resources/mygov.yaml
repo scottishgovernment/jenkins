@@ -21,6 +21,14 @@ jobs:
     debian: business-rates
     maven: org.mygovscot.business-rates:business-rates-deb
 
+  - name: 'Crudio'
+    repo: crudio
+    type: node
+    host: pubapp01
+    site: both
+    debian: crudio
+    maven: scot.mygov.crudio:crudio
+
   - name: 'Decommission Tool'
     repo: decommission-tool
     type: java
@@ -61,6 +69,16 @@ jobs:
     debian: geo-search
     maven: scot.mygov.geosearch:geo-deb
 
+  - name: 'Gov-Site'
+    repo: gov-site
+    type: node
+    host: pubapp01
+    site: gov
+    debian: gov-site
+    maven: org.mygovscot.beta:gov-site
+    dependencies:
+      - site-builder
+
   - name: 'Health Check'
     repo: health-check
     type: java
@@ -68,6 +86,16 @@ jobs:
     site: both
     debian: healthcheck
     maven: org.mygovscot.healthcheck:healthcheck-deb
+
+  - name: 'MyGov-Site'
+    repo: mygov-site
+    type: node
+    host: pubapp01
+    site: mygov
+    debian: mygov-site
+    maven: org.mygovscot.beta:web-site
+    dependencies:
+      - site-builder
 
   - name: 'Pictor'
     repo: pictor
