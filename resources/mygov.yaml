@@ -4,6 +4,7 @@ jobs:
     snapshot: 'authentication-client,authentication-spring'
     host: pubapp01
     site: both
+    debian: basic-authentication
     maven: org.mygovscot.beta:authentication-deb
 
   - name: 'Beta Config'
@@ -14,54 +15,63 @@ jobs:
     repo: business-rates-service
     host: pubapp01
     site: mygov
+    debian: business-rates
     maven: org.mygovscot.business-rates:business-rates-deb
 
   - name: 'Decommission Tool'
     repo: decommission-tool
     host: pubapp01
     site: both
+    debian: decommission-tool
     maven: org.mygovscot.decommission-tool:decommission-tool-deb
 
   - name: 'Doctor'
     repo: doctor
     host: sitapp01
     site: gov
+    debian: doctor
     maven: scot.mygov.doctor:doctor-deb
 
   - name: 'Feedback'
     repo: feedback
     host: fbkapp01
     site: both
+    debian: feedback
     maven: org.mygovscot.feedback:feedback-deb
 
   - name: 'Funding Tool'
     repo: funding-tool
     host: pubapp01
     site: mygov
+    debian: funding
     maven: scot.mygov.business.funding:funding-deb
 
   - name: 'GeoSearch'
     repo: geo-search
     host: sitapp01
     site: mygov
+    debian: geo-search
     maven: scot.mygov.geosearch:geo-deb
 
   - name: 'Health Check'
     repo: health-check
     host: pubapp01
     site: both
+    debian: healthcheck
     maven: org.mygovscot.healthcheck:healthcheck-deb
 
   - name: 'Pictor'
     repo: pictor
     host: sitapp01
     site: gov
+    debian: pictor
     maven: scot.mygov.pictor:pictor-deb
 
   - name: 'Press Releases'
     repo: press-releases
     host: pubapp01
     site: gov
+    debian: press-releases
     maven: scot.mygov.pressreleases:pressreleases-deb
 
   - name: 'Publishing'
@@ -69,12 +79,14 @@ jobs:
     snapshot: publishing-api
     host: pubapp01
     site: both
+    debian: publishing
     maven: org.mygovscot.publishing:publishing-deb
 
   - name: 'Search'
     repo: beta-web-site-search
     host: sitapp01
     site: both
+    debian: mygov-search
     maven: org.mygovscot.search:search-debian
 
   - name: 'Utils'
