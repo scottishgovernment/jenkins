@@ -1,6 +1,7 @@
 jobs:
   - name: 'Authentication'
     repo: basic-authentication
+    type: java
     snapshot: 'authentication-client,authentication-spring'
     host: pubapp01
     site: both
@@ -9,10 +10,12 @@ jobs:
 
   - name: 'Beta Config'
     repo: beta-config
+    type: java
     snapshot: .
 
   - name: 'Business Rates'
     repo: business-rates-service
+    type: java
     host: pubapp01
     site: mygov
     debian: business-rates
@@ -20,6 +23,7 @@ jobs:
 
   - name: 'Decommission Tool'
     repo: decommission-tool
+    type: java
     host: pubapp01
     site: both
     debian: decommission-tool
@@ -27,6 +31,7 @@ jobs:
 
   - name: 'Doctor'
     repo: doctor
+    type: java
     host: sitapp01
     site: gov
     debian: doctor
@@ -34,6 +39,7 @@ jobs:
 
   - name: 'Feedback'
     repo: feedback
+    type: java
     host: fbkapp01
     site: both
     debian: feedback
@@ -41,6 +47,7 @@ jobs:
 
   - name: 'Funding Tool'
     repo: funding-tool
+    type: java
     host: pubapp01
     site: mygov
     debian: funding
@@ -48,6 +55,7 @@ jobs:
 
   - name: 'GeoSearch'
     repo: geo-search
+    type: java
     host: sitapp01
     site: mygov
     debian: geo-search
@@ -55,6 +63,7 @@ jobs:
 
   - name: 'Health Check'
     repo: health-check
+    type: java
     host: pubapp01
     site: both
     debian: healthcheck
@@ -62,6 +71,7 @@ jobs:
 
   - name: 'Pictor'
     repo: pictor
+    type: java
     host: sitapp01
     site: gov
     debian: pictor
@@ -69,6 +79,7 @@ jobs:
 
   - name: 'Press Releases'
     repo: press-releases
+    type: java
     host: pubapp01
     site: gov
     debian: press-releases
@@ -76,6 +87,7 @@ jobs:
 
   - name: 'Publishing'
     repo: beta-publishing
+    type: java
     snapshot: publishing-api
     host: pubapp01
     site: both
@@ -84,15 +96,27 @@ jobs:
 
   - name: 'Search'
     repo: beta-web-site-search
+    type: java
     host: sitapp01
     site: both
     debian: mygov-search
     maven: org.mygovscot.search:search-debian
 
+  - name: 'Site-Builder'
+    repo: site-builder
+    type: shell
+    host: pubapp01
+    site: both
+    debian: site-builder
+    maven: scot.mygov.site:site-builder
+    build: site-builder.sh
+
   - name: 'Utils'
     repo: mygovscot_utils
+    type: java
     snapshot: .
 
   - name: 'Validation'
     repo: unified_validation
+    type: java
     snapshot: .

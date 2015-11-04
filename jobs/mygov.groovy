@@ -17,7 +17,14 @@ def File workspace() {
 def yaml = new Yaml().load(readFileFromWorkspace("resources/mygov.yaml"))
 def jobs = yaml.get("jobs")
 jobs.collect {
-    new JavaProject(it).build(this, out)
+    def type = it.remove('type')
+    MyGovProject project
+    if (type == 'java') {
+        project = new JavaProject(it)
+    } else if (type == 'shell') {
+        project = new ShellProject(it)
+    }
+    project.build(this, out)
 }
 
 new File(workspace(), "jobs.txt").withWriter { out ->
