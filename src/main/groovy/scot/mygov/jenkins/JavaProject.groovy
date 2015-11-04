@@ -9,6 +9,8 @@ import static scot.mygov.jenkins.Utils.trim
 
 class JavaProject {
 
+    final String VERSION = '1.0.${PROMOTED_ID}'
+
     String name
 
     String repo
@@ -18,6 +20,8 @@ class JavaProject {
     String host
 
     String site
+
+    String debian
 
     String maven
 
@@ -110,6 +114,7 @@ class JavaProject {
 
         def i = 0;
         properties.promotions {
+
             hosts.each { env, host ->
                 promotion {
                     name(sprintf("%02d", i++) + " " + env)
@@ -131,7 +136,7 @@ class JavaProject {
                         manual("")
                     }
                     actions {
-                        shell("echo ${nm};")
+                        shell("pipeline deploy:${debian},${VERSION},${nm}")
                     }
                 }
             }
@@ -145,11 +150,10 @@ class JavaProject {
         def artifactId = maven.substring(colon + 1)
 
         def path = new StringBuilder()
-        def version = '1.0.${PROMOTED_ID}'
         path << groupId.replace('.', '/') << '/'
         path << artifactId << '/'
-        path << version << '/'
-        path << artifactId << '-' << version << '.deb'
+        path << VERSION << '/'
+        path << artifactId << '-' << VERSION << '.deb'
 
         def script = new StringBuilder("set -e\n")
         script << trim("""\
