@@ -1,4 +1,3 @@
-#! /bin/sh
 set -ex
 repo=deploy-pipeline
 version=1.0.${BUILD_ID}
