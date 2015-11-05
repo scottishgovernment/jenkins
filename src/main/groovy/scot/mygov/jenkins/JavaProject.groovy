@@ -43,7 +43,7 @@ class JavaProject extends MyGovProject {
     }
 
     def void publish(def PublisherContext delegate) {
-        delegate.archiveJunit('*/target/surefire-reports/*.xml')
+        delegate.archiveJunit('**/target/surefire-reports/*.xml')
     }
 
     def String java(name) {
