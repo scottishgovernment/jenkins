@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sslyze --regular 54.229.113.42:443 2>&1 | tee sslyze.log
+sslyze --regular perwww.mygov.scot:443 2>&1 | tee sslyze.log
 o-saft +vulns https://perwww.mygov.scot 2>&1 | tee o-saft.log
 
 status='PASS'
