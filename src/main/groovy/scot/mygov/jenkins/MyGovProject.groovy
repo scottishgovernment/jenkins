@@ -4,6 +4,7 @@ import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.helpers.step.StepContext
 import javaposse.jobdsl.dsl.helpers.properties.PropertiesContext
+import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 
 import static scot.mygov.jenkins.Utils.repo
 import static scot.mygov.jenkins.Utils.trim
@@ -53,6 +54,9 @@ class MyGovProject {
             steps {
                 build(delegate)
             }
+            publishers {
+                publish(delegate)
+            }
             properties {
                 deploy(delegate, out)
             }
@@ -60,6 +64,10 @@ class MyGovProject {
     }
 
     def void build(def StepContext delegate) {
+
+    }
+
+    def void publish(def PublisherContext delegate) {
 
     }
 
