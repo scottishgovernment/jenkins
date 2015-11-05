@@ -36,7 +36,6 @@ new File(workspace(), "jobs.txt").withWriter { out ->
 
 job("Set Build Number") {
   steps {
-    shell("cd ../../mygov-seed/workspace")
     shell(readFileFromWorkspace('resources/set-build-id'))
   }
 }
