@@ -34,6 +34,16 @@ new File(workspace(), "jobs.txt").withWriter { out ->
     jobs.each { out.println(it['name'] + "," + repo(it['repo'])) }
 }
 
+buildMonitorView('Builds') {
+    statusFilter(StatusFilter.ENABLED)
+    delegate.jobs {
+        jobs.each {
+            name(it['name'])
+        }
+        name('Pipeline Tools')
+    }
+}
+
 job("Set Build Number") {
   steps {
     shell(readFileFromWorkspace('resources/set-build-id'))
