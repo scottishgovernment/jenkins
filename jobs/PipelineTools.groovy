@@ -5,18 +5,18 @@ job("Pipeline Tools") {
         git(repo('deploy-pipeline'))
     }
     steps {
-        shell(readFileFromWorkspace('resources/pipeline-tools-build.sh'))
+        shell(readFileFromWorkspace('resources/pipeline-build.sh'))
     }
     properties {
          promotions {
               promotion {
-                   name("Development")
-                   icon("buildserver")
+                   name("Build Server")
+                   icon("star-blue")
                    conditions {
                         selfPromotion()
                    }
                    actions {
-                        shell(readFileFromWorkspace('resources/deploy-pipeline-tools.sh'))
+                        shell(readFileFromWorkspace('resources/pipeline-deploy.sh'))
                    }
               }
          }
