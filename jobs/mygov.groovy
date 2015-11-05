@@ -17,6 +17,7 @@ def File workspace() {
 def yaml = new Yaml().load(readFileFromWorkspace("resources/mygov.yaml"))
 def jobs = yaml.get("jobs")
 jobs.collect {
+    out.println("Processing job ${it['name']}")
     def type = it.remove('type')
     MyGovProject project
     if (type == 'java') {
