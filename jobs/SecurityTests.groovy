@@ -1,4 +1,5 @@
 import static scot.mygov.jenkins.Utils.repo
+import static scot.mygov.jenkins.Utils.trim
 
 job("Security Tests") {
     scm {
