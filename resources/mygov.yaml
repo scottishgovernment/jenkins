@@ -122,6 +122,14 @@ jobs:
     debian: publishing
     maven: org.mygovscot.publishing:publishing-deb
 
+  - name: 'Publishing Site'
+    repo: publishing-site
+    type: node
+    host: pubwww01
+    site: both
+    debian: publishing-site
+    maven: org.mygovscot:publishing-site
+
   - name: 'Search'
     repo: beta-web-site-search
     type: java
