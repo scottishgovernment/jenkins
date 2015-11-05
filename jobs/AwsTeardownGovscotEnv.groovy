@@ -11,7 +11,7 @@ job("Aws Teardown Gov Scot Test Env") {
     steps {
         shell(trim('''\
             set -e
-            echo tools/provisioning/vpc/aws_teardown_env_govscot.sh  ${env}
+            tools/provisioning/vpc/aws_teardown_env_govscot.sh  ${env}
             echo "INFO: Just tore down [BUILTENV] ${env}" \
         '''))
     }

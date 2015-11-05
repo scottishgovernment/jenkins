@@ -5,8 +5,8 @@ job("Backup JIRA") {
     steps {
         shell(trim('''\
             set -e
-            echo scp devops@jira:/tmp/*jira-backup-inc-db.tgz . 
-            echo /usr/local/bin/aws s3 cp ./ s3://scotgovdigitalbackups/jira/ --exclude "*" --include "*.tgz" --recursive \
+            scp devops@jira:/tmp/*jira-backup-inc-db.tgz .
+            /usr/local/bin/aws s3 cp ./ s3://scotgovdigitalbackups/jira/ --exclude "*" --include "*.tgz" --recursive \
         '''))
     }
 }
