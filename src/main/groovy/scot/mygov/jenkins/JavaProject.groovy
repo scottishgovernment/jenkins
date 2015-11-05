@@ -1,6 +1,7 @@
 package scot.mygov.jenkins
 
 import javaposse.jobdsl.dsl.helpers.step.StepContext
+import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 
 import static scot.mygov.jenkins.Utils.trim
 
@@ -39,6 +40,10 @@ class JavaProject extends MyGovProject {
 
     def void build(def StepContext delegate) {
         delegate.shell(java(name))
+    }
+
+    def void publish(def PublisherContext delegate) {
+        delegate.archiveJunit('*/target/surefire-reports/*.xml')
     }
 
     def String java(name) {
