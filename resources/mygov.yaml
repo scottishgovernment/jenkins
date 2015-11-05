@@ -130,6 +130,14 @@ jobs:
     debian: publishing-site
     maven: org.mygovscot:publishing-site
 
+  - name: 'Puppet Manifests'
+    repo: www-infrastructure
+    type: shell
+    site: both
+    debian: puppetry
+    maven: org.mygovscot.puppet:puppetry
+    build: puppet.sh
+
   - name: 'Search'
     repo: beta-web-site-search
     type: java

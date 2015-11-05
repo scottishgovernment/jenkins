@@ -54,9 +54,7 @@ class MyGovProject {
                 build(delegate)
             }
             properties {
-                if (host) {
-                    deploy(delegate, out)
-                }
+                deploy(delegate, out)
             }
         }
     }
@@ -67,47 +65,40 @@ class MyGovProject {
 
     def deploy(PropertiesContext properties, PrintStream out) {
         def sites = site == 'both' ? [ 'gov', 'mygov' ] : [ site ]
-        def prefixes = [ 'mygov': 'dev', 'gov': 'dgv' ]
-        def hosts = sites
-                .collect { prefixes.get(it) }
-                .collectEntries {[ it, it + host ]}
-        def mygov = [ 'int', 'exp', 'uat', 'per', 'blu', 'grn']
-        def gov = [ 'igv', 'egv']
-        def siteHosts = []
-        if (sites.contains('mygov')) {
-            siteHosts << mygov
+        def devEnvs = [ 'dev', 'dgv' ]
+        def envs = []
+        if (debian) {
+            def mygov = [ 'dev', 'int', 'exp', 'uat', 'per', 'blu', 'grn']
+            def gov = [ 'dgv', 'igv', 'egv']
+            def siteEnvs = []
+            if (sites.contains('mygov')) {
+                siteEnvs << mygov
+            }
+            if (sites.contains('gov')) {
+                siteEnvs << gov
+            }
+            envs = flatten(siteEnvs)
         }
-        if (sites.contains('gov')) {
-            siteHosts << gov
-        }
-        def envs = flatten(siteHosts)
-
 
         def i = 0;
         properties.promotions {
-
-            hosts.each { env, host ->
-                promotion {
-                    name(sprintf("%02d", i++) + " " + env)
-                    icon('star-gold')
-                    conditions {
-                        selfPromotion()
-                    }
-                    actions {
-                        shell(deploySshStep(host, out))
-                    }
-                }
-            }
-
             envs.each { nm ->
+                def isDev = devEnvs.contains(nm)
                 promotion {
                     name(sprintf("%02d", i++) + " " + nm)
                     icon('star-gold')
                     conditions {
-                        manual("")
+                        if (isDev) {
+                            selfPromotion()
+                        } else {
+                            manual("")
+                        }
                     }
                     actions {
                         shell("pipeline deploy:${debian},${VERSION},${nm}")
+                        if (isDev && host) {
+                            shell(deploySshStep(host, out))
+                        }
                     }
                 }
             }
