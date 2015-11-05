@@ -11,7 +11,7 @@ job("Aws Build Full Env") {
     steps {
         shell(trim('''\
             set -e
-            echo tools/provisioning/vpc/aws_build_full_env.sh ${env}
+            tools/provisioning/vpc/aws_build_full_env.sh ${env}
             echo "INFO: Just built [BUILTENV] ${env}" \
         '''))
     }

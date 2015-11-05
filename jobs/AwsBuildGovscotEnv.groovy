@@ -11,7 +11,7 @@ job("Aws Build Gov Scot Test Env") {
     steps {
         shell(trim('''\
             set -e
-            echo tools/provisioning/vpc/aws_build_env_govscot.sh ${env}
+            tools/provisioning/vpc/aws_build_env_govscot.sh ${env}
             echo "INFO: Just built [BUILTENV] ${env}" \
         '''))
     }

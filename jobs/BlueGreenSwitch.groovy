@@ -11,7 +11,7 @@ job("Blue-Green Switch") {
     steps {
         shell(trim('''\
             cd tools/management/
-            echo ./aws_blugrn_switch.sh ${env}
+            ./aws_blugrn_switch.sh ${env}
             echo "INFO: Just switched to [PRDENV] ${env}"\
         '''))
     }

@@ -9,7 +9,7 @@ job("MyGov Site Fail Trigger") {
         shell(trim('''\
             set -e
             cd tools/management/
-            echo ./aws_sitefail_trigger.sh \
+            ./aws_sitefail_trigger.sh \
         '''))
     }
 }
