@@ -1,7 +1,14 @@
 import static scot.mygov.jenkins.Utils.repo
 
 job("Security Tests") {
+    scm {
+        git(repo('beta-security-tests'))
+    }
     steps {
-        shell(readFileFromWorkspace('resources/security-tests.sh'))
+        shell(trim('''\
+            set -e
+            cd SSL-Automated-Security-Tests
+            ./AutomatedSSLSecurityTests.sh perwww.mygov.scot
+        '''))
     }
 }
