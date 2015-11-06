@@ -7,6 +7,7 @@ import javaposse.jobdsl.dsl.helpers.properties.PropertiesContext
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 
 import static scot.mygov.jenkins.Utils.repo
+import static scot.mygov.jenkins.Utils.slug
 import static scot.mygov.jenkins.Utils.trim
 
 class MyGovProject {
@@ -41,7 +42,8 @@ class MyGovProject {
     }
 
     Job buildJob(DslFactory dslFactory, PrintStream out) {
-        return dslFactory.job(name) {
+        return dslFactory.job(slug(name)) {
+            displayName(this.name)
             scm {
                 git {
                     remote {
