@@ -62,7 +62,15 @@ class MyGovProject {
             properties {
                 deploy(delegate, out)
             }
+            configure { job ->
+                job / scm / clean(clean())
+
+            }
         }
+    }
+
+    def boolean clean() {
+        return true
     }
 
     def void build(def StepContext delegate) {
