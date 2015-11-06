@@ -37,7 +37,7 @@ jobs << job('layout-tests') {
                echo "removing old reports";
                rm -fR reports/*;
             fi
-            ./run.sh -t ${target_platform} -b ${browser} -g ${groups}
+            ./run.sh -t ${target_platform} ${browser:+-b ${browser}} -g ${groups}
         '''))
     }
 
