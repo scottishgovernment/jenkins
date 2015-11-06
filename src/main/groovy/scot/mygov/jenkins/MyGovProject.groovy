@@ -118,7 +118,7 @@ class MyGovProject {
                     actions {
                         shell("pipeline deploy:${debian},${VERSION},${nm}")
                         if (isDev && host) {
-                            shell(deploySshStep(host, out))
+                            shell(deploySshStep(nm + host, out))
                         }
                     }
                 }
@@ -145,8 +145,8 @@ class MyGovProject {
             host="${host}"\n""")
         script << trim('''\
             repo=http://repo.digital.gov.uk/nexus/content/repositories/releases/
-            curl -sSf -o "${name.deb}" "${repo}/${path}"
-            scp "${name.deb}" "devops@${host}:/tmp/${name.deb}"
+            curl -sSf -o "${name}.deb" "${repo}/${path}"
+            scp -o StrictHostKeyChecking=no "${name}.deb" "devops@${host}:/tmp/${name}.deb"
             ssh -o StrictHostKeyChecking=no devops@${host} "sudo dpkg -i /tmp/${name}.deb"
         ''')
         return script
