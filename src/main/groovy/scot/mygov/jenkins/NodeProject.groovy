@@ -8,6 +8,10 @@ class NodeProject extends MyGovProject {
 
     def List<String> dependencies
 
+    def boolean clean() {
+        return false
+    }
+
     def void build(def StepContext delegate) {
         def template = dsl.readFileFromWorkspace('resources/node.sh')
 
