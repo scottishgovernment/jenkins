@@ -33,6 +33,16 @@ jobs << job('layout-tests') {
         archiveJunit('**/*.xml')
         // After upgrading to Job DSL 1.40, change above line to:
         // archiveTestNG('**/*.xml')
+        publishHtml {
+             report("reports/informationalWebsite/") {
+                  reportName("Informational Website")
+                  allowMissing(true)
+             }
+             report("reports/publishingPlatform/") {
+                  reportName("Publishing Platform")
+                  allowMissing(true)
+             }
+        }
     }
 
 }
