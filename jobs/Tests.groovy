@@ -23,14 +23,23 @@ jobs << job('accessibility-tests') {
 jobs << job('layout-tests') {
     displayName('Layout Tests')
     parameters {
-        stringParam('groups', 'homepage, searchpage', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
+        stringParam('target_platform', 'web', 'Target Platform - web or pub - informational website or publishing platform')
         stringParam('browser', '', 'Browser to test - firefox or chrome - blank is both')
+        stringParam('groups', 'homepage, searchpage', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
     }
     scm {
         git(repo('beta-layout-tests'))
     }
     steps {
-        shell(readFileFromWorkspace('resources/layout-tests.sh'))
+    steps {
+        shell(trim('''\
+            set -e
+            if [ -d "reports" ]; then
+               echo "removing old reports";
+               rm -fR reports/*;
+            fi
+            ./run.sh -t ${target_platform} -b ${browser} -g ${groups}
+        '''))
     }
 
     publishers {
