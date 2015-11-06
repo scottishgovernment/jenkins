@@ -67,4 +67,7 @@ buildMonitorView('Dashboard') {
         }
         name('Pipeline Tools')
     }
+    configure { view ->
+        view / title('Builds')
+    }
 }
