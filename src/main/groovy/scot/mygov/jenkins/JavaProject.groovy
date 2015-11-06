@@ -26,15 +26,13 @@ class JavaProject extends MyGovProject {
       git commit -am "Set version to ${version}"
       git tag -a -m "Build ${version}" ${version}
 
-      mvn -B verify
-      #git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
-      #mvn -B -Prelease verify sonar:sonar deploy
+      git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
+      mvn -B -Prelease verify sonar:sonar deploy
     ''')
 
     def buildSnapshot=trim('''\
         git checkout HEAD^
-        mvn -B source:jar install -am -pl %projects% -DskipTests
-        # mvn -B source:jar deploy -am -pl %projects% -DskipTests
+        mvn -B source:jar deploy -am -pl %projects% -DskipTests
     ''')
 
 
