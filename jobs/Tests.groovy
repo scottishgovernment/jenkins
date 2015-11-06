@@ -31,7 +31,6 @@ jobs << job('layout-tests') {
         git(repo('beta-layout-tests'))
     }
     steps {
-    steps {
         shell(trim('''\
             set -e
             if [ -d "reports" ]; then
