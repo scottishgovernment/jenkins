@@ -1,7 +1,8 @@
 import static scot.mygov.jenkins.Utils.repo
 import static scot.mygov.jenkins.Utils.trim
 
-job("Blue-Green Switch") {
+job('blue-green-switch') {
+    displayName('Blue-Green Switch')
     parameters {
         choiceParam('env', ['blu', 'grn'], 'mygov.scot production environment')
     }

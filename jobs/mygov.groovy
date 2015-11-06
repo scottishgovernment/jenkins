@@ -36,7 +36,8 @@ new File(workspace(), "jobs.txt").withWriter { out ->
     jobs.each { out.println(it['name'] + "," + repo(it['repo'])) }
 }
 
-job("Set Build Number") {
+job("set-build-id") {
+  displayName('Set Build Number')
   steps {
     shell(readFileFromWorkspace('resources/set-build-id'))
   }

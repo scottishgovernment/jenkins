@@ -1,6 +1,7 @@
 import static scot.mygov.jenkins.Utils.repo
 
-job("Pipeline Tools") {
+job('pipeline') {
+    displayName('Pipeline')
     scm {
         git(repo('deploy-pipeline'))
     }

@@ -1,6 +1,7 @@
 import static scot.mygov.jenkins.Utils.repo
 
-job("Version Capture") {
+job('version-capture') {
+    displayName('Version Capture')
     steps {
         shell(readFileFromWorkspace('resources/version-capture.sh'))
     }
