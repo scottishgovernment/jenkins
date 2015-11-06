@@ -33,7 +33,7 @@ list.addAll(jobs.collect {
 })
 
 new File(workspace(), "jobs.txt").withWriter { out ->
-    jobs.each { out.println(it['name'] + "," + repo(it['repo'])) }
+    jobs.each { out.println(slug(it.name) + "," + repo(it.repo)) }
 }
 
 job("set-build-id") {
