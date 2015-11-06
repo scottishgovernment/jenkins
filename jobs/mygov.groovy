@@ -2,6 +2,7 @@ import org.yaml.snakeyaml.Yaml
 import scot.mygov.jenkins.*
 
 import static scot.mygov.jenkins.Utils.repo
+import static scot.mygov.jenkins.Utils.slug
 
 /**
  * Returns the workspace of this seed project.
@@ -16,8 +17,9 @@ def File workspace() {
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/mygov.yaml"))
 def jobs = yaml.get("jobs")
-jobs.collect {
-    out.println("Processing job ${it['name']}")
+def list = []
+list.addAll(jobs.collect {
+    out.println("Processing job ${it.name}")
     def type = it.remove('type')
     MyGovProject project
     if (type == 'java') {
@@ -28,24 +30,41 @@ jobs.collect {
         project = new NodeProject(it)
     }
     project.build(this, out)
-}
+})
 
 new File(workspace(), "jobs.txt").withWriter { out ->
     jobs.each { out.println(it['name'] + "," + repo(it['repo'])) }
-}
-
-buildMonitorView('Builds') {
-    statusFilter(StatusFilter.ENABLED)
-    delegate.jobs {
-        jobs.each {
-            name(it['name'])
-        }
-        name('Pipeline Tools')
-    }
 }
 
 job("Set Build Number") {
   steps {
     shell(readFileFromWorkspace('resources/set-build-id'))
   }
+}
+
+listView('Builds') {
+    statusFilter(StatusFilter.ENABLED)
+    delegate.jobs {
+        list.each {
+            name(it.name)
+        }
+    }
+    columns {
+        status()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+buildMonitorView('Dashboard') {
+    statusFilter(StatusFilter.ENABLED)
+    delegate.jobs {
+        list.each {
+            name(it.name)
+        }
+        name('Pipeline Tools')
+    }
 }
