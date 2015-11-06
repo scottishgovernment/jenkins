@@ -22,6 +22,10 @@ jobs << job('accessibility-tests') {
 
 jobs << job('layout-tests') {
     displayName('Layout Tests')
+    parameters {
+        stringParam('groups', 'homepage, searchpage', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
+        stringParam('browser', '', 'Browser to test - firefox or chrome - blank is both')
+    }
     scm {
         git(repo('beta-layout-tests'))
     }
