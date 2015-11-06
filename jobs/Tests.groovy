@@ -14,7 +14,6 @@ jobs << job('accessibility-tests') {
     }
     steps {
         shell(trim('''\
-            set -e
             ./run-tests.sh -s ${standard} -k ${keyword}
         '''))
     }
@@ -28,15 +27,12 @@ jobs << job('layout-tests') {
         stringParam('groups', 'homepage, searchpage', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
     }
     scm {
-        git(repo('beta-layout-tests'))
+        git(repo('beta-layout-tests')) {
+            clean(true)
+        }
     }
     steps {
         shell(trim('''\
-            set -e
-            if [ -d "reports" ]; then
-               echo "removing old reports";
-               rm -fR reports/*;
-            fi
             ./run.sh -t ${target_platform} ${browser:+-b ${browser}} -g ${groups}
         '''))
     }
@@ -76,7 +72,6 @@ jobs << job('security-tests') {
     }
     steps {
         shell(trim('''\
-            set -e
             cd SSL-Automated-Security-Tests
             ./AutomatedSSLSecurityTests.sh perwww.mygov.scot
         '''))
