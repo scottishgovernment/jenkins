@@ -56,6 +56,9 @@ class MyGovProject {
             steps {
                 build(delegate)
             }
+            triggers {
+                scm('# Poll SCM enabled to allow trigger from git hook.')
+            }
             publishers {
                 publish(delegate)
             }
