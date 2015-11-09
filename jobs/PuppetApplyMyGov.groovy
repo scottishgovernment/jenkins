@@ -1,7 +1,7 @@
 import static scot.mygov.jenkins.Utils.repo
 
-job('puppet-apply') {
-    displayName('Puppet Apply')
+job('puppet-apply-mygov') {
+    displayName('Puppet Apply MyGov')
     parameters {
         choiceParam(
             'env',
