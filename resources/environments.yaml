@@ -1,7 +1,7 @@
 jobs:
   - id: mygov-full-up
     name: Build Full Env
-    script: "tools/provisioning/vpc/aws_build_full_env.sh ${env}"
+    script: "tools/provisioning/vpc/aws_build_full_env.sh ${env}_vpc"
     parameters:
       - name: env
         description: 'mygov.scot full scale environment'
@@ -12,7 +12,7 @@ jobs:
 
   - id: mygov-full-down
     name: Teardown Full Env
-    script: "tools/provisioning/vpc/aws_teardown_full_env.sh ${env}"
+    script: "tools/provisioning/vpc/aws_teardown_full_env.sh ${env}_vpc"
     parameters:
       - name: env
         description: 'mygov.scot full environment'
@@ -23,7 +23,7 @@ jobs:
 
   - id: mygov-test-up
     name: Build Test Env
-    script: "tools/provisioning/vpc/aws_build_env.sh ${env}"
+    script: "tools/provisioning/vpc/aws_build_env.sh ${env}_vpc"
     parameters:
       - name: env
         description: 'mygov.scot test environment'
@@ -34,7 +34,7 @@ jobs:
 
   - id: mygov-test-down
     name: Teardown MyGov Test Env
-    script: "tools/provisioning/vpc/aws_teardown_env.sh ${env}"
+    script: "tools/provisioning/vpc/aws_teardown_env.sh ${env}_vpc"
     parameters:
       - name: env
         description: 'mygov.scot test environment'
@@ -45,7 +45,7 @@ jobs:
 
   - id: gov-test-up
     name: Build Gov Scot Test Env
-    script: "tools/provisioning/vpc/aws_build_env_govscot.sh ${env}"
+    script: "tools/provisioning/vpc/aws_build_env_govscot.sh ${env}_vpc"
     parameters:
       - name: env
         description: 'gov.scot full scale environment'
@@ -55,7 +55,7 @@ jobs:
 
   - id: gov-test-down
     name: Teardown Gov.Scot Test Env
-    script: "tools/provisioning/vpc/aws_teardown_env_govscot.sh ${env}"
+    script: "tools/provisioning/vpc/aws_teardown_env_govscot.sh ${env}_vpc"
     parameters:
       - name: env
         description: 'gov.scot test environment'
