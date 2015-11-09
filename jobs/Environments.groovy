@@ -23,7 +23,7 @@ jobs.collect { job ->
         steps {
             shell(trim("""\
                 set -e
-                echo ${job['script']}
+                ${job['script']}
                 echo "INFO: Completed: ${name}" \
             """))
         }
