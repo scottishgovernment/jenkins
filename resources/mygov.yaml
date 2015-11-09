@@ -97,6 +97,10 @@ jobs:
     dependencies:
       - site-builder
 
+  - name: 'Performance Platform'
+    repo: performance_platform
+    type: java
+
   - name: 'Pictor'
     repo: pictor
     type: java
