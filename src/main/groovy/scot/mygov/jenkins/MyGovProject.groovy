@@ -5,6 +5,7 @@ import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.helpers.step.StepContext
 import javaposse.jobdsl.dsl.helpers.properties.PropertiesContext
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
+import javaposse.jobdsl.dsl.helpers.publisher.SlackNotificationsContext
 
 import static scot.mygov.jenkins.Utils.repo
 import static scot.mygov.jenkins.Utils.slug
@@ -61,6 +62,7 @@ class MyGovProject {
             }
             publishers {
                 publish(delegate)
+                slack(delegate)
             }
             properties {
                 deploy(delegate, out)
@@ -82,6 +84,16 @@ class MyGovProject {
 
     def void publish(def PublisherContext delegate) {
 
+    }
+
+    def void slack(def PublisherContext delegate) {
+        delegate.slackNotifications {
+            notifyAborted()
+            notifyFailure()
+            notifyNotBuilt()
+            notifyUnstable()
+            notifyBackToNormal()
+        }
     }
 
     def deploy(PropertiesContext properties, PrintStream out) {
