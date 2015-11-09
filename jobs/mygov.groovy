@@ -34,6 +34,7 @@ list.addAll(jobs.collect {
 
 new File(workspace(), "jobs.txt").withWriter { out ->
     jobs.each { out.println(slug(it.name) + "," + repo(it.repo)) }
+    out.println('pipeline' + "," + repo('deploy-pipeline'))
 }
 
 job("set-build-id") {
