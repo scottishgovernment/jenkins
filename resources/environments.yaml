@@ -1,7 +1,7 @@
 jobs:
   - id: mygov-full-up
     name: Build Full Env
-    script: "tools/provisioning/vpc/aws_build_full_env.sh ${env}_vpc"
+    script: "tools/provisioning/vpc/aws_build_full_env.sh ${env}"
     parameters:
       - name: env
         description: 'mygov.scot full scale environment'
@@ -23,7 +23,7 @@ jobs:
 
   - id: mygov-test-up
     name: Build Test Env
-    script: "tools/provisioning/vpc/aws_build_env.sh ${env}_vpc"
+    script: "tools/provisioning/vpc/aws_build_env.sh ${env}"
     parameters:
       - name: env
         description: 'mygov.scot test environment'
@@ -45,7 +45,7 @@ jobs:
 
   - id: gov-test-up
     name: Build Gov Scot Test Env
-    script: "tools/provisioning/vpc/aws_build_env_govscot.sh ${env}_vpc"
+    script: "tools/provisioning/vpc/aws_build_env_govscot.sh ${env}"
     parameters:
       - name: env
         description: 'gov.scot full scale environment'
