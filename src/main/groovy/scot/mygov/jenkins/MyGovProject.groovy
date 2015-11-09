@@ -85,21 +85,24 @@ class MyGovProject {
     }
 
     def deploy(PropertiesContext properties, PrintStream out) {
+        if (!site || !debian) {
+            return
+        }
+
         def sites = site == 'both' ? [ 'gov', 'mygov' ] : [ site ]
         def devEnvs = [ 'dev', 'dgv' ]
         def envs = []
-        if (debian) {
-            def mygov = [ 'dev', 'int', 'exp', 'uat', 'per', 'blu', 'grn']
-            def gov = [ 'dgv', 'igv', 'egv']
-            def siteEnvs = []
-            if (sites.contains('mygov')) {
-                siteEnvs << mygov
-            }
-            if (sites.contains('gov')) {
-                siteEnvs << gov
-            }
-            envs = flatten(siteEnvs)
+
+        def mygov = [ 'dev', 'int', 'exp', 'uat', 'per', 'blu', 'grn']
+        def gov = [ 'dgv', 'igv', 'egv']
+        def siteEnvs = []
+        if (sites.contains('mygov')) {
+            siteEnvs << mygov
         }
+        if (sites.contains('gov')) {
+            siteEnvs << gov
+        }
+        envs = flatten(siteEnvs)
 
         def i = 0;
         properties.promotions {
