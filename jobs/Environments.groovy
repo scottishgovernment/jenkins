@@ -135,13 +135,13 @@ listView('Environments') {
     }
 }
 
-
 listView('Pipeline') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
         pipelineView.each {
             name(it.name)
         }
+        name('version-capture')
     }
     columns {
         status()
