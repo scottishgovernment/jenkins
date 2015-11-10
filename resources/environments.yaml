@@ -1,64 +1,28 @@
-jobs:
-  - id: mygov-full-up
-    name: Build Full Env
-    script: "tools/provisioning/vpc/aws_build_full_env.sh ${env}"
-    parameters:
-      - name: env
-        description: 'mygov.scot full scale environment'
-        options:
-          - per
-          - blu
-          - grn
+sites:
+  - id: mygov
+    domain: mygov.scot
+    environments:
+      - name: dev
+        type: isis
+      - name: int
+        type: test
+      - name: exp
+        type: test
+      - name: uat
+        type: test
+      - name: per
+        type: full
+      - name: blu
+        type: full
+      - name: grn
+        type: full
 
-  - id: mygov-full-down
-    name: Teardown Full Env
-    script: "tools/provisioning/vpc/aws_teardown_full_env.sh ${env}_vpc"
-    parameters:
-      - name: env
-        description: 'mygov.scot full environment'
-        options:
-          - per
-          - blu
-          - grn
-
-  - id: mygov-test-up
-    name: Build Test Env
-    script: "tools/provisioning/vpc/aws_build_env.sh ${env}"
-    parameters:
-      - name: env
-        description: 'mygov.scot test environment'
-        options:
-          - int
-          - exp
-          - uat
-
-  - id: mygov-test-down
-    name: Teardown MyGov Test Env
-    script: "tools/provisioning/vpc/aws_teardown_env.sh ${env}_vpc"
-    parameters:
-      - name: env
-        description: 'mygov.scot test environment'
-        options:
-          - int
-          - exp
-          - uat
-
-  - id: gov-test-up
-    name: Build Gov Scot Test Env
-    script: "tools/provisioning/vpc/aws_build_env_govscot.sh ${env}"
-    parameters:
-      - name: env
-        description: 'gov.scot full scale environment'
-        options:
-          - igv
-          - egv
-
-  - id: gov-test-down
-    name: Teardown Gov.Scot Test Env
-    script: "tools/provisioning/vpc/aws_teardown_env_govscot.sh ${env}_vpc"
-    parameters:
-      - name: env
-        description: 'gov.scot test environment'
-        options:
-          - igv
-          - egv
+  - id: gov
+    domain: gov.scot
+    environments:
+      - name: dgv
+        type: isis
+      - name: igv
+        type: test
+      - name: egv
+        type: test
