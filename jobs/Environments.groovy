@@ -4,7 +4,8 @@ import static scot.mygov.jenkins.Utils.repo
 import static scot.mygov.jenkins.Utils.trim
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
-def view = []
+def environmentsView = []
+def pipelineView = []
 def sites = yaml.get("sites")
 
 scripts = [
@@ -64,15 +65,11 @@ def envDown(site, type, List<String> envs) {
     }
 }
 
-sites.collect { site ->
-    out.println("Processing site ${site.domain}")
-
-    def environments = site.environments
-    def envNames = environments.each { it.name }
-    view << job("puppet-${site.id}") {
+def puppet(site, List<String> envs) {
+    return job("puppet-${site.id}") {
         displayName("Puppet Apply - ${site.domain}")
         parameters {
-            choiceParam('env', envNames, "${site.domain} environment")
+            choiceParam('env', envs, "${site.domain} environment")
             choiceParam('dbrestore', ['false', 'true'], 'restore databases')
             choiceParam('redisrestore', ['false', 'true'], 'restore redis and images')
         }
@@ -83,24 +80,66 @@ sites.collect { site ->
             shell(readFileFromWorkspace('resources/puppet-apply.sh'))
         }
     }
+}
 
+def promote(site, List<String> envs) {
+    return job("promote-${site.id}") {
+        displayName("Promote ${site.domain}")
+        parameters {
+            choiceParam('from', envs, 'Get versions from this environment')
+            choiceParam('to',   envs.drop(1), 'Stage versions in this environment')
+        }
+        steps {
+            shell('pipeline promote:${from},${to}')
+        }
+        publishers {
+            buildDescription('', '${from} - ${to}')
+        }
+    }
+}
+
+sites.collect { site ->
+    out.println("Processing site ${site.domain}")
+
+    def environments = site.environments
     def types = environments.collect { it.type }.unique(false)
     types.collect { type ->
         def envs = environments.grep { it.type == type }.collect { it.name }
         if (scripts[site.id]?.get(type)?.get('up')) {
-            view << envUp(site, type, envs)
+            environmentsView << envUp(site, type, envs)
         }
         if (scripts[site.id]?.get(type)?.get('down')) {
-            view << envDown(site, type, envs)
+            environmentsView << envDown(site, type, envs)
         }
     }
 
+    def envNames = environments.collect { it.name }
+    pipelineView << puppet(site, envNames)
+    pipelineView << promote(site, envNames)
 }
 
 listView('Environments') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
-        view.each {
+        environmentsView.each {
+            name(it.name)
+        }
+    }
+    columns {
+        status()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+
+listView('Pipeline') {
+    statusFilter(StatusFilter.ENABLED)
+    delegate.jobs {
+        pipelineView.each {
             name(it.name)
         }
     }
