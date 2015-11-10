@@ -118,6 +118,13 @@ sites.collect { site ->
     pipelineView << promote(site, envNames)
 }
 
+pipelineView << job('sync-repo') {
+    displayName('Update S3 repository')
+    steps {
+        shell('pipeline sync')
+    }
+}
+
 listView('Environments') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
