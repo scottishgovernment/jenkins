@@ -90,7 +90,7 @@ def promote(site, List<String> envs) {
             choiceParam('to',   envs.drop(1), 'Stage versions in this environment')
         }
         steps {
-            shell('pipeline promote:${from},${to}')
+            shell('pipeline promote:${from},${to} sync')
         }
         publishers {
             buildDescription('', '${from} - ${to}')
