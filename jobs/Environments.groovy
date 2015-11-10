@@ -40,6 +40,8 @@ listView('Environments') {
         jobs.each {
             name(it['id'])
         }
+        name('puppet-apply-gov')
+        name('puppet-apply-mygov')
     }
     columns {
         status()
