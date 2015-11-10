@@ -55,7 +55,6 @@ jobs << job('end-to-end-tests') {
         shell(trim('''\
             npm prune
             npm install
-            python createUserAccounts.py -e int
             grunt install update
             grunt test:e2e
         '''))
