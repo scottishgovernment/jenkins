@@ -48,19 +48,40 @@ jobs << job('multi-browser-tests') {
 
 jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
+    parameters {
+        choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
+        stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E,webSmokeTests,pubSmokeTests,stagingSite')
+    }
     scm {
         git(repo('beta-e2e'))
     }
     steps {
         shell(trim('''\
-            npm prune
-            npm install
-            grunt install update
-            grunt test:e2e
+            ./run.sh -m ${mode} -t ${tests}
         '''))
     }
     publishers {
-        archiveJunit('**/test-results/junit/*.xml')
+        archiveJunit('reports/xml/*.xml')
+        publishHtml {
+             report("reports/html") {
+                  reportName("Chrome Report")
+                  reportFiles("CHROME_index.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("reports/html") {
+                  reportName("Firefox Report")
+                  reportFiles("FIREFOX_index.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("reports/html") {
+                  reportName("Safari Report")
+                  reportFiles("SAFARI_index.html")
+                  allowMissing()
+                  keepAll()
+             }
+        }
     }
 }
 
