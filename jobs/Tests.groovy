@@ -58,7 +58,7 @@ jobs << job('end-to-end-tests') {
     }
     steps {
         shell(trim('''\
-            ./run.sh -m ${mode} -t ${tests}
+            ./run.sh -i ${selenium_ip_address} -m ${mode} -t ${tests}
         '''))
     }
     publishers {
