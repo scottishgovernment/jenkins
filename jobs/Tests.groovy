@@ -53,7 +53,7 @@ jobs << job('end-to-end-tests') {
         stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E,webSmokeTests,pubSmokeTests,stagingSite')
     }
     scm {
-        git(repo('beta-e2e', 'master'))
+        git(repo('beta-e2e'))
     }
     steps {
         shell(trim('''\
