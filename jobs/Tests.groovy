@@ -50,6 +50,7 @@ jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
+        stringParam('selenium_ip_address', '', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E,webSmokeTests,pubSmokeTests,stagingSite')
     }
     scm {
