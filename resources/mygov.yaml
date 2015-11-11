@@ -41,7 +41,7 @@ jobs:
     repo: doctor
     type: java
     host: sitapp01
-    site: gov
+    site: mygov
     debian: doctor
     maven: scot.mygov.doctor:doctor-deb
 
