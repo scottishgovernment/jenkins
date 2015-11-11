@@ -43,7 +43,7 @@ jobs:
     host: sitapp01
     site: mygov
     debian: doctor
-    maven: scot.mygov.doctor:doctor-deb
+    maven: org.mygovscot.doctor:doctor-deb
 
   - name: 'Feedback'
     repo: feedback
