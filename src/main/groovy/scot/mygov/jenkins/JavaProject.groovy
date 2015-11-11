@@ -32,7 +32,7 @@ class JavaProject extends MyGovProject {
 
     def buildSnapshot=trim('''\
         git checkout HEAD^
-        mvn -B source:jar deploy -am -pl %projects% -DskipTests
+        mvn -B source:jar deploy -DskipTests %projects%
     ''')
 
 
@@ -47,8 +47,9 @@ class JavaProject extends MyGovProject {
     def String java(name) {
         def job = new StringBuilder()
         job << buildRelease.replaceAll("%repo%", repo);
-        if (snapshot) {
-            job << '\n' << buildSnapshot.replace("%projects%", snapshot)
+        if (snapshot != null) {
+            def args = snapshot ? "-am -pl ${snapshot}" : ""
+            job << '\n' << buildSnapshot.replace("%projects%", args)
         }
         return job
     }

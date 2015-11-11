@@ -11,7 +11,7 @@ jobs:
   - name: 'Beta Config'
     repo: beta-config
     type: java
-    snapshot: .
+    snapshot: ''
 
   - name: 'Business Rates'
     repo: business-rates-service
@@ -162,9 +162,9 @@ jobs:
   - name: 'Utils'
     repo: mygovscot_utils
     type: java
-    snapshot: .
+    snapshot: ''
 
   - name: 'Validation'
     repo: unified_validation
     type: java
-    snapshot: .
+    snapshot: ''
