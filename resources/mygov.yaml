@@ -99,7 +99,8 @@ jobs:
 
   - name: 'Performance Platform'
     repo: performance_platform
-    type: java
+    type: shell
+    build: pp.sh
 
   - name: 'Pictor'
     repo: pictor
