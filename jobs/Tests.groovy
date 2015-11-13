@@ -19,33 +19,6 @@ jobs << job('accessibility-tests') {
     }
 }
 
-jobs << job('multi-browser-tests') {
-    displayName('Multi-browser tests')
-    scm {
-        git(repo('beta-e2e'))
-    }
-    steps {
-        shell(trim('''\
-            npm prune
-            npm install
-            grunt install update
-            grunt protractor:websiteSmokeTests \\
-              --configFile=protractor.multibrowser.conf.js \\
-              --website=https://intwww.mygov.scot
-
-            grunt screenshots --website=https://intwww.mygov.scot
-            mv screenshots screenshots.${BUILD_ID}
-            tar zcf screenshots.tar.gz screenshots.${BUILD_ID}
-            scp screenshots.tar.gz /var/tmp/screenshots/screenshots.tar.gz
-            ssh devops@repo "cd /home/devops/screenshot_archive; \\
-                tar zxf /var/tmp/screenshots.tar.gz; rm -f /var/tmp/screenshots.tar.gz"
-        '''))
-    }
-    publishers {
-        archiveJunit('**/test-results/junit/*.xml')
-    }
-}
-
 jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
