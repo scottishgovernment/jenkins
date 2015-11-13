@@ -131,7 +131,7 @@ class MyGovProject {
                         }
                     }
                     actions {
-                        shell("pipeline deploy:${debian},${VERSION},${nm}")
+                        shell("pipeline deploy:${debian},${VERSION},${nm} sync")
                         if (isDev && host) {
                             shell(deploySshStep(nm + host, out))
                         }
