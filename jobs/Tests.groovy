@@ -63,23 +63,33 @@ jobs << job('end-to-end-tests') {
 jobs << job('layout-tests') {
     displayName('Layout Tests')
     parameters {
-        stringParam('target_platform', 'web', 'Target Platform - web or pub - informational website or publishing platform')
-        stringParam('browser', '', 'Browser to test - firefox or chrome - blank is both')
-        stringParam('groups', 'homepage, searchpage', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
+        choiceParam('site', ['mygov', 'gov'], 'Site to tests, either MyGov.scot or Gov.scot')
+        choiceParam('target_platform', ['www', 'pub'], 'To run the tests either on Informational Website or Publishing Platform')
+        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'dgv', 'igv', 'egv'], 'The test environment to be used')
+        choiceParam('browser', ['all', 'chrome', 'firefox'], 'Browser to test')
+        stringParam('webdriver_ip', '', 'Use this option to specify the IP address of the machine running Selenium web driver')
+        stringParam('groups', '', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
     }
     scm {
-        git(repo('beta-layout-tests')) {
+        git(repo('beta-layout-tests'), 'master') {
             clean(true)
         }
     }
     steps {
         shell(trim('''\
-            ./run.sh -t ${target_platform} ${browser:+-b ${browser}} -g ${groups}
+            ./run.sh -s ${site} -t ${target_platform} -e ${test_env} -b ${browser} -g ${groups} ${webdriver_ip:+-i ${webdriver_ip}}
         '''))
     }
 
     publishers {
-        archiveJunit('**/*.xml')
+        archiveJunit('reports/${target_platform}/${site}/*.xml')
+        publishHtml {
+             report("reports/${target_platform}/${site}/html") {
+                  reportName("HTML Report")
+                  reportFiles("index.html")
+                  keepAll()
+             }
+        }
         // After upgrading to Job DSL 1.40, change above line to:
         // archiveTestNG('**/*.xml')
         /*
@@ -94,7 +104,6 @@ jobs << job('layout-tests') {
              }
         }*/
     }
-
 }
 
 jobs << job('publishing-perf-tests') {
