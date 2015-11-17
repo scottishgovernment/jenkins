@@ -84,7 +84,7 @@ jobs << job('layout-tests') {
     publishers {
         archiveJunit('reports/${target_platform}/${site}/*.xml')
         publishHtml {
-             report("reports/${target_platform}/${site}/html") {
+             report("reports/**/html") {
                   reportName("HTML Report")
                   reportFiles("index.html")
                   keepAll()
