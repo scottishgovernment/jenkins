@@ -148,7 +148,8 @@ listView('Pipeline') {
         pipelineView.each {
             name(it.name)
         }
-        name('version-capture')
+        name('mygov-release-prepare')
+        name('mygov-release-perform')
     }
     columns {
         status()
