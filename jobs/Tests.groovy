@@ -82,27 +82,21 @@ jobs << job('layout-tests') {
     }
 
     publishers {
-        archiveJunit('reports/${target_platform}/${site}/*.xml')
+        archiveTestNG('reports/**/xml/*.xml')
         publishHtml {
-             report("reports/**/html") {
-                  reportName("HTML Report")
+             report("reports/www/mygov/html") {
+                  reportName("MyGov Informational Website HTML Report")
                   reportFiles("index.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("reports/www/gov/html") {
+                  reportName("Gov Informational Website HTML Report")
+                  reportFiles("index.html")
+                  allowMissing()
                   keepAll()
              }
         }
-        // After upgrading to Job DSL 1.40, change above line to:
-        // archiveTestNG('**/*.xml')
-        /*
-        publishHtml {
-             report("reports/informationalWebsite/") {
-                  reportName("Informational Website")
-                  allowMissing(true)
-             }
-             report("reports/publishingPlatform/") {
-                  reportName("Publishing Platform")
-                  allowMissing(true)
-             }
-        }*/
     }
 }
 
