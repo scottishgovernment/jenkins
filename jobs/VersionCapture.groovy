@@ -1,8 +1,50 @@
 import static scot.mygov.jenkins.Utils.repo
 
-job('version-capture') {
-    displayName('Version Capture')
+job('mygov-release-prepare') {
+    displayName('Prepare mygov.scot release')
     steps {
-        shell(readFileFromWorkspace('resources/version-capture.sh'))
+        shell('pipeline prepare:per,scot.mygov.release,mygov-scot,${BUILD_ID}')
     }
+    properties {
+         promotions {
+              promotion {
+                   name("Default")
+                   icon("star-blue")
+                   conditions {
+                        selfPromotion()
+                   }
+              }
+         }
+    }
+}
+
+job('mygov-release-perform') {
+    displayName('Perform mygov.scot release')
+
+    parameters {
+        stringParam('override', '',
+            "If the required version isn't available above, specify it here.")
+        stringParam('env', '',
+            "Specify blu or grn.")
+    }
+
+    steps {
+        shell('pipeline perform:${env},scot.mygov.release,mygov-scot,${override:-$version_NUMBER}')
+    }
+
+    configure {
+        params = (it / 'properties'
+            / 'hudson.model.ParametersDefinitionProperty'
+            / 'parameterDefinitions')
+            .children()
+
+        params.add(0, 'hudson.plugins.promoted__builds.parameters.PromotedBuildParameterDefinition' {
+            name('version')
+            description('')
+            projectName('mygov-release-prepare')
+            promotionProcessName('Default')
+        })
+
+    }
+
 }
