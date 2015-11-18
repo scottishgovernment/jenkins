@@ -82,7 +82,7 @@ jobs << job('layout-tests') {
     }
 
     publishers {
-        archiveTestNG('reports/*\*/xml/*.xml'){
+        archiveTestNG('reports\/**/xml/*.xml'){
           showFailedBuildsInTrendGraph()
           markBuildAsFailureOnFailedConfiguration()
         }
