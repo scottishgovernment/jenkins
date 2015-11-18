@@ -82,7 +82,10 @@ jobs << job('layout-tests') {
     }
 
     publishers {
-        archiveTestNG('reports/**/xml/*.xml')
+        archiveTestNG('reports/**/xml/*.xml'){
+          showFailedBuildsInTrendGraph()
+          markBuildAsFailureOnFailedConfiguration()
+        }
         publishHtml {
              report("reports/www/mygov/html") {
                   reportName("MyGov Informational Website HTML Report")
