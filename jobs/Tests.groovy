@@ -77,7 +77,7 @@ jobs << job('layout-tests') {
     }
     steps {
         shell(trim('''\
-            ./run.sh -s ${site} -t ${target_platform} -e ${test_env} -b ${browser} -g ${groups} ${webdriver_ip:+-i ${webdriver_ip}}
+            ./run.sh -s ${site} -t ${target_platform} -e ${test_env} -b ${browser} ${groups:+-g ${groups}} ${webdriver_ip:+-i ${webdriver_ip}}
         '''))
     }
 
