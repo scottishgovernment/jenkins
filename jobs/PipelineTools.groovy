@@ -3,7 +3,13 @@ import static scot.mygov.jenkins.Utils.repo
 job('pipeline') {
     displayName('Pipeline')
     scm {
-        git(repo('deploy-pipeline'))
+        git {
+            remote {
+                name('deploy-pipeline')
+                url(repo('deploy-pipeline'))
+            }
+            branch('refs/heads/master')
+        }
     }
     steps {
         shell(readFileFromWorkspace('resources/pipeline-build.sh'))
