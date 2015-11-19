@@ -148,7 +148,6 @@ listView('Pipeline') {
         pipelineView.each {
             name(it.name)
         }
-        name('version-capture')
     }
     columns {
         status()
