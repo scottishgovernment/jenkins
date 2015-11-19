@@ -23,7 +23,7 @@ jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
-        stringParam('selenium_ip_address', '', 'Use this option to specify the IP address of the machine running Selenium web driver')
+        stringParam('selenium_ip_address', '10.21.134.45', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E,webSmokeTests,pubSmokeTests,stagingSite')
     }
     scm {
@@ -67,7 +67,7 @@ jobs << job('layout-tests') {
         choiceParam('target_platform', ['www', 'pub'], 'To run the tests either on Informational Website or Publishing Platform')
         choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'dgv', 'igv', 'egv'], 'The test environment to be used')
         choiceParam('browser', ['all', 'chrome', 'firefox'], 'Browser to test')
-        stringParam('webdriver_ip', '', 'Use this option to specify the IP address of the machine running Selenium web driver')
+        stringParam('webdriver_ip', '10.21.134.45', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('groups', '', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
     }
     scm {
