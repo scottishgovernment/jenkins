@@ -6,11 +6,11 @@ def jobs = []
 jobs << job('accessibility-tests') {
     displayName('Accessibility Tests')
     parameters {
-        stringParam('standard', 'WCAG2AA', 'Accessibility Standard')
-        stringParam('keyword', 'error', 'Keyword to signify errors')
+        choiceParam('standard', ['WCAG2AA', 'Section508', 'WCAG2A', 'WCAG2AAA'], 'Accessibility Standard')
+        choiceParam('keyword', ['error', 'warning', 'notice'], 'Keyword to signify errors')
     }
     scm {
-        git(repo('beta-website-accessibility-tests'))
+        git(repo('beta-website-accessibility-tests'), 'master')
     }
     steps {
         shell(trim('''\
