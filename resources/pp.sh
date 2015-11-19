@@ -18,5 +18,5 @@ git commit -am "Set version to ${version}"
 git tag -a -m "Build ${version}" ${version}
 git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
 mvn -B -Prelease deploy -Pdebian
-./refresh_db
+./refresh_db $version
 mvn -B verify sonar:sonar -Psonar,it || true
