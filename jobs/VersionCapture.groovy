@@ -32,6 +32,10 @@ job('mygov-release-perform') {
         shell('pipeline perform:${env},scot.mygov.release,mygov-scot,${override:-$version_NUMBER}')
     }
 
+    publishers {
+        buildDescription('', '${env} - ${version.number}')
+    }
+
     configure {
         params = (it / 'properties'
             / 'hudson.model.ParametersDefinitionProperty'
