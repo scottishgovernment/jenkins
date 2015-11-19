@@ -17,6 +17,50 @@ jobs << job('accessibility-tests') {
             ./run.sh -s ${standard} -k ${keyword}
         '''))
     }
+    publishers {
+        publishHtml {
+             report("logs/html") {
+                  reportName("Homepage Report")
+                  reportFiles("home-page.html")
+                  keepAll()
+             }
+             report("logs/html") {
+                  reportName("Contact us Report")
+                  reportFiles("contact-us-page.html")
+                  keepAll()
+             }
+             report("logs/html") {
+                  reportName("Search page Report")
+                  reportFiles("search-page.html")
+                  keepAll()
+             }
+             report("logs/html") {
+                  reportName("Funding opportunities page Report")
+                  reportFiles("funding-opportunities-page.html")
+                  keepAll()
+             }
+             report("logs/html") {
+                  reportName("Funding opportunities list Report")
+                  reportFiles("funding-opportunities-list.html")
+                  keepAll()
+             }
+             report("logs/html") {
+                  reportName("Guide page Report")
+                  reportFiles("guide-page.html")
+                  keepAll()
+             }
+             report("logs/html") {
+                  reportName("Organisations page Report")
+                  reportFiles("organisations-page.html")
+                  keepAll()
+             }
+             report("logs/html") {
+                  reportName("Signpost page Report")
+                  reportFiles("signpost-page.html")
+                  keepAll()
+             }
+        }
+    }
 }
 
 jobs << job('end-to-end-tests') {
