@@ -14,6 +14,9 @@ job('pipeline') {
     steps {
         shell(readFileFromWorkspace('resources/pipeline-build.sh'))
     }
+    triggers {
+        scm('# Poll SCM enabled to allow trigger from git hook.')
+    }
     properties {
          promotions {
               promotion {
