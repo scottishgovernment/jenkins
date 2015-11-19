@@ -69,7 +69,6 @@ class MyGovProject {
             }
             configure { job ->
                 job / scm / clean(clean())
-
             }
         }
     }
@@ -138,7 +137,6 @@ class MyGovProject {
                     }
                 }
             }
-
         }
     }
 
