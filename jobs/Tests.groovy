@@ -14,7 +14,7 @@ jobs << job('accessibility-tests') {
     }
     steps {
         shell(trim('''\
-            ./run-tests.sh -s ${standard} -k ${keyword}
+            ./run.sh -s ${standard} -k ${keyword}
         '''))
     }
 }
