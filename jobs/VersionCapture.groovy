@@ -22,10 +22,9 @@ job('mygov-release-perform') {
     displayName('Perform mygov.scot release')
 
     parameters {
+        choiceParam('env', ['blu', 'grn'], 'mygov.scot production environment')
         stringParam('override', '',
             "If the required version isn't available above, specify it here.")
-        stringParam('env', '',
-            "Specify blu or grn.")
     }
 
     steps {
