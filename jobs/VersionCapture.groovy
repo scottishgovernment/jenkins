@@ -1,52 +1,80 @@
 import static scot.mygov.jenkins.Utils.repo
 
-job('mygov-release-prepare') {
-    displayName('Prepare mygov.scot release')
-    steps {
-        shell('pipeline prepare:per,scot.mygov.release,mygov-scot,${BUILD_ID}')
+sites = [
+    [
+        'id': 'mygov',
+        'name': 'mygov.scot',
+        'artifact': 'mygov-site',
+        'test': 'per',
+        'prod': ['blu', 'grn']
+
+    ],
+    [
+        'id': 'gov',
+        'name': 'gov.scot',
+        'artifact': 'gov-site',
+        'test': 'igv',
+        'prod': ['egv']
+    ],
+]
+
+sites.each { site ->
+
+    def id = site.id
+    def domain = site.name
+    def test = site.test
+    def prod = site.prod
+    def artifact = site.artifact
+
+    job(id + '-release-prepare') {
+        displayName("Prepare ${domain} release")
+        steps {
+            shell("pipeline prepare:${test},scot.mygov.release,${artifact},\${BUILD_ID}")
+        }
+        properties {
+             promotions {
+                  promotion {
+                       name("Default")
+                       icon("star-blue")
+                       conditions {
+                            selfPromotion()
+                       }
+                  }
+             }
+        }
     }
-    properties {
-         promotions {
-              promotion {
-                   name("Default")
-                   icon("star-blue")
-                   conditions {
-                        selfPromotion()
-                   }
-              }
-         }
-    }
-}
 
-job('mygov-release-perform') {
-    displayName('Perform mygov.scot release')
+    job(id + '-release-perform') {
+        displayName("Perform ${domain} release")
 
-    parameters {
-        choiceParam('env', ['blu', 'grn'], 'mygov.scot production environment')
-        stringParam('override', '',
-            "If the required version isn't available above, specify it here.")
-    }
+        parameters {
+            choiceParam('env', prod, "${domain} production environment")
+            stringParam('override', '',
+                "If the required version isn't available above, specify it here.")
+        }
 
-    steps {
-        shell('pipeline perform:${env},scot.mygov.release,mygov-scot,${override:-$version_NUMBER}')
-    }
+        steps {
+            shell("pipeline perform:\${env},scot.mygov.release,${artifact},\${override:-\$version_NUMBER}")
+        }
 
-    publishers {
-        buildDescription('', '${env} - ${version.number}')
-    }
+        publishers {
+            buildDescription('', '${env} - ${version.number}')
+        }
 
-    configure {
-        params = (it / 'properties'
-            / 'hudson.model.ParametersDefinitionProperty'
-            / 'parameterDefinitions')
-            .children()
+        configure {
+            params = (it / 'properties'
+                / 'hudson.model.ParametersDefinitionProperty'
+                / 'parameterDefinitions')
+                .children()
 
-        params.add(0, 'hudson.plugins.promoted__builds.parameters.PromotedBuildParameterDefinition' {
-            name('version')
-            description('')
-            projectName('mygov-release-prepare')
-            promotionProcessName('Default')
-        })
+            params.add(0, 'hudson.plugins.promoted__builds.parameters.PromotedBuildParameterDefinition' {
+                name('version')
+                description('')
+                projectName("${id}-release-prepare")
+                promotionProcessName('Default')
+            })
+
+        }
 
     }
 
