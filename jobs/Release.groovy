@@ -43,6 +43,8 @@ listView('Release') {
         }
         name('mygov-release-prepare')
         name('mygov-release-perform')
+        name('gov-release-prepare')
+        name('gov-release-perform')
     }
     columns {
         status()
