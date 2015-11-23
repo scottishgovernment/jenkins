@@ -54,7 +54,7 @@ sites.each { site ->
         }
 
         steps {
-            shell("pipeline perform:\${env},scot.mygov.release,${artifact},\${override:-\$version_NUMBER}")
+            shell("pipeline perform:\${env},scot.mygov.release,${artifact},\${override:-\$version_NUMBER} sync")
         }
 
         publishers {
