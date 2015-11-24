@@ -72,12 +72,13 @@ jobs << job('backup-stash') {
     steps {
         shell(trim('''\
             set -e
-            ssh devops@stash "cd /home/stash/stash-backup-client-1.3.1 && java -noverify -jar stash-backup-client.jar"
-            scp devops@stash://home/stash/stash-backup-home/backups/*.tar .
+            ssh devops@stash "cd /home/stash/stash-backup-client-1.3.1 && rm -rf *.tar.gz || java -noverify -jar stash-backup-client.jar && gzip *.tar"
+            scp devops@stash://home/stash/stash-backup-home/backups/*.tar.gz .
             /usr/local/bin/aws s3 cp ./ s3://scotgovdigitalbackups/stash/ \\
               --exclude "*" \\
-              --include "*.tar" \\
-              --recursive
+              --include "*.tar.gz" \\
+              --recursive 
+            rm -rf *.tar.gz  
         '''))
     }
 }
