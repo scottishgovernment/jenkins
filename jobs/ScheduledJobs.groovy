@@ -2,24 +2,32 @@ import static scot.mygov.jenkins.Utils.trim
 
 def jobs = []
 
+// define vars for conditional triggering based on environment
+def env = System.getenv()
+def myenv = env['FACTER_machine_env']
+
 jobs << buildFlowJob('scheduled-rebuild-test-envs') {
     displayName('Scheduled Rebuild Test Environments')
-    triggers {
-        cron('30 07 * * 1-5')
+    if (myenv == "dev") {
+        triggers {
+            cron('30 07 * * 1-5')
+        }
     }
     buildFlow(trim('''
-        build("gov-test-up", env: "egv")\n
         build("gov-test-up", env: "igv")\n
         build("mygov-test-up", env: "int")\n
         build("mygov-test-up", env: "exp")\n
         build("mygov-full-up", env: "per")
+
     '''))
 }
 
 jobs << buildFlowJob('scheduled-teardown-test-envs') {
     displayName('Scheduled Teardown Test Environments')
-    triggers {
-        cron('30 19 * * 1-5')
+    if (myenv == "dev") {
+        triggers {
+            cron('30 19 * * 1-5')
+        }
     }
     buildFlow(trim('''
         build("gov-test-down", env: "igv")\n
@@ -32,8 +40,10 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
 
 jobs << job('backup-jira') {
     displayName('Backup JIRA')
-    triggers {
-        cron('00 03 * * 1-5')
+    if (myenv == "dev") {
+        triggers {
+            cron('00 03 * * 1-5')
+        }
     }
     steps {
         shell(trim('''\
@@ -48,8 +58,10 @@ jobs << job('backup-jira') {
 }
 
 jobs << job('backup-confluence') {
-    triggers {
-        cron('00 03 * * 1-5')
+    if (myenv == "dev") {
+        triggers {
+            cron('00 03 * * 1-5')
+        }
     }
     displayName('Backup Confluence')
     steps {
@@ -67,8 +79,10 @@ jobs << job('backup-confluence') {
 }
 
 jobs << job('backup-stash') {
-    triggers {
-        cron('00 04 * * 1-5')
+    if (myenv == "dev") {
+        triggers {
+            cron('00 04 * * 1-5')
+        }
     }
     displayName('Backup Stash')
     steps {
@@ -79,8 +93,8 @@ jobs << job('backup-stash') {
             /usr/local/bin/aws s3 cp ./ s3://scotgovdigitalbackups/stash/ \\
               --exclude "*" \\
               --include "*.tar.gz" \\
-              --recursive 
-            rm -rf *.tar.gz  
+              --recursive
+            rm -rf *.tar.gz
         '''))
     }
 }
