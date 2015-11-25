@@ -11,6 +11,6 @@ case ${env} in
     ;;
   *)
     cd tools/management/aws_fabric
-    fab -P --set dbrestore=${dbrestore},redisrestore=${redisrestore} ${env} apply
+    fab -P -z 8 --set dbrestore=${dbrestore},redisrestore=${redisrestore} ${env} apply
     ;;
 esac
