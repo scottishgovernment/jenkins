@@ -6,7 +6,7 @@ def jobs = []
 jobs << job('accessibility-tests') {
     displayName('Accessibility Tests')
     parameters {
-        choiceParam('website', ['Gov', 'MyGov','Both'], 'Target Website to Validate')
+        choiceParam('website', ['Both', 'MyGov','Gov'], 'Target Website to Validate')
         choiceParam('standard', ['WCAG2AA', 'Section508', 'WCAG2A', 'WCAG2AAA'], 'Accessibility Standard')
         choiceParam('keyword', ['error', 'warning', 'notice'], 'Keyword to signify errors')
     }
@@ -20,44 +20,113 @@ jobs << job('accessibility-tests') {
     }
     publishers {
         publishHtml {
-             report("logs/html") {
-                  reportName("Homepage Report")
+             report("logs/mygov/html") {
+                  reportName("MyGov Homepage Report")
                   reportFiles("home-page.html")
+                  allowMissing()
                   keepAll()
              }
-             report("logs/html") {
-                  reportName("Contact us Report")
+             report("logs/mygov/html") {
+                  reportName("MyGov Contact us Report")
                   reportFiles("contact-us-page.html")
+                  allowMissing()
                   keepAll()
              }
-             report("logs/html") {
-                  reportName("Search page Report")
+             report("logs/mygov/html") {
+                  reportName("MyGov Search page Report")
                   reportFiles("search-page.html")
+                  allowMissing()
                   keepAll()
              }
-             report("logs/html") {
-                  reportName("Funding opportunities page Report")
+             report("logs/mygov/html") {
+                  reportName("MyGov Funding opportunities page Report")
                   reportFiles("funding-opportunities-page.html")
+                  allowMissing()
                   keepAll()
              }
-             report("logs/html") {
-                  reportName("Funding opportunities list Report")
+             report("logs/mygov/html") {
+                  reportName("MyGov Funding opportunities list Report")
                   reportFiles("funding-opportunities-list.html")
+                  allowMissing()
                   keepAll()
              }
-             report("logs/html") {
-                  reportName("Guide page Report")
+             report("logs/mygov/html") {
+                  reportName("MyGov Guide page Report")
                   reportFiles("guide-page.html")
+                  allowMissing()
                   keepAll()
              }
-             report("logs/html") {
-                  reportName("Organisations page Report")
+             report("logs/mygov/html") {
+                  reportName("MyGov Organisations page Report")
                   reportFiles("organisations-page.html")
+                  allowMissing()
                   keepAll()
              }
-             report("logs/html") {
-                  reportName("Signpost page Report")
+             report("logs/mygov/html") {
+                  reportName("MyGov Signpost page Report")
                   reportFiles("signpost-page.html")
+                  allowMissing()
+                  keepAll()
+             }
+
+             report("logs/gov/html") {
+                  reportName("Gov Homepage Report")
+                  reportFiles("home-page.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov News page Report")
+                  reportFiles("news-page.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Policies page Report")
+                  reportFiles("policies-page.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Directorates list Report")
+                  reportFiles("directorates-atozlist.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Directorate page Report")
+                  reportFiles("directorate-page.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Organisations page Report")
+                  reportFiles("organisations-page.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Cabinet Ministers page Report")
+                  reportFiles("organisations-cabinetministers.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Person page Report")
+                  reportFiles("person-page.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Roles page Report")
+                  reportFiles("roles-page.html")
+                  allowMissing()
+                  keepAll()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Role page Report")
+                  reportFiles("role-page.html")
+                  allowMissing()
                   keepAll()
              }
         }
