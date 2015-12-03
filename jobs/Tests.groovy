@@ -26,48 +26,56 @@ jobs << job('accessibility-tests') {
                   reportFiles("home-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/mygov/html") {
                   reportName("MyGov Contact us Report")
                   reportFiles("contact-us-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/mygov/html") {
                   reportName("MyGov Search page Report")
                   reportFiles("search-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/mygov/html") {
                   reportName("MyGov Funding opportunities page Report")
                   reportFiles("funding-opportunities-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/mygov/html") {
                   reportName("MyGov Funding opportunities list Report")
                   reportFiles("funding-opportunities-list.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/mygov/html") {
                   reportName("MyGov Guide page Report")
                   reportFiles("guide-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/mygov/html") {
                   reportName("MyGov Organisations page Report")
                   reportFiles("organisations-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/mygov/html") {
                   reportName("MyGov Signpost page Report")
                   reportFiles("signpost-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
 
              report("logs/gov/html") {
@@ -75,60 +83,70 @@ jobs << job('accessibility-tests') {
                   reportFiles("home-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov News page Report")
                   reportFiles("news-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Policies page Report")
                   reportFiles("policies-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov Directorates list Report")
                   reportFiles("directorates-atozlist.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov Directorate page Report")
                   reportFiles("directorate-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov Organisations page Report")
                   reportFiles("organisations-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov Cabinet Ministers page Report")
                   reportFiles("organisations-cabinetministers.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov Person page Report")
                   reportFiles("person-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov Roles page Report")
                   reportFiles("roles-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov Role page Report")
                   reportFiles("role-page.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
         }
     }
