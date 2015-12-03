@@ -19,6 +19,7 @@ jobs << job('accessibility-tests') {
         '''))
     }
     publishers {
+        archiveJunit('logs/**/xml/*.xml')
         publishHtml {
              report("logs/mygov/html") {
                   reportName("MyGov Homepage Report")
