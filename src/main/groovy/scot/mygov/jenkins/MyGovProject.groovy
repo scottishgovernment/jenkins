@@ -105,7 +105,7 @@ class MyGovProject {
         def envs = []
 
         def mygov = [ 'dev', 'int', 'exp', 'uat', 'per', 'blu', 'grn']
-        def gov = [ 'dgv', 'igv', 'egv']
+        def gov = [ 'dgv', 'igv', 'egv', 'ugv', 'pgv', 'bgv', 'ggv']
         def siteEnvs = []
         if (sites.contains('mygov')) {
             siteEnvs << mygov
