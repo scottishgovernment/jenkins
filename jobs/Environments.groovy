@@ -71,7 +71,9 @@ def puppet(site, List<String> envs) {
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
             choiceParam('dbrestore', ['false', 'true'], 'restore databases')
+            if (${site.domain} == "gov.scot" ) {
             choiceParam('redisrestore', ['false', 'true'], 'restore redis and images')
+            }
         }
         scm {
             git(repo('aws'))
