@@ -20,6 +20,10 @@ scripts = [
         ]
     ],
     'gov': [
+        'full': [
+            'up': 'tools/provisioning/vpc/aws_build_full_env_govscot.sh ${env}',
+            'down': 'tools/provisioning/vpc/aws_teardown_full_env_govscot.sh ${env}_vpc'
+        ],
         'test': [
             'up': 'tools/provisioning/vpc/aws_build_env_govscot.sh ${env}',
             'down': 'tools/provisioning/vpc/aws_teardown_env_govscot.sh ${env}_vpc'
