@@ -12,6 +12,8 @@ sites:
         type: test
       - name: per
         type: full
+      - name: tst
+        type: full
       - name: blu
         type: full
       - name: grn
