@@ -9,7 +9,6 @@ def myenv = env['FACTER_machine_env']
 jobs << buildFlowJob('scheduled-rebuild-test-envs') {
     displayName('Scheduled Rebuild Test Environments')
     if (myenv == "dev") {
-      Commented out for christmas!
         triggers {
            cron('30 07 * * 1-5')
         }
@@ -26,7 +25,6 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
 jobs << buildFlowJob('scheduled-teardown-test-envs') {
     displayName('Scheduled Teardown Test Environments')
     if (myenv == "dev") {
-      Commented out for christmas!
         triggers {
            cron('30 19 * * 1-5')
       }
