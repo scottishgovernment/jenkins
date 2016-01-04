@@ -9,10 +9,10 @@ def myenv = env['FACTER_machine_env']
 jobs << buildFlowJob('scheduled-rebuild-test-envs') {
     displayName('Scheduled Rebuild Test Environments')
     if (myenv == "dev") {
-     // Commented out for christmas!
-     //   triggers {
-     //      cron('30 07 * * 1-5')
-     //   }
+      Commented out for christmas!
+        triggers {
+           cron('30 07 * * 1-5')
+        }
     }
     buildFlow(trim('''
         build("gov-test-up", env: "igv")\n
@@ -26,10 +26,10 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
 jobs << buildFlowJob('scheduled-teardown-test-envs') {
     displayName('Scheduled Teardown Test Environments')
     if (myenv == "dev") {
-     // Commented out for christmas!
-     //   triggers {
-     //      cron('30 19 * * 1-5')
-     // }
+      Commented out for christmas!
+        triggers {
+           cron('30 19 * * 1-5')
+      }
     }
     buildFlow(trim('''
         build("gov-test-down", env: "igv")\n
