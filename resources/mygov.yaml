@@ -21,14 +21,6 @@ jobs:
     debian: business-rates
     maven: org.mygovscot.business-rates:business-rates-deb
 
-  - name: 'Crudio'
-    repo: crudio
-    type: node
-    host: pubapp01
-    site: both
-    debian: crudio
-    maven: scot.mygov.crudio:crudio
-
   - name: 'Decommission Tool'
     repo: decommission-tool
     type: java
