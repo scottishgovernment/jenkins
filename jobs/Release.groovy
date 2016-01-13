@@ -22,6 +22,25 @@ view << job('blue-green-switch') {
     }
 }
 
+view << job('bgv-ggv-govscot-switch') {
+    displayName('Blue-Green Switch Gov.scot')
+    parameters {
+        choiceParam('env', ['bgv', 'ggv'], 'gov.scot production environment')
+    }
+    scm {
+        git(repo('aws'))
+    }
+    steps {
+        shell(trim('''\
+            cd tools/management/
+            ./aws_bgvggv_switch.sh ${env}
+        '''))
+    }
+    publishers {
+        buildDescription('', '$env')
+    }
+}
+
 view << job('site-fail-trigger') {
     displayName('MyGov Site Fail Trigger')
     scm {
