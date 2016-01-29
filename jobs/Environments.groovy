@@ -11,10 +11,6 @@ def sites = yaml.get("sites")
 scripts = [
     'mygov': [
         'full': [
-            'up': 'tools/provisioning/vpc/aws_build_full_env.sh ${env}',
-            'down': 'tools/provisioning/vpc/aws_teardown_full_env.sh ${env}_vpc'
-        ],
-        'rds': [
             'up': 'tools/provisioning/vpc/aws_build_full_env_rds.sh ${env}',
             'down': 'tools/provisioning/vpc/aws_teardown_full_env_rds.sh ${env}_vpc'
         ],
