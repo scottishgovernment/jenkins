@@ -13,7 +13,7 @@ sites:
       - name: per
         type: full
       - name: tst
-        type: rds
+        type: full
       - name: blu
         type: full
       - name: grn
