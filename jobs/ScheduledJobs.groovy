@@ -74,11 +74,11 @@ jobs << job('backup-confluence') {
         #!/bin/bash
         set -e
 
-        remotepath="/home/confluence/confluence-home/backups/"
-        backupfilename=$(ssh devops@confluence "ls -lart /home/confluence/confluence-home/backups/backup* | tail -1 | cut -d "/" -f6")
+        remotepath="/tmp/"
+        backupfilename=$(ssh devops@confluence "ls -lart /tmp/*confluence-backup-inc-db.tgz | tail -1 | cut -d "/" -f3")
 
         /usr/bin/scp devops@confluence:"$remotepath""$backupfilename" .
-        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key confluence/confluence_latest.zip --body "$backupfilename"
+        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key confluence/confluence_latest.tgz --body "$backupfilename"
 
         rm -fv $backupfilename
         '''))
