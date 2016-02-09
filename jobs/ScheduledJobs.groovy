@@ -15,6 +15,7 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
     }
     buildFlow(trim('''
         build("gov-test-up", env: "igv")\n
+        build("gov-test-up", env: "ugv")\n
         build("mygov-test-up", env: "int")\n
         build("mygov-test-up", env: "exp")\n
         build("mygov-full-up", env: "per")
@@ -31,6 +32,7 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
     }
     buildFlow(trim('''
         build("gov-test-down", env: "igv")\n
+        build("gov-test-down", env: "ugv")\n
         build("mygov-test-down", env: "int")\n
         build("mygov-test-down", env: "exp")\n
         build("mygov-full-down", env: "per")
@@ -72,11 +74,11 @@ jobs << job('backup-confluence') {
         #!/bin/bash
         set -e
 
-        remotepath="/home/confluence/confluence-home/backups/"
-        backupfilename=$(ssh devops@confluence "ls -lart /home/confluence/confluence-home/backups/backup* | tail -1 | cut -d "/" -f6")
+        remotepath="/tmp/"
+        backupfilename=$(ssh devops@confluence "ls -lart /tmp/*confluence-backup-inc-db.tgz | tail -1 | cut -d "/" -f3")
 
         /usr/bin/scp devops@confluence:"$remotepath""$backupfilename" .
-        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key confluence/confluence_latest.zip --body "$backupfilename"
+        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key confluence/confluence_latest.tgz --body "$backupfilename"
 
         rm -fv $backupfilename
         '''))

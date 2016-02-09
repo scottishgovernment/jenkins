@@ -6,6 +6,7 @@ def jobs = []
 jobs << job('accessibility-tests') {
     displayName('Accessibility Tests')
     parameters {
+        choiceParam('testenv', ['int', 'exp','per','tst','blu','grn','igv','egv','ugv','pgv','local'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('website', ['Both', 'MyGov','Gov'], 'Target Website to Validate')
         choiceParam('standard', ['WCAG2AA', 'Section508', 'WCAG2A', 'WCAG2AAA'], 'Accessibility Standard')
         choiceParam('keyword', ['error', 'warning', 'notice'], 'Keyword to signify errors')
@@ -155,6 +156,7 @@ jobs << job('accessibility-tests') {
 jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
+        choiceParam('testenv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','local'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
         stringParam('selenium_ip_address', '10.21.134.83', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E,webSmokeTests,pubSmokeTests,stagingSite')
@@ -164,7 +166,7 @@ jobs << job('end-to-end-tests') {
     }
     steps {
         shell(trim('''\
-            ./run.sh -i ${selenium_ip_address} -m ${mode} -t ${tests}
+            ./run.sh -i ${selenium_ip_address} -m ${mode} -t ${tests} -e ${testenv}
         '''))
     }
     publishers {
