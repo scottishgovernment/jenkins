@@ -32,7 +32,7 @@ jobs:
   - name: 'Doctor'
     repo: doctor
     type: java
-    host: sitapp01
+    host: pubapp01
     site: mygov
     debian: doctor
     maven: org.mygovscot.doctor:doctor-deb
