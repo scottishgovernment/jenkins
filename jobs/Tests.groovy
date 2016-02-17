@@ -156,6 +156,7 @@ jobs << job('accessibility-tests') {
 jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
+        choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
         choiceParam('testenv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','local'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
         stringParam('selenium_ip_address', '10.21.134.83', 'Use this option to specify the IP address of the machine running Selenium web driver')
