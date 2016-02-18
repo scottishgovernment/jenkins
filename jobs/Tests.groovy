@@ -251,13 +251,17 @@ jobs << job('publishing-perf-tests') {
 
 jobs << job('security-tests') {
     displayName('Security Tests')
+     parameters {
+        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'blu','grn','dgv', 'igv', 'egv'], 'The test environment to be used')
+      
+    }
     scm {
         git(repo('beta-security-tests'))
     }
     steps {
         shell(trim('''\
             cd SSL-Automated-Security-Tests
-            ./AutomatedSSLSecurityTests.sh perwww.mygov.scot
+            ./AutomatedSSLSecurityTests.sh -e ${test_env}
         '''))
     }
 }
