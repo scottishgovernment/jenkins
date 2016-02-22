@@ -11,7 +11,7 @@ git commit -m "Set version to ${version}"
 git tag -a -m "Build ${version}" ${version}
 git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
 
-./build -v "${version}"
+./build --ci -v "${version}"
 npm publish
 
 mvn deploy:deploy-file \
