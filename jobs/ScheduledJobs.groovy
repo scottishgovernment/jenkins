@@ -108,6 +108,26 @@ jobs << job('backup-stash') {
     }
 }
 
+jobs << job('backup-sonar') {
+    if (myenv == "dev") {
+        triggers {
+            cron('00 05 * * 1-5')
+        }
+    }
+    displayName('Backup SonarQube')
+    steps {
+        shell(trim('''\
+        #!/bin/bash
+        set -e
+        ssh devops@sonar "sudo su - sonar -c 'sonarqube-db backup'"
+        scp devops@sonar:/opt/sonar/backups/sonarqube.ar .
+        aws s3 cp sonarqube.ar s3://scotgovdigitalbackups/sonar/sonarqube.ar
+        scp sonarqube.ar devops@repo:DBbackups/services/sonarqube.ar
+        rm sonarqube.ar
+        '''))
+    }
+}
+
 listView('Scheduled Jobs') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
