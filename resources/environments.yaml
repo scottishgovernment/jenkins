@@ -12,6 +12,8 @@ sites:
         type: test
       - name: per
         type: full
+      - name: tst
+        type: full
       - name: blu
         type: full
       - name: grn
@@ -26,13 +28,13 @@ sites:
         type: test
       - name: egv
         type: test
-      - name: pgv
+      - name: tgv
         type: full
       - name: ugv
         type: test
-      - name: tgv
-        type: full
-      - name: ggv
+      - name: pgv
         type: full
       - name: bgv
+        type: full
+      - name: ggv
         type: full

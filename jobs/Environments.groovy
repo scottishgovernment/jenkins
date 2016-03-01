@@ -11,8 +11,8 @@ def sites = yaml.get("sites")
 scripts = [
     'mygov': [
         'full': [
-            'up': 'tools/provisioning/vpc/aws_build_full_env.sh ${env}',
-            'down': 'tools/provisioning/vpc/aws_teardown_full_env.sh ${env}_vpc'
+            'up': 'tools/provisioning/vpc/aws_build_full_env_rds.sh ${env}',
+            'down': 'tools/provisioning/vpc/aws_teardown_full_env_rds.sh ${env}_vpc'
         ],
         'test': [
             'up': 'tools/provisioning/vpc/aws_build_env.sh ${env}',
@@ -20,6 +20,10 @@ scripts = [
         ]
     ],
     'gov': [
+        'full': [
+            'up': 'tools/provisioning/vpc/aws_build_full_env_govscot.sh ${env}',
+            'down': 'tools/provisioning/vpc/aws_teardown_full_env_govscot.sh ${env}_vpc'
+        ],
         'test': [
             'up': 'tools/provisioning/vpc/aws_build_env_govscot.sh ${env}',
             'down': 'tools/provisioning/vpc/aws_teardown_env_govscot.sh ${env}_vpc'
@@ -71,7 +75,9 @@ def puppet(site, List<String> envs) {
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
             choiceParam('dbrestore', ['false', 'true'], 'restore databases')
-            choiceParam('redisrestore', ['false', 'true'], 'restore redis and images')
+            if (site.domain == "gov.scot" ) {
+              choiceParam('redisrestore', ['false', 'true'], 'restore redis and images')
+            }
         }
         scm {
             git(repo('aws'))
