@@ -55,6 +55,21 @@ view << job('site-fail-trigger') {
     }
 }
 
+view << job('mygov-publishing-ctl') {
+    displayName('Start/stop publishing on mygov')
+    parameters {
+        choiceParam('env', ['blu', 'grn'], 'mygov.scot production environment')
+        choiceParam('action', ['start', 'stop'], 'action')
+    }
+    scm {
+        git(repo('aws'))
+    }
+    steps {
+        shell('./tools/management/publishing_ctl ${env} mygov.scot ${action}')
+    }
+}
+
+
 listView('Release') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
