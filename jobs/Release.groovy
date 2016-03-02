@@ -15,6 +15,7 @@ view << job('blue-green-switch') {
         shell(trim('''\
             cd tools/management/
             ./aws_blugrn_switch.sh ${env}
+            ./monitoring_switch.sh ${env}
         '''))
     }
     publishers {
