@@ -32,7 +32,14 @@ scripts = [
 ]
 
 def envUp(site, type, List<String> envs) {
-    def script = scripts.get(site.id)?.get(type)?.get('up')
+    def cmds = StringBuilder.newInstance()
+    cmds << "tools/management/s3_restore ${site.domain} \${env}"
+    if (site.domain == 'gov.scot') {
+        cmds << ' egv'
+    }
+    cmds << '\n'
+    cmds << scripts.get(site.id)?.get(type)?.get('up') << '\n'
+
     return job("${site.id}-${type}-up") {
         displayName("Build ${site.domain} ${type} environment")
         scm {
@@ -42,7 +49,7 @@ def envUp(site, type, List<String> envs) {
             choiceParam('env', envs, "${site.domain} environment")
         }
         steps {
-            shell(script)
+            shell(cmds.toString())
         }
         publishers {
             buildDescription('', '${env}')
