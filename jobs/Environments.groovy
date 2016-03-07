@@ -111,6 +111,24 @@ def promote(site, List<String> envs) {
     }
 }
 
+def s3copy(site, List<String> envs) {
+    return job("copy-s3-${site.id}") {
+        displayName("Restore S3 data for ${site.domain}")
+        parameters {
+            choiceParam('env', envs, 'Environment to which production S3 data is copied')
+        }
+        scm {
+            git(repo('aws'))
+        }
+        steps {
+            shell("tools/management/s3_restore ${site.domain} \${env}")
+        }
+        publishers {
+            buildDescription('', '${env}')
+        }
+    }
+}
+
 sites.collect { site ->
     out.println("Processing site ${site.domain}")
 
@@ -129,6 +147,7 @@ sites.collect { site ->
     def envNames = environments.collect { it.name }
     pipelineView << puppet(site, envNames)
     pipelineView << promote(site, envNames)
+    pipelineView << s3copy(site, envNames)
 }
 
 pipelineView << job('sync-repo') {
