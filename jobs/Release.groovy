@@ -56,16 +56,17 @@ view << job('site-fail-trigger') {
 }
 
 view << job('mygov-publishing-ctl') {
-    displayName('Start/stop publishing on mygov')
+    displayName('Start/stop publishing')
     parameters {
-        choiceParam('env', ['blu', 'grn'], 'mygov.scot production environment')
+        choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
+        choiceParam('domain', ['mygov.scot', 'gov.scot', 'domain')
         choiceParam('action', ['start', 'stop'], 'action')
     }
     scm {
         git(repo('aws'))
     }
     steps {
-        shell('./tools/management/publishing_ctl ${env} mygov.scot ${action}')
+        shell('./tools/management/publishing_ctl ${env} ${domain} ${action}')
     }
 }
 
