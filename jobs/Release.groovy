@@ -59,7 +59,7 @@ view << job('mygov-publishing-ctl') {
     displayName('Start/stop publishing')
     parameters {
         choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
-        choiceParam('domain', ['mygov.scot', 'gov.scot', 'domain')
+        choiceParam('domain', ['mygov.scot', 'gov.scot'], 'domain')
         choiceParam('action', ['start', 'stop'], 'action')
     }
     scm {
