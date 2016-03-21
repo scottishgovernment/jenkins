@@ -20,5 +20,3 @@ mvn deploy:deploy-file \
   -Dpackaging=deb \
   -DrepositoryId=release \
   -Durl=http://repo.digital.gov.uk/nexus/content/repositories/releases/
-
-sonar-check

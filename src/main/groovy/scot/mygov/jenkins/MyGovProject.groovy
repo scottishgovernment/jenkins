@@ -63,6 +63,13 @@ class MyGovProject {
             publishers {
                 publish(delegate)
                 slack(delegate)
+                postBuildScripts {
+                    steps {
+                        shell('sonar-check')
+                    }
+                    onlyIfBuildSucceeds()
+                    markBuildUnstable()
+                }
             }
             properties {
                 deploy(delegate, out)
@@ -125,8 +132,6 @@ class MyGovProject {
                     conditions {
                         if (isDev) {
                             selfPromotion()
-                        } else {
-                            manual("")
                         }
                     }
                     actions {
