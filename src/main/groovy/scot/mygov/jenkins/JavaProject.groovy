@@ -42,6 +42,13 @@ class JavaProject extends MyGovProject {
 
     def void publish(def PublisherContext delegate) {
         delegate.archiveJunit('**/target/surefire-reports/*.xml')
+        delegate.postBuildScripts {
+            steps {
+                shell('sonar-check')
+            }
+            onlyIfBuildSucceeds()
+            markBuildUnstable()
+        }
     }
 
     def String java(name) {
