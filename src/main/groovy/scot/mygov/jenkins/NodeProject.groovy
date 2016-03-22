@@ -1,5 +1,6 @@
 package scot.mygov.jenkins
 
+import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 import javaposse.jobdsl.dsl.helpers.step.StepContext
 
 import static scot.mygov.jenkins.Utils.repo
@@ -36,6 +37,16 @@ class NodeProject extends MyGovProject {
         }
 
         delegate.shell(job)
+    }
+
+    def void publish(def PublisherContext delegate) {
+        delegate.postBuildScripts {
+            steps {
+                shell('sonar-check')
+            }
+            onlyIfBuildSucceeds()
+            markBuildUnstable()
+        }
     }
 
 }
