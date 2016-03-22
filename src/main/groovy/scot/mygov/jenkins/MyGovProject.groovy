@@ -125,6 +125,8 @@ class MyGovProject {
                     conditions {
                         if (isDev) {
                             selfPromotion()
+                        } else {
+                            manual(null)
                         }
                     }
                     actions {
