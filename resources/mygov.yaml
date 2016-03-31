@@ -152,6 +152,14 @@ jobs:
     maven: scot.mygov.site:site-builder
     build: site-builder.sh
 
+  - name: 'Trigger'
+    repo: trigger
+    type: node
+    host: pubapp01
+    site: both
+    debian: trigger
+    maven: scot.mygov.rubric:trigger
+
   - name: 'Utils'
     repo: mygovscot_utils
     type: java
