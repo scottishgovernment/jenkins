@@ -20,7 +20,7 @@ class NodeProject extends MyGovProject {
         def groupId = maven.substring(0, colon)
         def artifactId = maven.substring(colon + 1)
         def deps = dependencies?.inject(new StringBuilder()) { result, dep ->
-            return result.append("npm install ${dep}@latest")
+            return result.append("./install ${dep}")
         }
 
         def subs = [
