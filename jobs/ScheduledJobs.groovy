@@ -5,10 +5,11 @@ def jobs = []
 // define vars for conditional triggering based on environment
 def env = System.getenv()
 def myenv = env['FACTER_machine_env']
+def enabled = myenv == "dev" || myenv == "services"
 
 jobs << buildFlowJob('scheduled-rebuild-test-envs') {
     displayName('Scheduled Rebuild Test Environments')
-    if (myenv == "dev") {
+    if (enabled) {
         triggers {
            cron('30 07 * * 1-5')
         }
@@ -24,7 +25,7 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
 
 jobs << buildFlowJob('scheduled-teardown-test-envs') {
     displayName('Scheduled Teardown Test Environments')
-    if (myenv == "dev") {
+    if (enabled) {
         triggers {
            cron('30 19 * * 1-5')
       }
@@ -39,7 +40,7 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
 
 jobs << job('backup-jira') {
     displayName('Backup JIRA')
-    if (myenv == "dev") {
+    if (enabled) {
         triggers {
             cron('00 03 * * 1-5')
         }
@@ -61,7 +62,7 @@ jobs << job('backup-jira') {
 }
 
 jobs << job('backup-confluence') {
-    if (myenv == "dev") {
+    if (enabled) {
         triggers {
             cron('00 03 * * 1-5')
         }
@@ -84,7 +85,7 @@ jobs << job('backup-confluence') {
 }
 
 jobs << job('backup-stash') {
-    if (myenv == "dev") {
+    if (enabled) {
         triggers {
             cron('00 04 * * 1-5')
         }
@@ -107,7 +108,7 @@ jobs << job('backup-stash') {
 }
 
 jobs << job('backup-sonar') {
-    if (myenv == "dev") {
+    if (enabled) {
         triggers {
             cron('00 05 * * 1-5')
         }
