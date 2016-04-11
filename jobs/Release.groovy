@@ -35,6 +35,7 @@ view << job('bgv-ggv-govscot-switch') {
         shell(trim('''\
             cd tools/management/
             ./aws_bgvggv_switch.sh ${env}
+            ./monitoring_switch.sh ${env}
         '''))
     }
     publishers {
@@ -70,6 +71,19 @@ view << job('mygov-publishing-ctl') {
     }
 }
 
+view << job('eventhandler-ctl') {
+    displayName('Enable/disable event handlers')
+    parameters {
+        choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
+        choiceParam('action', ['enable', 'disable'], 'action')
+    }
+    scm {
+        git(repo('aws'))
+    }
+    steps {
+        shell('./tools/management/event_handlers.sh ${env} ${action}')
+    }
+}
 
 listView('Release') {
     statusFilter(StatusFilter.ENABLED)
