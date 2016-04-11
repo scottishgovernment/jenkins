@@ -13,8 +13,8 @@ sites = [
         'id': 'gov',
         'name': 'gov.scot',
         'artifact': 'gov-site',
-        'test': 'igv',
-        'prod': ['egv']
+        'test': 'pgv',
+        'prod': ['bgv', 'ggv']
     ],
 ]
 
