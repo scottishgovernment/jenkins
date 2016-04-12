@@ -62,14 +62,14 @@ view << job('mygov-publishing-ctl') {
         choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
         choiceParam('domain', ['mygov.scot', 'gov.scot'], 'domain')
         choiceParam('action', ['start', 'stop'], 'action')
-        choiceParam('eventhandlers_action', ['enable', 'disable'], 'ehaction')
+        choiceParam('eventhandlers_action', ['enable', 'disable'], 'eventhandlers_action')
     }
     scm {
         git(repo('aws'))
     }
     steps {
         shell('./tools/management/publishing_ctl ${env} ${domain} ${action}')
-        shell('./tools/management/event_handers.sh ${env} ${ehaction}')
+        shell('./tools/management/event_handers.sh ${env} ${eventhandlers_action}')
     }
 }
 
@@ -77,13 +77,13 @@ view << job('eventhandler-ctl') {
     displayName('Enable/disable event handlers')
     parameters {
         choiceParam('env', ['blu', 'grn', 'dev', 'exp', 'int', 'per', 'tst', 'uat', 'bgv', 'ggv', 'dgv', 'egv', 'igv', 'pgv', 'tgv', 'ugv' ], 'environment')
-        choiceParam('action', ['enable', 'disable'], 'ehaction')
+        choiceParam('action', ['enable', 'disable'], 'action')
     }
     scm {
         git(repo('aws'))
     }
     steps {
-        shell('./tools/management/event_handlers.sh ${env} ${ehaction}')
+        shell('./tools/management/event_handlers.sh ${env} ${action}')
     }
 }
 
