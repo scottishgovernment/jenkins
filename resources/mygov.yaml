@@ -82,7 +82,6 @@ jobs:
   - name: 'Marine Service'
     repo: marine-service
     type: java
-    snapshot: ''
 
   - name: 'MyGov Site'
     repo: mygov-site
