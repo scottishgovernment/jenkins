@@ -79,6 +79,11 @@ jobs:
     debian: healthcheck
     maven: org.mygovscot.healthcheck:healthcheck-deb
 
+  - name: 'Marine Service'
+    repo: marine-service
+    type: java
+    snapshot: ''
+
   - name: 'MyGov Site'
     repo: mygov-site
     type: node
