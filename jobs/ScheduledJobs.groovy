@@ -127,6 +127,20 @@ jobs << job('backup-sonar') {
     }
 }
 
+jobs << job('Backup Repo') {
+    if (enabled) {
+        triggers {
+            cron('H 4 * * 1-5')
+        }
+    }
+    displayName('Backup Repo')
+    steps 
+        #!/bin/bash
+        set -e
+        ssh devops@10.21.138.32 "sudo su - devops -c 'aws s3 sync /media/application s3://reposerver-backup'"
+	'''))
+    }
+}
 listView('Scheduled Jobs') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
