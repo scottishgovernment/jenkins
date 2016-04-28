@@ -18,8 +18,9 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
         build("gov-test-up", env: "ugv")\n
         build("mygov-test-up", env: "int")\n
         build("mygov-test-up", env: "exp")\n
-        build("mygov-full-up", env: "per")
-
+        build("mygov-full-up", env: "per")\n
+        build("gov-test-up", env: "igv")\n
+	build("gov-test-up", env: "egv")
     '''))
 }
 
@@ -34,7 +35,9 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
         build("gov-test-down", env: "ugv")\n
         build("mygov-test-down", env: "int")\n
         build("mygov-test-down", env: "exp")\n
-        build("mygov-full-down", env: "per")
+        build("mygov-full-down", env: "per")\n
+	build("gov-test-down", env: "igv")\n
+	build("gov-test-down", env: "egv")
     '''))
 }
 
