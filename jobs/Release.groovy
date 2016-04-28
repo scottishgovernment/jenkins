@@ -16,6 +16,7 @@ view << job('blue-green-switch') {
             cd tools/management/
             ./aws_blugrn_switch.sh ${env}
             ./monitoring_switch.sh ${env}
+            ./event_handlers.sh ${env} enable
         '''))
     }
     publishers {
@@ -36,6 +37,7 @@ view << job('bgv-ggv-govscot-switch') {
             cd tools/management/
             ./aws_bgvggv_switch.sh ${env}
             ./monitoring_switch.sh ${env}
+            ./event_handlers.sh ${env} enable
         '''))
     }
     publishers {
