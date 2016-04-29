@@ -138,10 +138,10 @@ jobs << job('Backup Repo') {
     }
     displayName('Backup Repo')
     steps {
-	shell(trim(''' 
+	shell(trim('''\
         #!/bin/bash
         set -e
-        ssh devops@10.21.138.32 "sudo su - devops -c 'aws s3 sync /media/application s3://reposerver-backup'"
+        ssh devops@repo aws s3 sync /media/application s3://reposerver-backup
 	'''))
     }
 }
