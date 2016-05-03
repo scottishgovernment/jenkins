@@ -177,3 +177,11 @@ jobs:
     repo: unified_validation
     type: java
     snapshot: ''
+
+  - name: 'Amphora'
+    repo: amphora
+    type: java
+    host: pubapp01
+    site: both
+    debian: amphora
+    maven: scot.mygov.amphora:amphora-deb    
