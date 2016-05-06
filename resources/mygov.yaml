@@ -1,4 +1,12 @@
 jobs:
+  - name: 'Amphora'
+    repo: amphora
+    type: java
+    host: pubapp01
+    site: gov
+    debian: amphora
+    maven: scot.mygov:amphora-deb
+
   - name: 'Authentication'
     repo: basic-authentication
     type: java
