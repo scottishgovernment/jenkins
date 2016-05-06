@@ -28,11 +28,11 @@ sites:
         type: test
       - name: egv
         type: test
-      - name: tgv
-        type: full
       - name: ugv
         type: test
       - name: pgv
+        type: full
+      - name: tgv
         type: full
       - name: bgv
         type: full
