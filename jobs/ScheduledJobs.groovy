@@ -15,11 +15,11 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
         }
     }
     buildFlow(trim('''
-        build("gov-test-up", env: "igv")\n
+        build("gov-test-up", env: "ugv")\n
         build("mygov-test-up", env: "int")\n
         build("mygov-test-up", env: "exp")\n
         build("mygov-full-up", env: "per")\n
-        build("gov-test-up", env: "ugv")\n
+        build("gov-test-up", env: "igv")\n
 	build("gov-test-up", env: "egv")
     '''))
 }
