@@ -3,6 +3,25 @@ import static scot.mygov.jenkins.Utils.trim
 
 def view = []
 
+view << job('packer-build-ami') {
+    displayName('Build AMI')
+    parameters {
+        choiceParam('env', ['mygov', 'govscot'], 'mygov or govscot')
+    }
+    scm {
+        git(repo('aws'))
+    }
+    steps {
+        shell(trim('''\
+            cd tools/provisioning/packer
+            ./aws_ami_manager $env
+        '''))
+    }
+    publishers {
+        buildDescription('', '$env')
+    }
+}
+
 view << job('blue-green-switch') {
     displayName('Blue-Green Switch')
     parameters {
