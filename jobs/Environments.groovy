@@ -86,6 +86,11 @@ def puppet(site, List<String> envs) {
             git(repo('aws'))
         }
         steps {
+            shell((trim("""\
+              if [ "\$dbrestore" = "true" ]; then
+                tools/management/s3_restore ${site.domain} \${env}
+              fi
+            """)))
             shell(readFileFromWorkspace('resources/puppet-apply.sh'))
         }
     }
