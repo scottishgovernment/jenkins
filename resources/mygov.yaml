@@ -5,7 +5,7 @@ jobs:
     host: pubapp01
     site: gov
     debian: amphora
-    maven: scot.mygov:amphora-deb
+    maven: scot.mygov.amphora:amphora-deb
 
   - name: 'Authentication'
     repo: basic-authentication
