@@ -12,21 +12,21 @@ def sites = yaml.get("sites")
 scripts = [
     'mygov': [
         'full': [
-            'up': 'tools/provisioning/vpc/aws_build_full_env_rds.sh ${env}',
+            'up': 'tools/provisioning/vpc/aws_build_full_env_rds.sh ${env} ${ami}',
             'down': 'tools/provisioning/vpc/aws_teardown_full_env_rds.sh ${env}_vpc'
         ],
         'test': [
-            'up': 'tools/provisioning/vpc/aws_build_env.sh ${env}',
+            'up': 'tools/provisioning/vpc/aws_build_env.sh ${env} ${ami}',
             'down': 'tools/provisioning/vpc/aws_teardown_env.sh ${env}_vpc'
         ]
     ],
     'gov': [
         'full': [
-            'up': 'tools/provisioning/vpc/aws_build_full_env_govscot_rds.sh ${env}',
+            'up': 'tools/provisioning/vpc/aws_build_full_env_govscot_rds.sh ${env} ${ami}',
             'down': 'tools/provisioning/vpc/aws_teardown_full_env_govscot_rds.sh ${env}_vpc'
         ],
         'test': [
-            'up': 'tools/provisioning/vpc/aws_build_env_govscot_rds.sh ${env}',
+            'up': 'tools/provisioning/vpc/aws_build_env_govscot_rds.sh ${env} ${ami}',
             'down': 'tools/provisioning/vpc/aws_teardown_env_govscot_rds.sh ${env}_vpc'
         ]
     ]
@@ -34,6 +34,8 @@ scripts = [
 
 def envUp(site, type, List<String> envs) {
     def cmds = StringBuilder.newInstance()
+    cmds << "#!/bin/sh -e\n"
+    cmds << "ami=\${override:-\$version_NUMBER}\n\n"
     cmds << "tools/management/s3_restore ${site.domain} \${env}\n"
     cmds << scripts.get(site.id)?.get(type)?.get('up') << '\n'
 
@@ -50,6 +52,23 @@ def envUp(site, type, List<String> envs) {
         }
         publishers {
             buildDescription('', '${env}')
+        }
+        parameters {
+            stringParam('override', '',
+                "If the required version isn't available above, specify it here.")
+        }
+        configure {
+            params = (it / 'properties'
+                / 'hudson.model.ParametersDefinitionProperty'
+                / 'parameterDefinitions')
+                .children()
+
+            params.add(0, 'hudson.plugins.promoted__builds.parameters.PromotedBuildParameterDefinition' {
+                name('version')
+                description('')
+                projectName("${site.id}-ami")
+                promotionProcessName('Default')
+            })
         }
     }
 }
