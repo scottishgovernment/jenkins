@@ -1,5 +1,6 @@
 package scot.mygov.jenkins
 
+import javaposse.jobdsl.dsl.helpers.ScmContext
 import java.util.regex.*
 
 class Utils {
@@ -19,6 +20,16 @@ class Utils {
             return str.replaceAll(Pattern.quote(matcher.group()), "")
         }
         return str;
+    }
+
+    static def awsRepo(def ScmContext delegate) {
+        return delegate.git {
+            remote {
+                name('origin')
+                url(repo('aws'))
+            }
+            branch('refs/heads/master')
+        }
     }
 
 }
