@@ -1,5 +1,6 @@
 import static scot.mygov.jenkins.Utils.repo
 import static scot.mygov.jenkins.Utils.trim
+import static scot.mygov.jenkins.Utils.awsRepo
 
 def view = []
 
@@ -9,7 +10,7 @@ view << job('packer-build-ami') {
         choiceParam('env', ['mygov', 'govscot'], 'mygov or govscot')
     }
     scm {
-        git(repo('aws'))
+        awsRepo(delegate)
     }
     steps {
         shell(trim('''\
@@ -28,7 +29,7 @@ view << job('blue-green-switch') {
         choiceParam('env', ['blu', 'grn'], 'mygov.scot production environment')
     }
     scm {
-        git(repo('aws'))
+        awsRepo(delegate)
     }
     steps {
         shell(trim('''\
@@ -49,7 +50,7 @@ view << job('bgv-ggv-govscot-switch') {
         choiceParam('env', ['bgv', 'ggv'], 'gov.scot production environment')
     }
     scm {
-        git(repo('aws'))
+        awsRepo(delegate)
     }
     steps {
         shell(trim('''\
@@ -67,7 +68,7 @@ view << job('bgv-ggv-govscot-switch') {
 view << job('site-fail-trigger') {
     displayName('MyGov Site Fail Trigger')
     scm {
-        git(repo('aws'))
+        awsRepo(delegate)
     }
     steps {
         shell(trim('''\
@@ -86,7 +87,7 @@ view << job('mygov-publishing-ctl') {
         choiceParam('eventhandlers_action', ['enable', 'disable'], 'eventhandlers_action')
     }
     scm {
-        git(repo('aws'))
+        awsRepo(delegate)
     }
     steps {
         shell('./tools/management/publishing_ctl ${env} ${domain} ${action}')
@@ -101,7 +102,7 @@ view << job('eventhandler-ctl') {
         choiceParam('action', ['enable', 'disable'], 'action')
     }
     scm {
-        git(repo('aws'))
+        awsRepo(delegate)
     }
     steps {
         shell('./tools/management/event_handlers.sh ${env} ${action}')
