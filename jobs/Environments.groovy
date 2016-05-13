@@ -2,6 +2,7 @@ import org.yaml.snakeyaml.Yaml
 
 import static scot.mygov.jenkins.Utils.repo
 import static scot.mygov.jenkins.Utils.trim
+import static scot.mygov.jenkins.Utils.awsRepo
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
 def environmentsView = []
@@ -39,7 +40,7 @@ def envUp(site, type, List<String> envs) {
     return job("${site.id}-${type}-up") {
         displayName("Build ${site.domain} ${type} environment")
         scm {
-            git(repo('aws'))
+            awsRepo(delegate)
         }
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
@@ -58,7 +59,7 @@ def envDown(site, type, List<String> envs) {
     return job("${site.id}-${type}-down") {
         displayName("Tear down ${site.domain} ${type} environment")
         scm {
-            git(repo('aws'))
+            awsRepo(delegate)
         }
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
@@ -83,7 +84,7 @@ def puppet(site, List<String> envs) {
             }
         }
         scm {
-            git(repo('aws'))
+            awsRepo(delegate)
         }
         steps {
             shell((trim("""\
@@ -119,7 +120,7 @@ def s3copy(site, List<String> envs) {
             choiceParam('env', envs, 'Environment to which production S3 data is copied')
         }
         scm {
-            git(repo('aws'))
+            awsRepo(delegate)
         }
         steps {
             shell("tools/management/s3_restore ${site.domain} \${env}")
