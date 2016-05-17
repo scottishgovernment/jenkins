@@ -20,7 +20,7 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
         build("mygov-test-up", env: "exp")\n
         build("mygov-full-up", env: "per")\n
         build("gov-test-up", env: "ugv")\n
-	      build("gov-test-up", env: "egv")
+        build("gov-test-up", env: "egv")
     '''))
 }
 
@@ -36,8 +36,8 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
         build("mygov-test-down", env: "int")\n
         build("mygov-test-down", env: "exp")\n
         build("mygov-full-down", env: "per")\n
-	      build("gov-test-down", env: "ugv")\n
-	      build("gov-test-down", env: "egv")
+        build("gov-test-down", env: "ugv")\n
+        build("gov-test-down", env: "egv")
     '''))
 }
 
@@ -100,7 +100,7 @@ jobs << job('backup-stash') {
 
         set -e
 
-        ssh devops@stash "cd /home/stash/stash-backup-client-1.3.1 && java -noverify -jar stash-backup-client.jar ; rm -rf /home/stash/stash-backup-home/backups/*.tar.gz && gzip /home/stash/stash-backup-home/backups/*.tar"
+        ssh devops@stash "sudo su - stash -c 'cd bitbucket-backup-client-3.2.0 && java -noverify -jar bitbucket-backup-client.jar ; rm -rf /home/stash/stash-backup-home/backups/*.tar.gz && gzip /home/stash/stash-backup-home/backups/*.tar'"
         scp devops@stash://home/stash/stash-backup-home/backups/*.tar.gz .
 
         /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key stash/stash_latest.tar.gz --body *.tar.gz
@@ -138,11 +138,11 @@ jobs << job('Backup Repo') {
     }
     displayName('Backup Repo')
     steps {
-	shell(trim('''\
+        shell(trim('''\
         #!/bin/bash
         set -e
         ssh devops@repo aws s3 sync /media/application s3://reposerver-backup
-	'''))
+        '''))
     }
 }
 listView('Scheduled Jobs') {
