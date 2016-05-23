@@ -2,6 +2,7 @@ jobs:
   - name: 'Amphora'
     repo: amphora
     type: java
+    snapshot: 'amphora-client'
     host: pubapp01
     site: gov
     debian: amphora
