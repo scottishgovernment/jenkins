@@ -153,6 +153,36 @@ jobs << job('accessibility-tests') {
     }
 }
 
+jobs << job('Rubric-API-tests') {
+    displayName('Rubric API tests')
+    parameters {
+        choiceParam('TESTENV', ['int', 'exp','per','tst','blu','grn','igv','egv','ugv','pgv','local'], 'Use this option to select test environment against which tests shall be executed')
+
+    }
+    scm {
+        git(repo('rubric-api-tests'), 'master')
+    }
+    steps {
+        shell(trim('''\
+            ./run.sh -e ${TESTENV}
+        '''))
+    }
+    publishers {
+        archiveJunit('target/surefire-reports/junitreports/*.xml')
+        publishHtml {
+             report("target/surefire-reports") {
+                  reportName("Rubric API Test Report")
+                  reportFiles("index.html")
+                  allowMissing()
+                  keepAll()
+             }
+
+        }
+    }
+}
+
+
+
 jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
@@ -253,7 +283,7 @@ jobs << job('security-tests') {
     displayName('Security Tests')
      parameters {
         choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'blu','grn','dgv', 'igv', 'egv'], 'The test environment to be used')
-      
+
     }
     scm {
         git(repo('beta-security-tests'))
