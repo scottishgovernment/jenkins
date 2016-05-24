@@ -93,7 +93,7 @@ jobs << job('backup-stash') {
             cron('00 04 * * 1-5')
         }
     }
-    displayName('Backup Stash')
+    displayName('Backup Bitbucket')
     steps {
         shell(trim('''\
         #!/bin/bash
