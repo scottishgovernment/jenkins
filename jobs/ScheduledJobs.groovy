@@ -100,12 +100,13 @@ jobs << job('backup-stash') {
 
         set -e
 
-        ssh devops@stash "sudo su - stash -c 'cd bitbucket-backup-client-3.2.0 && java -noverify -jar bitbucket-backup-client.jar ; rm -rf /home/stash/stash-backup-home/backups/*.tar.gz && gzip /home/stash/stash-backup-home/backups/*.tar'"
-        scp devops@stash://home/stash/stash-backup-home/backups/*.tar.gz .
+        ssh devops@stash "sudo su - stash -c 'cd bitbucket-backup-client-3.2.0 && java -noverify -jar bitbucket-backup-client.jar'"
+        scp devops@stash://home/stash/stash-backup-home/backups/*.tar .
 
-        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key stash/stash_latest.tar.gz --body *.tar.gz
+        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key bitbucket/bitbucket_latest.tar --body *.tar
 
-        rm -rf *.tar.gz
+        rm -rf *.tar
+        ssh devops@stash "sudo su - stash -c 'rm -rf /home/stash/stash-backup-home/backups/*.tar'"
         '''))
     }
 }
