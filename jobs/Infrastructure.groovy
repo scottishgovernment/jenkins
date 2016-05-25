@@ -42,7 +42,7 @@ sites.each { site ->
             echo '{}' | jq ".artifactId=\\"${site}\\"
               | .name=\\"${site}-\${BUILD_ID}\\"
               | .version=\${BUILD_ID}
-              | .ami=\\"\${ami_id}\\"" > ami.txt
+              | .ami=\\"\${ami_id}\\"" > ami.json
 
             mvn deploy:deploy-file \\
             -DgroupId=scot.mygov.ami \\
@@ -52,7 +52,7 @@ sites.each { site ->
             -Dpackaging=json \\
             -DgeneratePom \\
             -Durl=http://repo.digital.gov.uk/nexus/content/repositories/releases/ \\
-            -Dfile=ami.txt
+            -Dfile=ami.json
             """)
             shell(script.toString())
         }
