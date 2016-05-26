@@ -1,4 +1,5 @@
 import static scot.mygov.jenkins.Utils.trim
+import static scot.mygov.jenkins.Utils.awsRepo
 
 def jobs = []
 
@@ -7,11 +8,13 @@ def env = System.getenv()
 def myenv = env['FACTER_machine_env']
 def enabled = myenv == "dev" || myenv == "services"
 
+
+
 jobs << buildFlowJob('scheduled-rebuild-test-envs') {
     displayName('Scheduled Rebuild Test Environments')
     if (enabled) {
         triggers {
-           cron('30 07 * * 1-5')
+           cron('0 * * * 1-5')
         }
     }
     buildFlow(trim('''
@@ -39,6 +42,26 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
         build("gov-test-down", env: "ugv")\n
         build("gov-test-down", env: "egv")
     '''))
+}
+
+
+jobs << job('backup-production-s3-buckets') {
+    displayName('Backup Production S3 Buckets')
+    if (enabled) {
+        triggers {
+           cron('0 * * * 1-5')
+        }
+    }
+    scm {
+        awsRepo(delegate)
+    }
+    steps {
+        shell(trim('''\
+            cd tools/management/
+            ./s3_restore mygov.scot backup
+            ./s3_restore gov.scot backup
+        '''))
+    }
 }
 
 jobs << job('backup-jira') {
