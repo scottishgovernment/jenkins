@@ -14,7 +14,7 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
     displayName('Scheduled Rebuild Test Environments')
     if (enabled) {
         triggers {
-           cron('0 * * * 1-5')
+           cron('30 07 * * 1-5')
         }
     }
     buildFlow(trim('''
