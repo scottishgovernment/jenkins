@@ -8,6 +8,14 @@ jobs:
     debian: amphora
     maven: scot.mygov.amphora:amphora-deb
 
+  - name: 'APS Importer'
+    repo: aps-importer
+    type: java
+    host: pubapp01
+    site: gov
+    debian: aps-importer
+    maven: scot.mygov.aps:aps-importer
+
   - name: 'Authentication'
     repo: basic-authentication
     type: java
