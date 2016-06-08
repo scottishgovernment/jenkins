@@ -163,9 +163,10 @@ jobs << job('Backup Repo') {
     displayName('Backup Repo')
     steps {
         shell(trim('''\
-        #!/bin/bash
-        set -e
-        ssh devops@repo aws s3 sync /media/application s3://reposerver-backup
+        #!/bin/sh
+        ssh devops@repo s3-nexus backup
+        ssh devops@repo s3-apt backup
+        ssh devops@repo s3-apt-cacher-ng backup
         '''))
     }
 }
