@@ -189,8 +189,3 @@ jobs:
     repo: mygovscot_utils
     type: java
     snapshot: ''
-
-  - name: 'Validation'
-    repo: unified_validation
-    type: java
-    snapshot: ''
