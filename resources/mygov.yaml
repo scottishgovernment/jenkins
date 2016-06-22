@@ -135,6 +135,14 @@ jobs:
     debian: press-releases
     maven: scot.mygov.pressreleases:pressreleases-deb
 
+  - name: 'Proxette'
+    repo: proxette
+    type: node
+    host: pubapp01
+    site: both
+    debian: proxette
+    maven: scot.mygov.rubric:proxette
+
   - name: 'Publishing'
     repo: beta-publishing
     type: java
