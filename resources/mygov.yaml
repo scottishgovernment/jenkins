@@ -14,7 +14,7 @@ jobs:
     host: pubapp01
     site: gov
     debian: aps-importer
-    maven: scot.mygov.aps:aps-importer
+    maven: scot.mygov.aps:aps-importer-deb
 
   - name: 'Authentication'
     repo: basic-authentication
