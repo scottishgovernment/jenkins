@@ -12,22 +12,22 @@ def sites = yaml.get("sites")
 scripts = [
     'mygov': [
         'full': [
-            'up': 'tools/provisioning/vpc/mygov_build_full.sh ${env} ${ami}',
-            'down': 'tools/provisioning/vpc/mygov_teardown_full.sh ${env}_vpc'
+            'up': 'vpc/mygov_build_full.sh ${env} ${ami}',
+            'down': 'vpc/mygov_teardown_full.sh ${env}_vpc'
         ],
         'test': [
-            'up': 'tools/provisioning/vpc/mygov_build_test.sh ${env} ${ami}',
-            'down': 'tools/provisioning/vpc/mygov_teardown_test.sh ${env}_vpc'
+            'up': 'vpc/mygov_build_test.sh ${env} ${ami}',
+            'down': 'vpc/mygov_teardown_test.sh ${env}_vpc'
         ]
     ],
     'gov': [
         'full': [
-            'up': 'tools/provisioning/vpc/gov_build_full.sh ${env} ${ami}',
-            'down': 'tools/provisioning/vpc/gov_teardown_full.sh ${env}_vpc'
+            'up': 'vpc/gov_build_full.sh ${env} ${ami}',
+            'down': 'vpc/gov_teardown_full.sh ${env}_vpc'
         ],
         'test': [
-            'up': 'tools/provisioning/vpc/gov_build_test.sh ${env} ${ami}',
-            'down': 'tools/provisioning/vpc/gov_teardown_test.sh ${env}_vpc'
+            'up': 'vpc/gov_build_test.sh ${env} ${ami}',
+            'down': 'vpc/gov_teardown_test.sh ${env}_vpc'
         ]
     ]
 ]
