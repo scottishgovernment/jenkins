@@ -19,16 +19,14 @@ class NodeProject extends MyGovProject {
         def colon = maven.indexOf(':')
         def groupId = maven.substring(0, colon)
         def artifactId = maven.substring(colon + 1)
-        def deps = dependencies?.inject(new StringBuilder()) { result, dep ->
-            return result.append("./install ${dep}")
-        }
+        def deps = dependencies ? dependencies.join(' ') : ''
 
         def subs = [
           'repo': repo,
           'groupId': groupId,
           'artifactId': artifactId,
           'debian': debian,
-          'dependencies': deps ?: ''
+          'dependencies': deps
         ]
 
         def job = template

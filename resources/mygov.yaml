@@ -178,12 +178,11 @@ jobs:
 
   - name: 'Site Builder'
     repo: site-builder
-    type: shell
+    type: node
     host: pubapp01
     site: both
     debian: site-builder
     maven: scot.mygov.site:site-builder
-    build: site-builder.sh
 
   - name: 'Trigger'
     repo: trigger
