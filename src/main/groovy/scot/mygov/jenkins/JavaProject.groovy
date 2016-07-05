@@ -27,7 +27,7 @@ class JavaProject extends MyGovProject {
       git tag -a -m "Build ${version}" ${version}
 
       git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
-      mvn -B -Prelease deploy sonar:sonar -DdeployAtEnd
+      mvn -B -Prelease deploy sonar:sonar
     ''')
 
     def buildSnapshot=trim('''\
