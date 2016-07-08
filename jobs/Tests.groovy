@@ -156,8 +156,8 @@ jobs << job('accessibility-tests') {
 jobs << job('Rubric-API-tests') {
     displayName('Rubric API tests')
     parameters {
-        choiceParam('TESTENV', ['int', 'exp','per','tst','blu','grn','igv','egv','ugv','pgv','local'], 'Use this option to select test environment against which tests shall be executed')
-
+        choiceParam('TESTENV', ['int', 'exp','per','tst','igv','egv','ugv','pgv','uat'], 'Use this option to select test environment against which tests shall be executed')
+        choiceParam('groups', ['govsmoke', 'mygovsmoke','govregression','mygovregression'], 'Target Website to Validate')
     }
     scm {
         git(repo('rubric-api-tests'), 'master')
