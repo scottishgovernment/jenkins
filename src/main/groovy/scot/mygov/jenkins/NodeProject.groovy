@@ -7,8 +7,6 @@ import static scot.mygov.jenkins.Utils.repo
 
 class NodeProject extends MyGovProject {
 
-    def List<String> dependencies
-
     def boolean clean() {
         return false
     }
@@ -19,14 +17,12 @@ class NodeProject extends MyGovProject {
         def colon = maven.indexOf(':')
         def groupId = maven.substring(0, colon)
         def artifactId = maven.substring(colon + 1)
-        def deps = dependencies ? dependencies.join(' ') : ''
 
         def subs = [
           'repo': repo,
           'groupId': groupId,
           'artifactId': artifactId,
           'debian': debian,
-          'dependencies': deps
         ]
 
         def job = template

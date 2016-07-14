@@ -5,22 +5,23 @@ version="1.0.${BUILD_ID}"
 git clean -fdx -e node_modules
 git update-ref --no-deref HEAD HEAD
 
-dependencies="%dependencies%"
-if [ -n "$dependencies" ]; then
-  # Install dependencies not managed through npm-shrinkwrap.json
-  tmp=$(mktemp -d /tmp/npm-XXXXXX)
-  trap "rm -r \"$tmp\"" 0
-  cd "$tmp"
-  ln -s $OLDPWD lib
-  globalconfig=$(npm config get globalconfig)
-  globalignorefile=$(npm config get globalignorefile)
-  args="--globalconfig=$globalconfig \
-    --globalignorefile=$globalignorefile \
-    --prefix=$PWD"
-  for package in $dependencies; do
-    npm install $args -g --production "$package@latest"
+checksum=node_modules/.npm
+if [ ! -e "$checksum" ] || ! sha1sum --status -c "$checksum" ; then
+  mkdir -p node_modules
+  npm prune &&
+    npm install &&
+    sha1sum package.json npm-shrinkwrap.json > "$checksum"
+    shasum -a1 package.json | awk '{print $1}' > node_modules/package.json.sha1
+fi
+
+deps=$(jq -r '.dependencies | to_entries[] | select(.value == "latest") | .key' package.json)
+if [ -n "$deps" ]; then
+  for dep in $deps; do
+    npm install $dep@latest
+    cd node_modules/$dep
+    npm prune --production
+    cd -
   done
-  cd -
 fi
 
 jq .version=\"${version}\" package.json | sponge package.json
