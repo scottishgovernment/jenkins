@@ -164,7 +164,7 @@ jobs << job('Rubric-API-tests') {
     }
     steps {
         shell(trim('''\
-            ./run.sh -e ${TESTENV}
+            ./run.sh -e ${TESTENV} -g ${groups}
         '''))
     }
     publishers {
