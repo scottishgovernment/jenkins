@@ -6,8 +6,7 @@ def jobs = []
 // define vars for conditional triggering based on environment
 def env = System.getenv()
 def myenv = env['FACTER_machine_env']
-def enabled = myenv == "dev" || myenv == "services"
-
+def enabled = myenv == "services"
 
 
 jobs << buildFlowJob('scheduled-rebuild-test-envs') {
@@ -71,14 +70,13 @@ jobs << job('backup-jira') {
     }
     steps {
         shell(trim('''\
-        #!/bin/bash
+        #!/bin/sh
         set -e
-
         remotepath="/tmp/"
         backupfilename=$(ssh devops@jira "ls -lart /tmp/*jira*.tgz | cut -d "/" -f3")
 
-        /usr/bin/scp devops@jira:"$remotepath""$backupfilename" .
-        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key jira/jira_latest.tgz --body "$backupfilename"
+        scp devops@jira:"$remotepath""$backupfilename" .
+        aws s3api put-object --bucket scotgovdigitalbackups --key jira/jira_latest.tgz --body "$backupfilename"
 
         rm -fv "$backupfilename"
         '''))
@@ -94,14 +92,13 @@ jobs << job('backup-confluence') {
     displayName('Backup Confluence')
     steps {
         shell(trim('''\
-        #!/bin/bash
+        #!/bin/sh
         set -e
-
         remotepath="/tmp/"
         backupfilename=$(ssh devops@confluence "ls -lart /tmp/*confluence-backup-inc-db.tgz | tail -1 | cut -d "/" -f3")
 
-        /usr/bin/scp devops@confluence:"$remotepath""$backupfilename" .
-        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key confluence/confluence_latest.tgz --body "$backupfilename"
+        scp devops@confluence:"$remotepath""$backupfilename" .
+        aws s3api put-object --bucket scotgovdigitalbackups --key confluence/confluence_latest.tgz --body "$backupfilename"
 
         rm -fv $backupfilename
         '''))
@@ -117,14 +114,13 @@ jobs << job('backup-stash') {
     displayName('Backup Bitbucket')
     steps {
         shell(trim('''\
-        #!/bin/bash
-
+        #!/bin/sh
         set -e
 
         ssh devops@stash "sudo su - stash -c 'cd bitbucket-backup-client-3.2.0 && java -noverify -jar bitbucket-backup-client.jar'"
         scp devops@stash://home/stash/stash-backup-home/backups/*.tar .
 
-        /usr/local/bin/aws s3api put-object --bucket scotgovdigitalbackups --key bitbucket/bitbucket_latest.tar --body *.tar
+        aws s3api put-object --bucket scotgovdigitalbackups --key bitbucket/bitbucket_latest.tar --body *.tar
 
         rm -rf *.tar
         ssh devops@stash "sudo su - stash -c 'rm -rf /home/stash/stash-backup-home/backups/*.tar'"
@@ -171,7 +167,7 @@ jobs << job('Backup Repo') {
         triggers {
             cron('H 4 * * 1-5')
     }
-}    
+}
 
     displayName('Backup Repo')
     steps {
