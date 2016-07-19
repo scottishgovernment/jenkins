@@ -1,8 +1,6 @@
 set -ex
-repo=www-infrastructure
+repo=puppet
 version="1.0.${BUILD_ID}"
-
-cd puppet
 
 git tag -a -m "Build ${version}" ${version}
 git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"

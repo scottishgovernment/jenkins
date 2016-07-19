@@ -157,7 +157,7 @@ jobs:
     maven: org.mygovscot:publishing-site
 
   - name: 'Puppet Manifests'
-    repo: www-infrastructure
+    repo: puppet
     type: shell
     site: both
     debian: puppetry
