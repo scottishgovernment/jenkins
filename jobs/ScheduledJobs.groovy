@@ -170,6 +170,9 @@ jobs << job('Backup Repo') {
     if (enabled) {
         triggers {
             cron('H 4 * * 1-5')
+    }
+}    
+
     displayName('Backup Repo')
     steps {
         shell(trim('''\
