@@ -152,9 +152,9 @@ jobs << job('backup-sonar') {
     }
 }
 
-jobs << job('Backup Repo') {
-bs << job('backup-sonar') {
+jobs << job('backup-sonar') {
     if (enabled) {
+
         triggers {
             cron('00 05 * * 1-5')
         }
