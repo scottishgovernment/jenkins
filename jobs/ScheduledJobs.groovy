@@ -151,27 +151,6 @@ jobs << job('backup-sonar') {
         '''))
     }
 }
-
-jobs << job('backup-sonar') {
-    if (enabled) {
-
-        triggers {
-            cron('00 05 * * 1-5')
-        }
-    }
-    displayName('Backup SonarQube')
-    steps {
-        shell(trim('''\
-        #!/bin/bash
-        set -e
-        ssh devops@sonar "sudo su - sonar -c 'sonarqube-db backup'"
-        scp devops@sonar:/opt/sonar/backups/sonarqube.ar .
-        aws s3 cp sonarqube.ar s3://scotgovdigitalbackups/sonar/sonarqube.ar
-        scp sonarqube.ar devops@repo:/srv/backups/services/sonarqube.ar
-        rm sonarqube.ar
-        '''))
-    }
-}
 jobs << job('MacFS_Backup') {
     if (enabled) {
         triggers {
@@ -187,11 +166,10 @@ jobs << job('MacFS_Backup') {
         '''))
     }
 }
+jobs << job('Backup Repo') {
     if (enabled) {
         triggers {
             cron('H 4 * * 1-5')
-        }
-    }
     displayName('Backup Repo')
     steps {
         shell(trim('''\
