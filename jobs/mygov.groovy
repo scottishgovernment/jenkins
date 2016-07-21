@@ -9,8 +9,8 @@ import static scot.mygov.jenkins.Utils.slug
  */
 def File workspace() {
     File file = new File(JavaProject.class.getResource('.').toURI())
-    for (int i = 0; i < 6; i++) {
-        file = file.getParentFile()
+    6.times {
+      file = file.getParentFile()
     }
     return file;
 }
