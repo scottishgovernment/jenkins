@@ -144,7 +144,7 @@ jobs << job('backup-jenkins') {
     }
     if (enabled) {
         triggers {
-            cron('H/5 9-14 * * 1-5')
+            cron('H/10 9-18 * * 1-5')
         }
     }
     steps {
