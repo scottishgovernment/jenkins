@@ -69,17 +69,7 @@ jobs << job('backup-jira') {
         }
     }
     steps {
-        shell(trim('''\
-        #!/bin/sh
-        set -e
-        remotepath="/tmp/"
-        backupfilename=$(ssh devops@jira "ls -lart /tmp/*jira*.tgz | cut -d "/" -f3")
-
-        scp devops@jira:"$remotepath""$backupfilename" .
-        aws s3api put-object --bucket scotgovdigitalbackups --key jira/jira_latest.tgz --body "$backupfilename"
-
-        rm -fv "$backupfilename"
-        '''))
+        shell(readFileFromWorkspace('resources/backup-jira.sh'))
     }
 }
 
@@ -91,40 +81,19 @@ jobs << job('backup-confluence') {
     }
     displayName('Backup Confluence')
     steps {
-        shell(trim('''\
-        #!/bin/sh
-        set -e
-        remotepath="/tmp/"
-        backupfilename=$(ssh devops@confluence "ls -lart /tmp/*confluence-backup-inc-db.tgz | tail -1 | cut -d "/" -f3")
-
-        scp devops@confluence:"$remotepath""$backupfilename" .
-        aws s3api put-object --bucket scotgovdigitalbackups --key confluence/confluence_latest.tgz --body "$backupfilename"
-
-        rm -fv $backupfilename
-        '''))
+        shell(readFileFromWorkspace('resources/backup-confluence.sh'))
     }
 }
 
 jobs << job('backup-stash') {
+    displayName('Backup Bitbucket')
     if (enabled) {
         triggers {
             cron('00 04 * * 1-5')
         }
     }
-    displayName('Backup Bitbucket')
     steps {
-        shell(trim('''\
-        #!/bin/sh
-        set -e
-
-        ssh devops@stash "sudo su - stash -c 'cd bitbucket-backup-client-3.2.0 && java -noverify -jar bitbucket-backup-client.jar'"
-        scp devops@stash://home/stash/stash-backup-home/backups/*.tar .
-
-        aws s3api put-object --bucket scotgovdigitalbackups --key bitbucket/bitbucket_latest.tar --body *.tar
-
-        rm -rf *.tar
-        ssh devops@stash "sudo su - stash -c 'rm -rf /home/stash/stash-backup-home/backups/*.tar'"
-        '''))
+      shell(readFileFromWorkspace('resources/backup-bitbucket.sh'))
     }
 }
 
@@ -136,24 +105,17 @@ jobs << job('backup-sonar') {
     }
     displayName('Backup SonarQube')
     steps {
-        shell(trim('''\
-        #!/bin/bash
-        set -e
-        ssh devops@sonar "sudo su - sonar -c 'sonarqube-db backup'"
-        scp devops@sonar:/opt/sonar/backups/sonarqube.ar .
-        aws s3 cp sonarqube.ar s3://scotgovdigitalbackups/sonar/sonarqube.ar
-        scp sonarqube.ar devops@repo:/srv/backups/services/sonarqube.ar
-        rm sonarqube.ar
-        '''))
+        shell(readFileFromWorkspace('resources/backup-sonarqube.sh'))
     }
 }
-jobs << job('MacFS_Backup') {
+
+jobs << job('macfs-backup') {
+    displayName('MacFS Backup')
     if (enabled) {
         triggers {
             cron('00 05 * * 1-5')
         }
     }
-    displayName('MacFS Backup')
     steps {
         shell(trim('''\
         #!/bin/bash
@@ -162,24 +124,19 @@ jobs << job('MacFS_Backup') {
         '''))
     }
 }
-jobs << job('Backup Repo') {
+
+jobs << job('backup-repo') {
+    displayName('Backup Repo')
     if (enabled) {
         triggers {
             cron('H 4 * * 1-5')
+        }
+    }
+    steps {
+        shell(readFileFromWorkspace('resources/backup-repo.sh'))
     }
 }
 
-    displayName('Backup Repo')
-    steps {
-        shell(trim('''\
-        #!/bin/sh
-        ssh devops@repo s3-nexus backup
-        ssh devops@repo s3-apt backup
-        ssh devops@repo s3-apt-cacher-ng backup
-        ssh devops@repo aws s3 sync --delete /srv/backups/ s3://mgs-repo/backups/
-        '''))
-    }
-}
 listView('Scheduled Jobs') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
