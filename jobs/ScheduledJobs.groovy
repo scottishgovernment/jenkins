@@ -137,6 +137,21 @@ jobs << job('backup-repo') {
     }
 }
 
+jobs << job('backup-jenkins') {
+    displayName('Backup Jenkins')
+    logRotator {
+        numToKeep(1)
+    }
+    if (enabled) {
+        triggers {
+            cron('H/5 9-14 * * 1-5')
+        }
+    }
+    steps {
+        shell(readFileFromWorkspace('resources/backup-jenkins.sh'))
+    }
+}
+
 listView('Scheduled Jobs') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
