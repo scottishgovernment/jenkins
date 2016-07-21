@@ -45,6 +45,9 @@ class MyGovProject {
     Job buildJob(DslFactory dslFactory, PrintStream out) {
         return dslFactory.job(slug(name)) {
             displayName(this.name)
+            logRotator {
+                daysToKeep(90)
+            }
             scm {
                 git {
                     remote {
