@@ -2,6 +2,18 @@
 
 This project is used for generating Jenkins job definitions for mygov.scot projects.
 
+## Required Plugins
+
+* job-dsl
+* build-monitor-plugin
+* postbuildscript
+* description-setter
+* promoted-builds
+* git
+* junit
+* htmlpublisher
+* build-flow-plugin
+* testng-plugin
 
 ## Resources
 
