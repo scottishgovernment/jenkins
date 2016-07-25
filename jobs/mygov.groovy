@@ -3,6 +3,7 @@ import build.JavaProject
 import build.MyGovProject
 import build.NodeProject
 import build.ShellProject
+import pipeline.Tools
 
 /**
  * Returns the workspace of this seed project.
@@ -29,11 +30,13 @@ list.addAll(jobs.collect {
 })
 
 job("set-build-id") {
-  displayName('Set Build Number')
-  steps {
-    shell(readFileFromWorkspace('resources/set-build-id'))
-  }
+    displayName('Set Build Number')
+    steps {
+        shell(readFileFromWorkspace('resources/set-build-id'))
+    }
 }
+
+list << new Tools().build(this)
 
 listView('Builds') {
     statusFilter(StatusFilter.ENABLED)
@@ -58,7 +61,6 @@ buildMonitorView('Dashboard') {
         list.each {
             name(it.name)
         }
-        name('Pipeline Tools')
     }
     configure { view ->
         view / title('Builds')
