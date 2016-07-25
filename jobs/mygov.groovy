@@ -1,8 +1,8 @@
 import org.yaml.snakeyaml.Yaml
-import build.*
-
-import static build.Utils.repo
-import static build.Utils.slug
+import build.JavaProject
+import build.MyGovProject
+import build.NodeProject
+import build.ShellProject
 
 /**
  * Returns the workspace of this seed project.

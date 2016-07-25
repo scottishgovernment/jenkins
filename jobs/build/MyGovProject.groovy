@@ -6,7 +6,6 @@ import javaposse.jobdsl.dsl.helpers.step.StepContext
 import javaposse.jobdsl.dsl.helpers.properties.PropertiesContext
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 import javaposse.jobdsl.dsl.helpers.publisher.SlackNotificationsContext
-import org.yaml.snakeyaml.Yaml
 
 import static build.Utils.repo
 import static build.Utils.slug

@@ -23,7 +23,7 @@ class Utils {
     }
 
     static def awsRepo(def ScmContext delegate) {
-        return delegate.git {
+        delegate.git {
             remote {
                 name('origin')
                 url(repo('aws'))
