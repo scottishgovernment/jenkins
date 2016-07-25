@@ -1,4 +1,3 @@
-import static scot.mygov.jenkins.Utils.repo
 
 sites = [
     [

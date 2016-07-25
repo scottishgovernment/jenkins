@@ -7,16 +7,12 @@ import static scot.mygov.jenkins.Utils.slug
 /**
  * Returns the workspace of this seed project.
  */
-def File workspace() {
-    File file = new File(JavaProject.class.getResource('.').toURI())
-    6.times {
-      file = file.getParentFile()
-    }
-    return file;
+def loadYaml(file) {
+    new Yaml().load(readFileFromWorkspace("resources/" + file))
 }
 
-def yaml = new Yaml().load(readFileFromWorkspace("resources/mygov.yaml"))
-def jobs = yaml.get("jobs")
+def jobs = loadYaml("mygov.yaml").jobs
+def sites = loadYaml("environments.yaml").sites
 def list = []
 list.addAll(jobs.collect {
     out.println("Processing job ${it.name}")
@@ -29,13 +25,8 @@ list.addAll(jobs.collect {
     } else if (type == 'node') {
         project = new NodeProject(it)
     }
-    project.build(this, out)
+    project.build(this, sites, out)
 })
-
-new File(workspace(), "jobs.txt").withWriter { out ->
-    jobs.each { out.println(slug(it.name) + "," + repo(it.repo)) }
-    out.println('pipeline' + "," + repo('deploy-pipeline'))
-}
 
 job("set-build-id") {
   displayName('Set Build Number')

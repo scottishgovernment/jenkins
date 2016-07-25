@@ -6,6 +6,7 @@ import javaposse.jobdsl.dsl.helpers.step.StepContext
 import javaposse.jobdsl.dsl.helpers.properties.PropertiesContext
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 import javaposse.jobdsl.dsl.helpers.publisher.SlackNotificationsContext
+import org.yaml.snakeyaml.Yaml
 
 import static scot.mygov.jenkins.Utils.repo
 import static scot.mygov.jenkins.Utils.slug
@@ -19,6 +20,8 @@ class MyGovProject {
 
     PrintStream out
 
+    List sites
+
     String name
 
     String repo
@@ -31,19 +34,20 @@ class MyGovProject {
 
     String maven
 
-    Job build(DslFactory dslFactory, out) {
+    Job build(DslFactory dslFactory, sites, out) {
         this.dsl = dslFactory
+        this.sites = sites
         this.out = out
         try {
-            return buildJob(dslFactory, out)
+            return buildJob()
         } catch (Throwable t) {
             t.printStackTrace(out)
             throw t;
         }
     }
 
-    Job buildJob(DslFactory dslFactory, PrintStream out) {
-        return dslFactory.job(slug(name)) {
+    Job buildJob() {
+        return dsl.job(slug(name)) {
             displayName(this.name)
             logRotator {
                 daysToKeep(90)
@@ -68,7 +72,7 @@ class MyGovProject {
                 slack(delegate)
             }
             properties {
-                deploy(delegate, out)
+                deploy(delegate)
             }
             configure { job ->
                 job / scm / clean(clean())
@@ -98,25 +102,25 @@ class MyGovProject {
         }
     }
 
-    def deploy(PropertiesContext properties, PrintStream out) {
+    def deploy(PropertiesContext properties) {
         if (!site || !debian) {
             return
         }
+        def target = site == 'both' ?
+            sites.collect { it.id } :
+            [ site ]
 
-        def sites = site == 'both' ? [ 'gov', 'mygov' ] : [ site ]
-        def devEnvs = [ 'dev', 'dgv' ]
-        def envs = []
+        def devEnvs = sites.
+            collect { it.environments }.
+            grep { it.type == "isis" }.
+            collect { it.name }
 
-        def mygov = [ 'dev', 'int', 'exp', 'uat', 'per', 'tst', 'blu', 'grn']
-        def gov = [ 'dgv', 'igv', 'egv', 'ugv', 'pgv', 'bgv', 'ggv', 'tgv']
-        def siteEnvs = []
-        if (sites.contains('mygov')) {
-            siteEnvs << mygov
-        }
-        if (sites.contains('gov')) {
-            siteEnvs << gov
-        }
-        envs = flatten(siteEnvs)
+        def siteEnvs = sites.
+            grep { target.contains(it.id) }.
+            collect { it.environments }.
+            collect { it.name }
+
+        def envs = flatten(siteEnvs)
 
         def i = 0;
         properties.promotions {
