@@ -1,4 +1,4 @@
-package scot.mygov.jenkins
+package build
 
 import javaposse.jobdsl.dsl.helpers.ScmContext
 import java.util.regex.*

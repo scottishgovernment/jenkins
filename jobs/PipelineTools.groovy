@@ -1,4 +1,4 @@
-import static scot.mygov.jenkins.Utils.repo
+import static build.Utils.repo
 
 job('pipeline') {
     displayName('Pipeline')

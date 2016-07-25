@@ -1,8 +1,8 @@
 import org.yaml.snakeyaml.Yaml
-import scot.mygov.jenkins.*
+import build.*
 
-import static scot.mygov.jenkins.Utils.repo
-import static scot.mygov.jenkins.Utils.slug
+import static build.Utils.repo
+import static build.Utils.slug
 
 /**
  * Returns the workspace of this seed project.

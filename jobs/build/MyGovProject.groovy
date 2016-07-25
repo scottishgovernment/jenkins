@@ -1,4 +1,4 @@
-package scot.mygov.jenkins
+package build
 
 import javaposse.jobdsl.dsl.DslFactory
 import javaposse.jobdsl.dsl.Job
@@ -8,9 +8,9 @@ import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 import javaposse.jobdsl.dsl.helpers.publisher.SlackNotificationsContext
 import org.yaml.snakeyaml.Yaml
 
-import static scot.mygov.jenkins.Utils.repo
-import static scot.mygov.jenkins.Utils.slug
-import static scot.mygov.jenkins.Utils.trim
+import static build.Utils.repo
+import static build.Utils.slug
+import static build.Utils.trim
 
 class MyGovProject {
 

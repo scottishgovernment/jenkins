@@ -1,8 +1,7 @@
 import org.yaml.snakeyaml.Yaml
 
-import static scot.mygov.jenkins.Utils.repo
-import static scot.mygov.jenkins.Utils.trim
-import static scot.mygov.jenkins.Utils.awsRepo
+import static build.Utils.trim
+import static build.Utils.awsRepo
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
 def environmentsView = []

@@ -1,9 +1,9 @@
-package scot.mygov.jenkins
+package build
 
 import javaposse.jobdsl.dsl.helpers.step.StepContext
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 
-import static scot.mygov.jenkins.Utils.trim
+import static build.Utils.trim
 
 class JavaProject extends MyGovProject {
 

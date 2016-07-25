@@ -1,6 +1,6 @@
-import static scot.mygov.jenkins.Utils.repo
-import static scot.mygov.jenkins.Utils.trim
-import static scot.mygov.jenkins.Utils.awsRepo
+import static build.Utils.repo
+import static build.Utils.trim
+import static build.Utils.awsRepo
 
 def view = []
 

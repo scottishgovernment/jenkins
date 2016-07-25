@@ -1,9 +1,9 @@
-package scot.mygov.jenkins
+package build
 
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 import javaposse.jobdsl.dsl.helpers.step.StepContext
 
-import static scot.mygov.jenkins.Utils.repo
+import static build.Utils.repo
 
 class NodeProject extends MyGovProject {
 
