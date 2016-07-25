@@ -1,6 +1,13 @@
 sites:
   - id: mygov
     domain: mygov.scot
+    types:
+      test:
+        up:   'vpc/mygov_build_test.sh ${env} ${ami}'
+        down: 'vpc/mygov_teardown_test.sh ${env}_vpc'
+      full:
+        up:   'vpc/mygov_build_full.sh ${env} ${ami}'
+        down: 'vpc/mygov_teardown_full.sh ${env}_vpc'
     environments:
       - name: dev
         type: isis
@@ -21,6 +28,13 @@ sites:
 
   - id: gov
     domain: gov.scot
+    types:
+      test:
+        up:   'vpc/gov_build_test.sh ${env} ${ami}'
+        down: 'vpc/gov_teardown_test.sh ${env}_vpc'
+      full:
+        up:   'vpc/gov_build_full.sh ${env} ${ami}'
+        down: 'vpc/gov_teardown_full.sh ${env}_vpc'
     environments:
       - name: dgv
         type: isis

@@ -1,4 +1,6 @@
 import org.yaml.snakeyaml.Yaml
+import environments.Puppet
+import environments.VPC
 
 import static build.Utils.trim
 import static build.Utils.awsRepo
@@ -6,114 +8,10 @@ import static build.Utils.awsRepo
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
 def environmentsView = []
 def pipelineView = []
-def sites = yaml.get("sites")
+def sites = yaml.sites
 
-scripts = [
-    'mygov': [
-        'full': [
-            'up': 'vpc/mygov_build_full.sh ${env} ${ami}',
-            'down': 'vpc/mygov_teardown_full.sh ${env}_vpc'
-        ],
-        'test': [
-            'up': 'vpc/mygov_build_test.sh ${env} ${ami}',
-            'down': 'vpc/mygov_teardown_test.sh ${env}_vpc'
-        ]
-    ],
-    'gov': [
-        'full': [
-            'up': 'vpc/gov_build_full.sh ${env} ${ami}',
-            'down': 'vpc/gov_teardown_full.sh ${env}_vpc'
-        ],
-        'test': [
-            'up': 'vpc/gov_build_test.sh ${env} ${ami}',
-            'down': 'vpc/gov_teardown_test.sh ${env}_vpc'
-        ]
-    ]
-]
-
-def envUp(site, type, List<String> envs) {
-    def cmds = StringBuilder.newInstance()
-    cmds << "#!/bin/sh -e\n"
-    cmds << "ami=\${override:-\$version_NUMBER}\n\n"
-    cmds << "tools/management/s3_restore ${site.domain} \${env}\n"
-    cmds << scripts.get(site.id)?.get(type)?.get('up') << '\n'
-
-    return job("${site.id}-${type}-up") {
-        displayName("Build ${site.domain} ${type} environment")
-        scm {
-            awsRepo(delegate)
-        }
-        parameters {
-            choiceParam('env', envs, "${site.domain} environment")
-        }
-        steps {
-            shell(cmds.toString())
-        }
-        publishers {
-            buildDescription('', '${env}')
-        }
-        parameters {
-            stringParam('override', '',
-                "If the required version isn't available above, specify it here.")
-        }
-        configure {
-            params = (it / 'properties'
-                / 'hudson.model.ParametersDefinitionProperty'
-                / 'parameterDefinitions')
-                .children()
-
-            params.add(0, 'hudson.plugins.promoted__builds.parameters.PromotedBuildParameterDefinition' {
-                name('version')
-                description('')
-                projectName("${site.id}-ami")
-                promotionProcessName('Default')
-            })
-        }
-    }
-}
-
-def envDown(site, type, List<String> envs) {
-    def script = scripts[site.id]?.get(type)?.get('down')
-    return job("${site.id}-${type}-down") {
-        displayName("Tear down ${site.domain} ${type} environment")
-        scm {
-            awsRepo(delegate)
-        }
-        parameters {
-            choiceParam('env', envs, "${site.domain} environment")
-        }
-        steps {
-            shell(script)
-        }
-        publishers {
-            buildDescription('', '${env}')
-        }
-    }
-}
-
-def puppet(site, List<String> envs) {
-    return job("puppet-${site.id}") {
-        displayName("Puppet Apply - ${site.domain}")
-        parameters {
-            choiceParam('env', envs, "${site.domain} environment")
-            choiceParam('dbrestore', ['false', 'true'], 'restore databases')
-            if (site.domain == "gov.scot" ) {
-              choiceParam('redisrestore', ['false', 'true'], 'restore redis and images')
-            }
-        }
-        scm {
-            awsRepo(delegate)
-        }
-        steps {
-            shell((trim("""\
-              if [ "\$dbrestore" = "true" ]; then
-                tools/management/s3_restore ${site.domain} \${env}
-              fi
-            """)))
-            shell(readFileFromWorkspace('resources/puppet-apply.sh'))
-        }
-    }
-}
+def vpc = new VPC(this, out)
+def puppet = new Puppet(this, out)
 
 def promote(site, List<String> envs) {
     return job("promote-${site.id}") {
@@ -183,21 +81,10 @@ def s3revert(site, List<String> envs) {
 
 sites.collect { site ->
     out.println("Processing site ${site.domain}")
+    environmentsView += vpc.site(site)
 
-    def environments = site.environments
-    def types = environments.collect { it.type }.unique(false)
-    types.collect { type ->
-        def envs = environments.grep { it.type == type }.collect { it.name }
-        if (scripts[site.id]?.get(type)?.get('up')) {
-            environmentsView << envUp(site, type, envs)
-        }
-        if (scripts[site.id]?.get(type)?.get('down')) {
-            environmentsView << envDown(site, type, envs)
-        }
-    }
-
-    def envNames = environments.collect { it.name }
-    pipelineView << puppet(site, envNames)
+    def envNames = site.environments.collect { it.name }
+    pipelineView << puppet.build(site, envNames)
     pipelineView << promote(site, envNames)
     pipelineView << s3copy(site, envNames)
     pipelineView << s3revert(site, envNames)
