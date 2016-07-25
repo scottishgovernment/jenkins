@@ -111,6 +111,7 @@ class MyGovProject {
 
         def devEnvs = sites.
             collect { it.environments }.
+            flatten().
             grep { it.type == "isis" }.
             collect { it.name }
 
