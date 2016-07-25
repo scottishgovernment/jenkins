@@ -3,6 +3,8 @@ import data.Restore
 import data.Revert
 import environments.Puppet
 import environments.VPC
+import pipeline.Perform
+import pipeline.Prepare
 import pipeline.Promotion
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
@@ -15,6 +17,8 @@ binding.setVariable("dsl", this)
 binding.setVariable("out", out)
 
 def vpc = new VPC(binding)
+def prepare = new Prepare(binding)
+def perform = new Perform(binding)
 def puppet = new Puppet(binding)
 def promotion = new Promotion(binding)
 def restore = new Restore(binding)
@@ -23,6 +27,9 @@ def revert = new Revert(binding)
 sites.collect { site ->
     out.println("Processing site ${site.domain}")
     environmentsView += vpc.build(site)
+
+    prepare.build(site)
+    perform.build(site)
 
     def envNames = site.environments.collect { it.name }
     pipelineView << puppet.build(site, envNames)

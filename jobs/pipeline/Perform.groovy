@@ -1,49 +1,14 @@
+package pipeline
 
-sites = [
-    [
-        'id': 'mygov',
-        'name': 'mygov.scot',
-        'artifact': 'mygov-site',
-        'test': 'per',
-        'prod': ['blu', 'grn']
-
-    ],
-    [
-        'id': 'gov',
-        'name': 'gov.scot',
-        'artifact': 'gov-site',
-        'test': 'pgv',
-        'prod': ['bgv', 'ggv']
-    ],
-]
-
-sites.each { site ->
-
+def build(site) {
     def id = site.id
-    def domain = site.name
-    def test = site.test
-    def prod = site.prod
-    def artifact = site.artifact
+    def domain = site.domain
+    def prod = site.environments.
+        findAll { it.perform }.
+        collect { it.name }
+    def artifact = id + '-site'
 
-    job(id + '-release-prepare') {
-        displayName("Prepare ${domain} release")
-        steps {
-            shell("pipeline prepare:${test},scot.mygov.release,${artifact},\${BUILD_ID}")
-        }
-        properties {
-             promotions {
-                  promotion {
-                       name("Default")
-                       icon("star-blue")
-                       conditions {
-                            selfPromotion()
-                       }
-                  }
-             }
-        }
-    }
-
-    job(id + '-release-perform') {
+    dsl.job(id + '-release-perform') {
         displayName("Perform ${domain} release")
 
         parameters {
@@ -74,7 +39,6 @@ sites.each { site ->
             })
 
         }
-
     }
 
 }

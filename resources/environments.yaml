@@ -19,12 +19,15 @@ sites:
         type: test
       - name: per
         type: full
+        prepare: true
       - name: tst
         type: full
       - name: blu
         type: full
+        perform: true
       - name: grn
         type: full
+        perform: true
 
   - id: gov
     domain: gov.scot
@@ -46,9 +49,12 @@ sites:
         type: test
       - name: pgv
         type: full
+        prepare: true
       - name: tgv
         type: full
       - name: bgv
         type: full
+        perform: true
       - name: ggv
         type: full
+        perform: true
