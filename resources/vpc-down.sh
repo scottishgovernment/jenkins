@@ -1,7 +1,10 @@
 #!/bin/sh
 set -e
 
-version=$(pipeline list:${env} | awk '/aws:/{print $2}')
+version=$(aws ec2 describe-vpcs \
+  --filters "Name=tag:Name,Values=${env}_vpc" \
+  --query Vpcs[].Tags[?Key==\`Version\`].Value \
+  --output text)
 version=${version:-RELEASE}
 
 content=http://nexus/service/local/artifact/maven/content
