@@ -110,11 +110,6 @@ jobs:
     debian: mygov-site
     maven: org.mygovscot.beta:web-site
 
-  - name: 'Performance Platform'
-    repo: performance_platform
-    type: shell
-    build: pp.sh
-
   - name: 'Pictor'
     repo: pictor
     type: java
