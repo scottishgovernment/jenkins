@@ -1,4 +1,12 @@
 jobs:
+  - name: 'AWS'
+    repo: aws
+    type: shell
+    site: both
+    debian: aws
+    maven: scot.mygov.infrastructure:aws
+    build: './build -v ${BUILD_ID}'
+
   - name: 'Amphora'
     repo: amphora
     type: java
@@ -157,7 +165,7 @@ jobs:
     site: both
     debian: puppetry
     maven: org.mygovscot.puppet:puppetry
-    build: puppet.sh
+    build: './build -v ${BUILD_ID}'
 
   - name: 'Search'
     repo: beta-web-site-search
