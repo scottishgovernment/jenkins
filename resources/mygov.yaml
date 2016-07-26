@@ -5,7 +5,7 @@ jobs:
     site: both
     debian: aws
     maven: scot.mygov.infrastructure:aws
-    build: './build -v ${BUILD_ID}'
+    build: './build -v ${version}'
 
   - name: 'Amphora'
     repo: amphora
@@ -173,7 +173,7 @@ jobs:
     site: both
     debian: puppetry
     maven: org.mygovscot.puppet:puppetry
-    build: './build -v ${BUILD_ID}'
+    build: './build -v ${version}'
 
   - name: 'Search'
     repo: beta-web-site-search
