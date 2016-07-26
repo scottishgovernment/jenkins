@@ -21,22 +21,17 @@ def build(site) {
 }
 
 def envUp(site, type, List<String> envs) {
-    def cmds = StringBuilder.newInstance()
-    cmds << "#!/bin/sh -e\n"
-    cmds << "ami=\${override:-\$version_NUMBER}\n\n"
-    cmds << "tools/management/s3_restore ${site.domain} \${env}\n"
-    cmds << site.types.get(type).up << '\n'
+    def script = dsl.readFileFromWorkspace('resources/vpc-up.sh').
+        replace('%domain%', site.domain).
+        replace('%build%', site.types.get(type).up)
 
     return dsl.job("${site.id}-${type}-up") {
         displayName("Build ${site.domain} ${type} environment")
-        scm {
-            awsRepo(delegate)
-        }
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
         }
         steps {
-            shell(cmds.toString())
+            shell(script)
         }
         publishers {
             buildDescription('', '${env}')
@@ -62,7 +57,9 @@ def envUp(site, type, List<String> envs) {
 }
 
 def envDown(site, type, List<String> envs) {
-    def script = site.types.get(type).down
+    def script = dsl.readFileFromWorkspace('resources/vpc-down.sh').
+        replace('%teardown%', site.types.get(type).down)
+
     return dsl.job("${site.id}-${type}-down") {
         displayName("Tear down ${site.domain} ${type} environment")
         scm {
