@@ -62,9 +62,6 @@ def envDown(site, type, List<String> envs) {
 
     return dsl.job("${site.id}-${type}-down") {
         displayName("Tear down ${site.domain} ${type} environment")
-        scm {
-            awsRepo(delegate)
-        }
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
         }
