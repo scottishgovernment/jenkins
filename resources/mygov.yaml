@@ -102,6 +102,14 @@ jobs:
     debian: healthcheck
     maven: org.mygovscot.healthcheck:healthcheck-deb
 
+  - name: 'Json2csv'
+    repo: json2csv
+    type: node
+    host: pubapp01
+    site: both
+    debian: json2csv
+    maven: scot.mygov.rubric:json2csv
+
   - name: 'Marine Service'
     repo: marine-service
     type: java
