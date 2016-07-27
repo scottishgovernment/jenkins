@@ -3,6 +3,19 @@ set -e
 ami=${override:-$version_NUMBER}
 domain=%domain%
 
+vpc_id() {
+  aws ec2 describe-vpcs \
+    --filters "Name=tag:Name,Values=${env}_vpc" \
+    --query Vpcs[].VpcId \
+    --output text
+}
+
+vpc=$(vpc_id)
+if [ -n "$vpc" ]; then
+  echo "VPC already exists for environment ${env}"
+  exit 1
+fi
+
 version=$(pipeline list:${env} | awk '/aws:/{print $2}')
 version=${version:-RELEASE}
 
@@ -14,12 +27,11 @@ dpkg -x aws.deb .
 cd opt/aws
 
 tools/management/s3_restore ${domain} ${env}
-%build% || true
+%build% || ok=$?
 
-vpc=$(aws ec2 describe-vpcs \
-  --filters "Name=tag:Name,Values=${env}_vpc" \
-  --query Vpcs[].VpcId \
-  --output text)
+vpc=$(vpc_id)
 if [ -n "$vpc" ] && [ "$version" != "RELEASE" ]; then
   aws ec2 create-tags --resources ${vpc} --tags Key=Version,Value=${version}
 fi
+
+exit $ok
