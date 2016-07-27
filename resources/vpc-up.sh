@@ -23,6 +23,10 @@ content=http://nexus/service/local/artifact/maven/content
 curl -sSfo aws.deb \
   "${content}?g=scot.mygov.infrastructure&a=aws&v=${version}&r=releases&p=deb"
 
+v=$(dpkg --info aws.deb | awk '/Version/{print $2}')
+echo "Environment: ${env}"
+echo "Version:     ${v}"
+echo "AMI:         ${version}"
 dpkg -x aws.deb .
 cd opt/aws
 
