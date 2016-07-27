@@ -94,7 +94,7 @@ jobs << job('accessibility-tests') {
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
-                  reportName("Policies page Report")
+                  reportName("Gov Policies page Report")
                   reportFiles("policies-page.html")
                   allowMissing()
                   keepAll()
@@ -115,15 +115,15 @@ jobs << job('accessibility-tests') {
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
-                  reportName("Gov Organisations page Report")
-                  reportFiles("organisations-page.html")
+                  reportName("Gov Cabinet and Ministers page Report")
+                  reportFiles("cabinet-and-ministers.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
-                  reportName("Gov Cabinet Ministers page Report")
-                  reportFiles("organisations-cabinetministers.html")
+                  reportName("Gov Civil Service page Report")
+                  reportFiles("civil-service.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
@@ -136,8 +136,8 @@ jobs << job('accessibility-tests') {
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
-                  reportName("Gov Roles page Report")
-                  reportFiles("roles-page.html")
+                  reportName("Gov Featured Role page Report")
+                  reportFiles("featured-role-page.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
