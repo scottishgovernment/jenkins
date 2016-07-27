@@ -3,7 +3,7 @@ package pipeline
 def build(site) {
 
     def id = site.id
-    def test = site.environments.find { it.prepare }
+    def test = site.environments.find { it.prepare }.name
     def artifact = site.id + '-site'
 
     dsl.job(id + '-release-prepare') {
