@@ -29,6 +29,8 @@ def envUp(site, type, List<String> envs) {
         displayName("Build ${site.domain} ${type} environment")
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
+            stringParam('ami_override', '',
+                "If the required version isn't available above, specify it here.")
         }
         steps {
             shell(script)
@@ -36,18 +38,14 @@ def envUp(site, type, List<String> envs) {
         publishers {
             buildDescription('', '${env}')
         }
-        parameters {
-            stringParam('override', '',
-                "If the required version isn't available above, specify it here.")
-        }
         configure {
             def params = (it / 'properties'
                 / 'hudson.model.ParametersDefinitionProperty'
                 / 'parameterDefinitions')
                 .children()
 
-            params.add(0, 'hudson.plugins.promoted__builds.parameters.PromotedBuildParameterDefinition' {
-                name('version')
+            params.add(1, 'hudson.plugins.promoted__builds.parameters.PromotedBuildParameterDefinition' {
+                name('ami')
                 description('')
                 projectName("${site.id}-ami")
                 promotionProcessName('Default')

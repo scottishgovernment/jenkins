@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-ami=${override:-$version_NUMBER}
+ami=${ami_override:-$ami_NUMBER}
 domain=%domain%
 
 vpc_id() {
@@ -16,26 +16,25 @@ if [ -n "$vpc" ]; then
   exit 1
 fi
 
-version=$(pipeline list:${env} | awk '/aws:/{print $2}')
-version=${version:-RELEASE}
-
 content=http://nexus/service/local/artifact/maven/content
+ver=$(pipeline list:"${env}" | awk '/aws:/{print $2}')
+ver=${ver:-RELEASE}
 curl -sSfo aws.deb \
-  "${content}?g=scot.mygov.infrastructure&a=aws&v=${version}&r=releases&p=deb"
+  "${content}?g=scot.mygov.infrastructure&a=aws&v=${ver}&r=releases&p=deb"
 
-v=$(dpkg --info aws.deb | awk '/Version/{print $2}')
+version=$(dpkg --info aws.deb | awk '/Version/{print $2}')
 echo "Environment: ${env}"
-echo "Version:     ${v}"
-echo "AMI:         ${version}"
+echo "Version:     ${version}"
+echo "AMI:         ${ami}"
 dpkg -x aws.deb .
 cd opt/aws
 
-tools/management/s3_restore ${domain} ${env}
+tools/management/s3_restore "${domain}" "${env}"
 %build% || ok=$?
 
 vpc=$(vpc_id)
-if [ -n "$vpc" ] && [ "$version" != "RELEASE" ]; then
-  aws ec2 create-tags --resources ${vpc} --tags Key=Version,Value=${version}
+if [ -n "$vpc" ]; then
+  aws ec2 create-tags --resources "${vpc}" --tags Key=Version,Value="${version}"
 fi
 
 exit $ok
