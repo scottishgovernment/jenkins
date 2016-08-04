@@ -21,6 +21,8 @@ jobs << buildFlowJob('scheduled-rebuild-test-envs') {
         build("mygov-test-up", env: "int")\n
         build("mygov-test-up", env: "exp")\n
         build("mygov-full-up", env: "per")\n
+        build("mygov-test-up", env: "dev")\n
+        build("gov-test-up", env: "dgv")\n
         build("gov-test-up", env: "egv")
     '''))
 }
@@ -37,6 +39,8 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
         build("mygov-test-down", env: "int")\n
         build("mygov-test-down", env: "exp")\n
         build("mygov-full-down", env: "per")\n
+        build("gov-test-down", env: "dgv")\n
+        build("mygov-test-down", env: "dev")\n
         build("gov-test-down", env: "egv")
     '''))
 }
@@ -120,7 +124,7 @@ jobs << job('macfs-backup') {
         shell(trim('''\
         #!/bin/bash
         set -e
-        ssh devops@macfs "sudo su - macfsbackup -c 'aws s3 sync /opt/shared/ s3://macfs-backup/shared/'"
+        ssh devops@macfs "sudo su - macfsbackup -c 'sudo aws s3 sync /opt/shared/ s3://macfs-backup/shared/'"
         '''))
     }
 }
