@@ -9,18 +9,17 @@ def myenv = env['FACTER_machine_env']
 def enabled = myenv == "services"
 
 
-jobs << buildFlowJob('scheduled-rebuild-test-envs') {
-    displayName('Scheduled Rebuild Test Environments')
+jobs << buildFlowJob('scheduled-build-test-envs') {
+    displayName('Scheduled Build Test Environments')
     if (enabled) {
         triggers {
            cron('30 07 * * 1-5')
         }
     }
     buildFlow(trim('''
-        build("gov-test-up", env: "igv")\n
         build("mygov-test-up", env: "int")\n
+        build("gov-test-up", env: "igv")\n
         build("mygov-test-up", env: "exp")\n
-        build("mygov-full-up", env: "per")\n
         build("gov-test-up", env: "egv")
     '''))
 }
@@ -33,10 +32,9 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
       }
     }
     buildFlow(trim('''
-        build("gov-test-down", env: "igv")\n
         build("mygov-test-down", env: "int")\n
+        build("gov-test-down", env: "igv")\n
         build("mygov-test-down", env: "exp")\n
-        build("mygov-full-down", env: "per")\n
         build("gov-test-down", env: "egv")
     '''))
 }
