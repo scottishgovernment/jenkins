@@ -122,7 +122,7 @@ jobs << job('macfs-backup') {
         shell(trim('''\
         #!/bin/bash
         set -e
-        ssh devops@macfs "sudo su - macfsbackup -c 'aws s3 sync /opt/shared/ s3://macfs-backup/shared/'"
+        ssh devops@macfs "sudo su  macfsbackup -c 'sudo aws s3 sync /opt/shared/ s3://macfs-backup/shared/'"
         '''))
     }
 }
