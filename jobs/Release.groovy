@@ -72,7 +72,7 @@ view << job('mygov-publishing-ctl') {
     }
     steps {
         shell('./tools/management/publishing_ctl ${env} ${domain} ${action}')
-        shell('./tools/management/event_handers.sh ${env} ${eventhandlers_action}')
+        shell('./tools/management/event_handlers.sh ${env} ${eventhandlers_action}')
     }
 }
 
