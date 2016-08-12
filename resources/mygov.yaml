@@ -38,6 +38,14 @@ jobs:
     type: java
     snapshot: ''
 
+  - name: 'Brexit Form'
+    repo: brexit-form
+    type: java
+    host: sitapp01
+    site: mygov
+    debian: brexit-form
+    maven: scot.mygov.business.brexit:brexit-deb
+
   - name: 'Business Rates'
     repo: business-rates-service
     type: java
