@@ -86,7 +86,7 @@ jobs << job('accessibility-tests') {
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
-                  reportName("Gov News page Report")
+                  reportName("Gov News landing page Report")
                   reportFiles("news-landing-page.html")
                   allowMissing()
                   keepAll()
@@ -100,22 +100,29 @@ jobs << job('accessibility-tests') {
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
-                  reportName("Gov Policies page Report")
+                  reportName("Gov Policies landing page Report")
                   reportFiles("policies-landing-page.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
-                  reportName("Gov Publications page Report")
+                  reportName("Gov Publications landing page Report")
                   reportFiles("publications-landing-page.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
-                  reportName("Gov Publication page Report")
-                  reportFiles("publications-page.html")
+                  reportName("Gov Non-APS Publication page Report")
+                  reportFiles("publication-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov APS Publication page Report")
+                  reportFiles("aps-publication-page.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
@@ -165,13 +172,6 @@ jobs << job('accessibility-tests') {
              report("logs/gov/html") {
                   reportName("Gov Role page Report")
                   reportFiles("role-page.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-             report("logs/gov/html") {
-                  reportName("Gov APS Publication page Report")
-                  reportFiles("aps-publication-page.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
