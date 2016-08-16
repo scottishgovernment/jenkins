@@ -7,6 +7,8 @@ import static build.Utils.repo
 
 class NodeProject extends MyGovProject {
 
+    boolean publish
+
     def boolean clean() {
         return false
     }
@@ -31,6 +33,9 @@ class NodeProject extends MyGovProject {
         }
 
         delegate.shell(job)
+        if (publish) {
+            delegate.shell('npm publish')
+        }
     }
 
     def void publish(def PublisherContext delegate) {

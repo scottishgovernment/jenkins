@@ -198,6 +198,7 @@ jobs:
     site: both
     debian: site-builder
     maven: scot.mygov.site:site-builder
+    publish: true
 
   - name: 'Trigger'
     repo: trigger
