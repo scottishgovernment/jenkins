@@ -79,13 +79,6 @@ jobs << job('accessibility-tests') {
              }
 
              report("logs/gov/html") {
-                  reportName("Gov Homepage Report")
-                  reportFiles("home-page.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-             report("logs/gov/html") {
                   reportName("Gov News page Report")
                   reportFiles("news-page.html")
                   allowMissing()
@@ -148,6 +141,14 @@ jobs << job('accessibility-tests') {
                   keepAll()
                   alwaysLinkToLastBuild()
              }
+             report("logs/gov/html") {
+                  reportName("Gov APS Publication page Report")
+                  reportFiles("aps-publication-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+
         }
     }
 }
