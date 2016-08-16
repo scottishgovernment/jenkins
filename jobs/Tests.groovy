@@ -87,14 +87,35 @@ jobs << job('accessibility-tests') {
              }
              report("logs/gov/html") {
                   reportName("Gov News page Report")
-                  reportFiles("news-page.html")
+                  reportFiles("news-landing-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov News Item page Report")
+                  reportFiles("news-item.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
              }
              report("logs/gov/html") {
                   reportName("Gov Policies page Report")
-                  reportFiles("policies-page.html")
+                  reportFiles("policies-landing-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Publications page Report")
+                  reportFiles("publications-landing-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+             report("logs/gov/html") {
+                  reportName("Gov Publication page Report")
+                  reportFiles("publications-page.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
