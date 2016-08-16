@@ -11,6 +11,7 @@ def build(site, List<String> envs) {
             choiceParam('dbrestore', ['false', 'true'], 'restore databases')
             if (site.domain == "gov.scot" ) {
               choiceParam('redisrestore', ['false', 'true'], 'restore redis and images')
+              choiceParam('imagesrestore', ['false', 'true'], 'restore images')
             }
         }
         scm {
@@ -26,4 +27,3 @@ def build(site, List<String> envs) {
         }
     }
 }
-
