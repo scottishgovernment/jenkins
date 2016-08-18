@@ -10,7 +10,8 @@ sites:
         down: 'vpc/mygov_teardown_full.sh ${env}_vpc'
     environments:
       - name: dev
-        type: isis
+        type: test
+        auto: true
       - name: int
         type: test
       - name: exp
@@ -40,7 +41,8 @@ sites:
         down: 'vpc/gov_teardown_full.sh ${env}_vpc'
     environments:
       - name: dgv
-        type: isis
+        type: test
+        auto: true
       - name: igv
         type: test
       - name: egv

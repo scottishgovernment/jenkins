@@ -105,32 +105,18 @@ class MyGovProject {
         if (!site || !debian) {
             return
         }
-        def target = site == 'both' ?
-            sites.collect { it.id } :
-            [ site ]
-
-        def devEnvs = sites.
-            collect { it.environments }.
-            flatten().
-            grep { it.type == "isis" }.
-            collect { it.name }
-
-        def siteEnvs = sites.
-            grep { target.contains(it.id) }.
-            collect { it.environments }.
-            collect { it.name }
-
-        def envs = flatten(siteEnvs)
+        def targets = site == 'both' ? sites : sites.grep { it.id == site }
+        def envs = flatten(targets.collect { it.environments })
 
         def i = 0;
         properties.promotions {
-            envs.each { nm ->
-                def isDev = devEnvs.contains(nm)
+            envs.each { env ->
+                def nm = env.name
                 promotion {
                     name(sprintf("%02d", i++) + " " + nm)
                     icon('star-gold')
                     conditions {
-                        if (isDev) {
+                        if (env.auto) {
                             selfPromotion()
                         } else {
                             manual(null)
@@ -138,7 +124,7 @@ class MyGovProject {
                     }
                     actions {
                         shell("pipeline deploy:${debian},${VERSION},${nm} sync")
-                        if (isDev && host) {
+                        if (env.auto && host) {
                             shell(deploySshStep(nm + host, out))
                         }
                     }
@@ -175,7 +161,7 @@ class MyGovProject {
     /**
      * Flattens a map of lists: [[ma, mb, mc], [ga, gb]] -> [ma, ga, mb, gb, mc]
      */
-    def List<String> flatten(List<List<String>> lists) {
+    def <X> List<X> flatten(List<List<X>> lists) {
         def len = lists.collect { it.size() }.inject { a, b -> Math.max(a,b) }
         def result = []
         (0..len - 1).each { i ->
