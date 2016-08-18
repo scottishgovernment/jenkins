@@ -19,11 +19,13 @@ def build(site, List<String> envs) {
         }
         steps {
             shell((trim("""\
-              if [ "\$dbrestore" = "true" ]; then
-                tools/management/s3_restore ${site.domain} \${env}
-              fi
-            """)))
-            shell(dsl.readFileFromWorkspace('resources/puppet-apply.sh'))
+            #!/bin/sh -e
+           if [ "\$dbrestore" = "true" ]; then
+             tools/management/s3_restore ${site.domain} \${env}
+           fi
+           cd tools/management/aws_fabric
+           fab -P -z 8 --set dbrestore=\${dbrestore},redisrestore=\${redisrestore} \${env} apply
+         """)))
         }
     }
 }
