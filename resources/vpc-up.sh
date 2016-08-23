@@ -30,7 +30,12 @@ dpkg -x aws.deb .
 cd opt/aws
 
 tools/management/s3_restore "${domain}" "${env}"
-%build% || ok=$?
+exitcode=$(mktemp)
+trap 'rm -f $tmp' 0
+(%build% 2>&1 || echo $? > "$exitcode") | ts %H:%M:%.S
+if [ -f "$exitcode" ]; then
+  ok=$(cat "$exitcode")
+fi
 
 vpc=$(vpc_id)
 if [ -n "$vpc" ]; then
