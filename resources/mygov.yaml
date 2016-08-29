@@ -12,7 +12,7 @@ jobs:
     type: java
     snapshot: 'amphora-client'
     host: pubapp01
-    site: gov
+    site: both
     debian: amphora
     maven: scot.mygov.amphora:amphora-deb
 
