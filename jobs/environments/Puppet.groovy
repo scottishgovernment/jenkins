@@ -10,7 +10,6 @@ def build(site, List<String> envs) {
             choiceParam('env', envs, "${site.domain} environment")
             choiceParam('dbrestore', ['false', 'true'], 'restore databases')
             if (site.domain == "gov.scot" ) {
-              choiceParam('redisrestore', ['false', 'true'], 'restore redis and images')
               choiceParam('imagesrestore', ['false', 'true'], 'restore images')
             }
         }
@@ -24,7 +23,7 @@ def build(site, List<String> envs) {
              tools/management/s3_restore ${site.domain} \${env}
            fi
            cd tools/management/aws_fabric
-           fab -P -z 8 --set dbrestore=\${dbrestore},redisrestore=\${redisrestore} \${env} apply
+           fab -P -z 8 --set dbrestore=\${dbrestore},imagesrestore=\${imagesrestore} \${env} apply
          """)))
         }
     }
