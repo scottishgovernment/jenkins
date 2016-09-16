@@ -10,6 +10,9 @@ jobs << job('accessibility-tests') {
         choiceParam('standard', ['WCAG2AA', 'Section508', 'WCAG2A', 'WCAG2AAA'], 'Accessibility Standard')
         choiceParam('keyword', ['error', 'warning', 'notice'], 'Keyword to signify errors')
     }
+    logRotator {
+        daysToKeep(90)
+    }
     scm {
         git(repo('beta-website-accessibility-tests'), 'master')
     }
@@ -187,6 +190,9 @@ jobs << job('rubric-api-tests') {
         choiceParam('TESTENV', ['int', 'exp','per','tst','igv','egv','ugv','pgv','uat'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('groups', ['govsmoke', 'mygovsmoke','govregression','mygovregression'], 'Target Website to Validate')
     }
+    logRotator {
+        daysToKeep(90)
+    }
     scm {
         git(repo('rubric-api-tests'), 'master')
     }
@@ -219,6 +225,9 @@ jobs << job('end-to-end-tests') {
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
         stringParam('selenium_ip_address', '10.21.134.83', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E,webSmokeTests,pubSmokeTests,stagingSite')
+    }
+    logRotator {
+        daysToKeep(90)
     }
     scm {
         git(repo('beta-e2e'), 'master')
@@ -264,6 +273,9 @@ jobs << job('layout-tests') {
         stringParam('webdriver_ip', '10.21.134.83', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('groups', '', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
     }
+    logRotator {
+        daysToKeep(90)
+    }
     scm {
         git(repo('beta-layout-tests'), 'master') {
             clean(true)
@@ -299,6 +311,9 @@ jobs << job('layout-tests') {
 
 jobs << job('publishing-perf-tests') {
     displayName("Publishing Performance Tests")
+    logRotator {
+        daysToKeep(90)
+    }
     scm {
         git(repo('publishing-performance-tests'))
     }
@@ -312,6 +327,9 @@ jobs << job('security-tests') {
      parameters {
         choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'blu','grn','dgv', 'igv', 'egv'], 'The test environment to be used')
 
+    }
+    logRotator {
+        daysToKeep(90)
     }
     scm {
         git(repo('beta-security-tests'))
