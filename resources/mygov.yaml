@@ -62,14 +62,6 @@ jobs:
     debian: decommission-tool
     maven: org.mygovscot.decommission-tool:decommission-tool-deb
 
-  - name: 'Doctor'
-    repo: doctor
-    type: java
-    host: pubapp01
-    site: both
-    debian: doctor
-    maven: org.mygovscot.doctor:doctor-deb
-
   - name: 'Feedback'
     repo: feedback
     type: java
