@@ -80,6 +80,13 @@ jobs << job('accessibility-tests') {
                   keepAll()
                   alwaysLinkToLastBuild()
              }
+             report("logs/mygov/html") {
+                  reportName("MyGov page with dropdown Report")
+                  reportFiles("dropdown-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
 
              report("logs/gov/html") {
                   reportName("Gov Home page Report")
