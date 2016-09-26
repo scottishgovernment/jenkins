@@ -11,7 +11,6 @@ if [ ! -e "$checksum" ] || ! sha1sum --status -c "$checksum" ; then
   npm prune &&
     npm install &&
     sha1sum package.json npm-shrinkwrap.json > "$checksum"
-    shasum -a1 package.json | awk '{print $1}' > node_modules/package.json.sha1
 fi
 
 deps=$(jq -r '.dependencies | to_entries[] | select(.value == "latest") | .key' package.json)
