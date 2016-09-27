@@ -173,6 +173,7 @@ jobs:
     site: both
     debian: puppetry
     maven: org.mygovscot.puppet:puppetry
+    clean: 'git clean -fdx -e .tmp'
     build: './build -v ${version}'
 
   - name: 'Search'

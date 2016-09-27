@@ -6,7 +6,13 @@ import static build.Utils.trim
 
 class ShellProject extends MyGovProject {
 
+    String clean
+
     String build
+
+    def boolean clean() {
+        return !clean
+    }
 
     def void build(def StepContext delegate) {
         def script = StringBuilder.newInstance()
@@ -25,6 +31,9 @@ class ShellProject extends MyGovProject {
                 artifactId=${artifactId}
                 version="1.0.\${BUILD_ID}"\n
                 """)
+        }
+        if (clean) {
+          script << clean << '\n\n'
         }
         script << trim('''\
             git tag -a -m "Build ${version}" ${version}
