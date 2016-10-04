@@ -34,7 +34,7 @@ class NodeProject extends MyGovProject {
 
         delegate.shell(job)
         if (publish) {
-            delegate.shell('npm publish')
+            delegate.shell('npm shrinkwrap && npm publish')
         }
     }
 
