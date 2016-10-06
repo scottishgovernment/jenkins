@@ -120,7 +120,7 @@ jobs << job('macfs-backup') {
     }
     steps {
         shell(trim('''\
-        ssh devops@macfs "sudo -iu macfsbackup sudo aws s3 sync --delete /opt/shared/ s3://macfs-backup/shared/"
+        ssh -o StrictHostKeyChecking=no devops@macfs "sudo -iu macfsbackup sudo aws s3 sync --delete /opt/shared/ s3://macfs-backup/shared/"
         '''))
     }
 }
