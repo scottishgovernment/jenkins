@@ -70,6 +70,15 @@ jobs:
     debian: feedback
     maven: org.mygovscot.feedback:feedback-deb
 
+  - name: 'Fetchor'
+    repo: fetchor
+    type: shell
+    host: sitwww01
+    site: both
+    debian: fetchor
+    maven: scot.mygov.rubric:fetchor
+    build: './build -v ${version}'
+
   - name: 'Funding Tool'
     repo: funding-tool
     type: java
