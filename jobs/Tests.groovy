@@ -269,6 +269,39 @@ jobs << job('end-to-end-tests') {
     }
 }
 
+jobs << job('perceptual-testing') {
+    displayName('perceptual-tests')
+    parameters {
+        choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
+        choiceParam('testenv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
+        choiceParam('referenceEnv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','bgv','ggv','live','local'], 'reference environment where base screenshots will be taken from')
+
+    }
+    logRotator {
+        daysToKeep(90)
+    }
+    scm {
+        git(repo('perceptual-testing'), 'master')
+    }
+    steps {
+        shell(trim('''\
+            ./run.sh -s ${site} -r ${referenceEnv} -t ${testenv}
+        '''))
+    }
+    publishers {
+        archiveJunit('backstop_data/ci_report/*.xml')
+        publishHtml {
+             report("backstop_data//html_report") {
+                  reportName("Perceptual Test HTML Report")
+                  reportFiles("index.html")
+                  allowMissing()
+                  keepAll()
+             }
+
+        }
+    }
+}
+
 
 jobs << job('layout-tests') {
     displayName('Layout Tests')
