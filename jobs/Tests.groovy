@@ -289,7 +289,7 @@ jobs << job('perceptual-testing') {
             if [ "\$install_backstopJS" = "true" ]; then
               ./run.sh -i -p ${platform} -s ${site} -r ${referenceEnv} -t ${testenv}
             else
-              ./run.sh -i -p ${platform} -s ${site} -r ${referenceEnv} -t ${testenv}
+              ./run.sh -p ${platform} -s ${site} -r ${referenceEnv} -t ${testenv}
             fi
         '''))
     }
