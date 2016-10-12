@@ -272,10 +272,11 @@ jobs << job('end-to-end-tests') {
 jobs << job('perceptual-testing') {
     displayName('perceptual-tests')
     parameters {
+        choiceParma('install_backstopJS', ['true', 'false'], 'Set to false to NOT install backstopJS')
+        choiceParam('platform', ['www', 'pub'], 'Use this option to select tests for the site (www) or for Rubric (pub)')
         choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
         choiceParam('testenv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
         choiceParam('referenceEnv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','bgv','ggv','live','local'], 'reference environment where base screenshots will be taken from')
-
     }
     logRotator {
         daysToKeep(90)
@@ -285,7 +286,11 @@ jobs << job('perceptual-testing') {
     }
     steps {
         shell(trim('''\
-            ./run.sh -s ${site} -r ${referenceEnv} -t ${testenv}
+            if [ "\$install_backstopJS" = "true" ]; then
+              ./run.sh -i -p ${platform} -s ${site} -r ${referenceEnv} -t ${testenv}
+            else
+              ./run.sh -i -p ${platform} -s ${site} -r ${referenceEnv} -t ${testenv}
+            fi
         '''))
     }
     publishers {
