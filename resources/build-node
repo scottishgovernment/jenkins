@@ -1,3 +1,4 @@
+#!/bin/sh
 set -ex
 repo={{repo}}
 version="1.0.${BUILD_ID}"
@@ -13,15 +14,27 @@ if [ ! -e "$checksum" ] || ! sha1sum --status -c "$checksum" ; then
     sha1sum package.json npm-shrinkwrap.json > "$checksum"
 fi
 
-deps=$(jq -r '.dependencies | to_entries[] | select(.value == "latest") | .key' package.json)
-if [ -n "$deps" ]; then
-  for dep in $deps; do
-    npm install $dep@latest
-    cd node_modules/$dep
-    npm prune --production
-    cd -
+install_latest() {
+  local property=dependencies
+  local flag=--save
+  if [ "$1" = "--dev" ]; then
+    flag=--save-dev
+    property=devDependencies
+  fi
+  local packages
+  local pkg_vers
+  local pkg
+  packages=$(jq -r ".$property"' | to_entries[] | select(.value == "latest") | .key' package.json)
+  for pkg in $packages; do
+    pkg_vers="${pkg_vers:+$pkg_vers }$pkg@latest"
   done
-fi
+  if [ -n "$pkg_vers" ]; then
+    npm install $flag --production --no-optional "$pkg_vers"
+  fi
+}
+
+install_latest
+install_latest --dev
 
 jq .version=\"${version}\" package.json | sponge package.json
 git add package.json
