@@ -2,6 +2,8 @@ package build
 
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
 import javaposse.jobdsl.dsl.helpers.step.StepContext
+import com.samskivert.mustache.Mustache
+import com.samskivert.mustache.Template
 
 import static build.Utils.repo
 
@@ -14,28 +16,22 @@ class NodeProject extends MyGovProject {
     }
 
     def void build(def StepContext delegate) {
-        def template = dsl.readFileFromWorkspace('resources/node.sh')
+        def template = dsl.readFileFromWorkspace('resources/build-node')
+        def compiled = Mustache.compiler().compile(template);
 
         def colon = maven.indexOf(':')
         def groupId = maven.substring(0, colon)
         def artifactId = maven.substring(colon + 1)
 
-        def subs = [
-          'repo': repo,
-          'groupId': groupId,
-          'artifactId': artifactId,
-          'debian': debian,
-        ]
+        def script = compiled.execute([
+            repo: repo,
+            groupId: groupId,
+            artifactId: artifactId,
+            debian: debian,
+            publish: publish
+        ])
 
-        def job = template
-        subs.each { k, v ->
-            job = job.replaceAll('%' + k + '%', v)
-        }
-
-        delegate.shell(job)
-        if (publish) {
-            delegate.shell('npm shrinkwrap && npm publish')
-        }
+        delegate.shell(script)
     }
 
     def void publish(def PublisherContext delegate) {

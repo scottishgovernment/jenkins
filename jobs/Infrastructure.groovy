@@ -51,7 +51,7 @@ sites.each { site ->
             -DrepositoryId=release \\
             -Dpackaging=json \\
             -DgeneratePom \\
-            -Durl=http://repo.digital.gov.uk/nexus/content/repositories/releases/ \\
+            -Durl=http://nexus/content/repositories/releases/ \\
             -Dfile=ami.json
             """)
             shell(script.toString())

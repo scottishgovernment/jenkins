@@ -1,6 +1,8 @@
 package build
 
 import javaposse.jobdsl.dsl.helpers.step.StepContext
+import com.samskivert.mustache.Mustache
+import com.samskivert.mustache.Template
 
 import static build.Utils.trim
 
@@ -15,50 +17,28 @@ class ShellProject extends MyGovProject {
     }
 
     def void build(def StepContext delegate) {
-        def script = StringBuilder.newInstance()
-        script << trim("""\
-            #!/bin/sh
-            set -ex
-            repo=${repo}
-            """)
+        def vars = [
+            repo: repo,
+            build: build,
+            clean: clean,
+            maven: maven,
+            debian: debian
+        ]
+
         if (maven) {
             def splits = maven.split(':')
             def groupId = splits[0]
             def artifactId = splits[1]
-            script << trim("""\
-                debian=${debian}
-                groupId=${groupId}
-                artifactId=${artifactId}
-                version="1.0.\${BUILD_ID}"\n
-                """)
+            vars << [
+                groupId: groupId,
+                artifactId: artifactId
+            ]
         }
-        if (clean) {
-          script << clean << '\n\n'
-        }
-        script << trim('''\
-            git tag -a -m "Build ${version}" ${version}
-            git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
-            ''')
+        def template = dsl.readFileFromWorkspace('resources/build-shell')
+        def compiled = Mustache.compiler().compile(template);
+        def script = compiled.execute(vars)
 
-        if (build) {
-            script << build << '\n\n'
-        }
-
-        if (maven) {
-          script << trim('''\
-              mvn deploy:deploy-file \\
-                --batch-mode \\
-                -Dfile="${debian}_${version}_all.deb" \\
-                -DgroupId="${groupId}" \\
-                -DartifactId="${artifactId}" \\
-                -Dversion="${version}" \\
-                -Dpackaging=deb \\
-                -DrepositoryId=release \\
-                -Durl=http://repo.digital.gov.uk/content/repositories/releases/
-              ''')
-        }
-
-        delegate.shell(script.toString())
+        delegate.shell(script)
     }
 
 }
