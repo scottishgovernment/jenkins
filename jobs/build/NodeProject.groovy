@@ -11,6 +11,8 @@ class NodeProject extends MyGovProject {
 
     boolean publish
 
+    boolean sonar = true
+
     def boolean clean() {
         return false
     }
@@ -19,22 +21,29 @@ class NodeProject extends MyGovProject {
         def template = dsl.readFileFromWorkspace('resources/build-node')
         def compiled = Mustache.compiler().compile(template);
 
-        def colon = maven.indexOf(':')
-        def groupId = maven.substring(0, colon)
-        def artifactId = maven.substring(colon + 1)
-
-        def script = compiled.execute([
-            repo: repo,
-            groupId: groupId,
-            artifactId: artifactId,
-            debian: debian,
-            publish: publish
-        ])
+        def vars = [
+          repo: repo,
+          debian: debian,
+          publish: publish
+        ]
+        if (maven) {
+            def colon = maven.indexOf(':')
+            def groupId = maven.substring(0, colon)
+            def artifactId = maven.substring(colon + 1)
+            vars << [
+                groupId: groupId,
+                artifactId: artifactId
+            ]
+        }
+        def script = compiled.execute(vars)
 
         delegate.shell(script)
     }
 
     def void publish(def PublisherContext delegate) {
+        if (!sonar) {
+            return
+        }
         delegate.postBuildScripts {
             steps {
                 shell('sonar-check')

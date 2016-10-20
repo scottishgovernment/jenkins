@@ -1,4 +1,10 @@
 jobs:
+  - name: 'Assets'
+    repo: mygov-assets
+    type: node
+    publish: true
+    sonar: false
+
   - name: 'AWS'
     repo: aws
     type: shell
