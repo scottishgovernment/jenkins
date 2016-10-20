@@ -48,7 +48,7 @@ git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
 
 {{#publish}}
 npm shrinkwrap
-npm publish
+npm publish --registry=http://nexus/content/repositories/npm/
 {{/publish}}
 
 {{#debian}}
