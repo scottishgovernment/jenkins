@@ -24,7 +24,7 @@ install_latest() {
   local packages
   local pkg_vers
   local pkg
-  packages=$(jq -r ".$property"' | to_entries[] | select(.value == "latest") | .key' package.json)
+  packages=$(jq -r ".$property"' // [] | to_entries[] | select(.value == "latest") | .key' package.json)
   for pkg in $packages; do
     pkg_vers="${pkg_vers:+$pkg_vers }$pkg@latest"
   done
