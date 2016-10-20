@@ -17,6 +17,8 @@ jobs << buildFlowJob('scheduled-build-test-envs') {
         }
     }
     buildFlow(trim('''
+        build("promote-gov", from: "dgv", to: "igv")\n
+        build("promote-mygov", from: "dev", to: "int")\n
         build("mygov-test-up", env: "int")\n
         build("gov-test-up", env: "igv")\n
         build("mygov-test-up", env: "exp")\n
