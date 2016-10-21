@@ -11,7 +11,7 @@ jobs << job('accessibility-tests') {
         choiceParam('keyword', ['error', 'warning', 'notice'], 'Keyword to signify errors')
     }
     logRotator {
-        daysToKeep(90)
+        daysToKeep(60)
     }
     scm {
         git(repo('beta-website-accessibility-tests'), 'master')
@@ -198,7 +198,7 @@ jobs << job('rubric-api-tests') {
         choiceParam('groups', ['govsmoke', 'mygovsmoke','govregression','mygovregression'], 'Target Website to Validate')
     }
     logRotator {
-        daysToKeep(90)
+        daysToKeep(60)
     }
     scm {
         git(repo('rubric-api-tests'), 'master')
@@ -230,18 +230,23 @@ jobs << job('end-to-end-tests') {
         choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
         choiceParam('testenv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','local'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
+        choiceParam('smoke_only', ['false', 'true'], 'Use this option to ONLY run smoke tests')
         stringParam('selenium_ip_address', '10.21.134.83', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E,webSmokeTests,pubSmokeTests,stagingSite')
     }
     logRotator {
-        daysToKeep(90)
+        daysToKeep(60)
     }
     scm {
         git(repo('beta-e2e'), 'master')
     }
     steps {
         shell(trim('''\
-            ./run.sh -s ${site} -i ${selenium_ip_address} -m ${mode} -t ${tests} -e ${testenv}
+            if [ "\$smoke_only" = "true" ]; then
+                ./run.sh -s ${site} -i ${selenium_ip_address} -m ${mode} -t ${tests} -e ${testenv} -k
+            else
+                ./run.sh -s ${site} -i ${selenium_ip_address} -m ${mode} -t ${tests} -e ${testenv}
+            fi
         '''))
     }
     publishers {
@@ -279,7 +284,7 @@ jobs << job('perceptual-testing') {
         choiceParam('referenceEnv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','bgv','ggv','live','local'], 'reference environment where base screenshots will be taken from')
     }
     logRotator {
-        daysToKeep(90)
+        daysToKeep(60)
     }
     scm {
         git(repo('perceptual-testing'), 'master')
@@ -319,7 +324,7 @@ jobs << job('layout-tests') {
         stringParam('groups', '', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
     }
     logRotator {
-        daysToKeep(90)
+        daysToKeep(60)
     }
     scm {
         git(repo('beta-layout-tests'), 'master') {
@@ -357,7 +362,7 @@ jobs << job('layout-tests') {
 jobs << job('publishing-perf-tests') {
     displayName("Publishing Performance Tests")
     logRotator {
-        daysToKeep(90)
+        daysToKeep(60)
     }
     scm {
         git(repo('publishing-performance-tests'))
@@ -374,7 +379,7 @@ jobs << job('security-tests') {
 
     }
     logRotator {
-        daysToKeep(90)
+        daysToKeep(60)
     }
     scm {
         git(repo('beta-security-tests'))
