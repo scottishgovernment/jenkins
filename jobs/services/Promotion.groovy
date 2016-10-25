@@ -29,7 +29,7 @@ def build() {
             params.add(0, 'hudson.plugins.promoted__builds.parameters.PromotedBuildParameterDefinition' {
                 name('version')
                 description('')
-                projectName('puppet-manifest')
+                projectName('puppet-manifests')
                 promotionProcessName('Default')
             })
         }
