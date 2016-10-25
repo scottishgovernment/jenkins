@@ -55,7 +55,7 @@ jobs:
   - name: 'Business Rates'
     repo: business-rates-service
     type: java
-    host: pubapp01
+    host: sitapp01
     site: mygov
     debian: business-rates
     maven: org.mygovscot.business-rates:business-rates-deb
