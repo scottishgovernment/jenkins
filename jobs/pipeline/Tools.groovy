@@ -31,7 +31,7 @@ def build(dsl) {
                        }
                        actions {
                             String version = '1.0.${PROMOTED_ID}'
-                            shell("pipeline deploy:pipeline,${version},services sync")
+                            shell("pipeline deploy:pipeline,${version},build sync")
                             shell(dsl.readFileFromWorkspace('resources/pipeline-deploy.sh'))
                        }
                   }
