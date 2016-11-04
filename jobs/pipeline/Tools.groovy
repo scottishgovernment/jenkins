@@ -2,6 +2,7 @@ package pipeline
 
 import static build.Utils.repo
 
+
 def build(dsl) {
     dsl.job('pipeline') {
         displayName('Pipeline')
@@ -29,6 +30,8 @@ def build(dsl) {
                             selfPromotion()
                        }
                        actions {
+                            String version = '1.0.${PROMOTED_ID}'
+                            shell("pipeline deploy:pipeline,${version},services sync")
                             shell(dsl.readFileFromWorkspace('resources/pipeline-deploy.sh'))
                        }
                   }
