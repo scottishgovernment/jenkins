@@ -1,0 +1,23 @@
+#!/bin/sh -l
+set -ex
+
+cat <<'EOF' | sudo tee /etc/apt/sources.list.d/services.list >/dev/null
+deb [arch=amd64] http://apt.digital.gov.uk services main
+EOF
+curl -sSf http://apt/key.gpg | sudo apt-key add -
+
+sudo apt-get update
+
+read installed candidate <<EOF
+$(apt-cache policy puppetry | awk '/Installed: /||/Candidate: / {printf $2" "}')
+EOF
+if [ "$installed" != "$candidate" ]; then
+  sudo apt-get install puppetry
+fi
+
+if [ ! -L /tmp/current_puppet ]; then
+  ln -s /tmp/consolidated_puppet /tmp/current_puppet
+fi
+cd /tmp/current_puppet
+printenv | grep FACTER
+./apply 2>&1 | sudo tee /var/log/puppet_run.log

@@ -3,27 +3,35 @@ package services
 import static build.Utils.trim
 
 def build() {
-    dsl.job("apply-services") {
+
+    def template = dsl.readFileFromWorkspace('resources/puppet-apply-services')
+
+    dsl.job('puppet-services') {
+
         displayName("Apply Services Puppet")
 
-
-
         steps {
-          shell(trim('''\
+            def script = StringBuilder.newInstance()
+            script << trim("""\
+                #!/bin/sh
+                set -e
+                cat <<'APPLY' > apply
+                """)
+            script << template
+            script << trim('''\
+                APPLY
 
-        source=/var/lib/jenkins/jobs/mygov-seed/workspace/resources/fabfile.py\n
-        target=/var/lib/jenkins/jobs/apply-services/workspace/services/\n
-
-        if [ ! -d "$target" ] ; then\n
-           mkdir $target\n
-           cp $source $target\n
-        else\n
-           echo "Fabfile is in place already"\n
-        fi\n
-
-        cd services\n
-	      fab -P servers apply\n
- 	      '''))
+                chmod +x apply
+                set -x
+                SSH_OPTS="-o StrictHostKeyChecking=no"
+                for host in macfs; do
+                  scp $SSH_OPTS apply devops@${host}:/tmp
+                  ssh $SSH_OPTS devops@${host} /tmp/apply
+                done
+                ''')
+            shell(script.toString())
         }
-     }
- }
+
+    }
+
+}

@@ -3,7 +3,7 @@ package services
 import static build.Utils.trim
 
 def build() {
-    dsl.job("promote-services") {
+    dsl.job('promote-services') {
         displayName("Promote Services Puppet")
         parameters {
             stringParam('override', '',

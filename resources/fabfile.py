@@ -5,19 +5,30 @@ env.use_ssh_config = True
 env.disable_known_hosts = True
 env.user = 'devops'
 
+
 @task
 def servers():
-    env.hosts = ['gabortest.digital.gov.uk', 'gabortest2.digital.gov.uk']
+    env.hosts = [
+        'gabortest.digital.gov.uk',
+        'gabortest2.digital.gov.uk'
+    ]
+
 
 @task
-def package():
-    sudo("curl -sSo /tmp/currentpuppet.deb 'http://repo.digital.gov.uk/nexus/service/local/artifact/maven/content?g=org.mygovscot.puppet&a=puppetry&v=RELEASE&r=releases&p=deb'")
+def pwd():
+    run('hostname')
+    run('pwd')
 
-@task
-def install():
-    sudo("dpkg -i /tmp/currentpuppet.deb")
 
 @task
 def apply():
+    sudo("""echo "deb [arch=amd64] http://apt.digital.gov.uk services main" > \
+        /etc/apt/sources.list.d/services.list""")
+    sudo('apt-get update')
+    sudo('apt-get install puppetry')
+    with cd('/tmp'):
+        sudo("""if [ ! -l current_puppet ]; then
+          ln -s consolidated_puppet current_puppet;
+          fi""")
     with cd("/tmp/current_puppet"):
-     run("./apply")
+        run("./apply")
