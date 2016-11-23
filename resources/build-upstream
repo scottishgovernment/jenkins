@@ -1,0 +1,42 @@
+#!/bin/sh
+set -ex
+repo={{repo}}
+git="ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git"
+{{#maven}}
+debian={{debian}}
+groupId={{groupId}}
+artifactId={{artifactId}}
+{{/maven}}
+
+{{#clean}}
+{{clean}}
+{{/clean}}
+
+git update-ref --no-deref HEAD HEAD
+git fetch --tags $git
+version=$(make -f debian/rules version)
+last=$(git tag -l | grep ^${version} | cut -d- -f2 | sort -nr | head -1)
+next=$(( last + 1 ))
+version=${version}-${next}
+
+{{#build}}
+{{build}}
+{{/build}}
+
+git add debian/changelog
+git commit -m "Build ${version}"
+echo git tag -a -m "Build ${version}" ${version}
+echo git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
+
+file=$(printf ${debian}_${version}_*.deb)
+{{#maven}}
+echo mvn deploy:deploy-file \
+    --batch-mode \
+    -Dfile="${file}" \
+    -DgroupId="${groupId}" \
+    -DartifactId="${artifactId}" \
+    -Dversion="${version}" \
+    -Dpackaging=deb \
+    -DrepositoryId=release \
+    -Durl=http://nexus/content/repositories/releases/
+{{/maven}}

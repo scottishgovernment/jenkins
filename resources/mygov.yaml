@@ -200,6 +200,14 @@ jobs:
     maven: scot.mygov.site:site-builder
     publish: true
 
+  - name: 'Thumbor'
+    repo: thumbor
+    type: upstream
+    host: pubapp01
+    site: both
+    debian: thumbor
+    maven: scot.mygov.rubric:trigger
+
   - name: 'Trigger'
     repo: trigger
     type: node
