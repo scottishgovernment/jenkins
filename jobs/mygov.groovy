@@ -3,6 +3,7 @@ import build.JavaProject
 import build.MyGovProject
 import build.NodeProject
 import build.ShellProject
+import build.UpstreamProject
 import pipeline.Tools
 
 /**
@@ -25,6 +26,8 @@ list.addAll(jobs.collect {
         project = new ShellProject(it)
     } else if (type == 'node') {
         project = new NodeProject(it)
+    } else if (type == 'upstream') {
+        project = new UpstreamProject(it)
     }
     project.build(this, sites, out)
 })

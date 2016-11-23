@@ -101,6 +101,10 @@ class MyGovProject {
         }
     }
 
+    def String deployVersion(String debian, String env) {
+        return "pipeline deploy:${debian},${VERSION},${env} sync"
+    }
+
     def deploy(PropertiesContext properties) {
         if (!site || !debian) {
             return
@@ -123,7 +127,7 @@ class MyGovProject {
                         }
                     }
                     actions {
-                        shell("pipeline deploy:${debian},${VERSION},${nm} sync")
+                        shell(deployVersion(debian, nm))
                         if (env.auto && host) {
                             shell(deploySshStep(nm + host, out))
                         }
