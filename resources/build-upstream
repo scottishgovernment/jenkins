@@ -24,7 +24,7 @@ echo "VERSION: $version"
 {{build}}
 {{/build}}
 
-git add debian/changelog
+git add -f debian/changelog
 git commit -m "Build ${version}"
 git tag -a -m "Build ${version}" ${version}
 git push --tags "${git}" "${version}"
