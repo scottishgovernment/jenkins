@@ -68,6 +68,14 @@ jobs:
     debian: decommission-tool
     maven: org.mygovscot.decommission-tool:decommission-tool-deb
 
+  - name: 'Disclosure'
+    repo: disclosure
+    type: java
+    host: sitapp01
+    site: mygov
+    debian: disclosure
+    maven: scot.mygov.disclosure:disclosure-deb
+
   - name: 'Feedback'
     repo: feedback
     type: java
