@@ -29,7 +29,7 @@ install_latest() {
     pkg_vers="${pkg_vers:+$pkg_vers }$pkg@latest"
   done
   if [ -n "$pkg_vers" ]; then
-    npm install $flag --production --no-optional "$pkg_vers"
+    npm install $flag --production --no-optional $pkg_vers
   fi
 }
 
