@@ -87,6 +87,13 @@ jobs << job('accessibility-tests') {
                   keepAll()
                   alwaysLinkToLastBuild()
              }
+             report("logs/mygov/html") {
+                  reportName("MyGov Corporate Org Hub Report")
+                  reportFiles("corp-org-hub-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
 
              report("logs/gov/html") {
                   reportName("Gov Home page Report")
