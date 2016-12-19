@@ -13,7 +13,7 @@ jobs << buildFlowJob('scheduled-build-test-envs') {
     displayName('Scheduled Build Test Environments')
     if (enabled) {
         triggers {
-           cron('30 07 * * 1-5')
+           cron('00 07 * * 1-5')
         }
     }
     buildFlow(trim('''
