@@ -93,6 +93,14 @@ jobs:
     maven: scot.mygov.rubric:fetchor
     build: './build -v ${version}'
 
+  - name: 'Form'
+    repo: form
+    type: java
+    host: sitapp01
+    site: mygov
+    debian: form
+    maven: scot.mygov.form:form-deb    
+
   - name: 'Funding Tool'
     repo: funding-tool
     type: java
