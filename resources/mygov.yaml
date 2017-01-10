@@ -99,7 +99,7 @@ jobs:
     host: sitapp01
     site: mygov
     debian: mygov-forms
-    maven: scot.mygov.form:form-deb    
+    maven: scot.mygov.form:mygov-forms-deb    
 
   - name: 'Funding Tool'
     repo: funding-tool
