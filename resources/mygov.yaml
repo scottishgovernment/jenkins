@@ -93,7 +93,7 @@ jobs:
     maven: scot.mygov.rubric:fetchor
     build: './build -v ${version}'
 
-  - name: 'Form'
+  - name: 'Mygov Forms'
     repo: mygov-forms
     type: java
     host: sitapp01
