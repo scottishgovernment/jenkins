@@ -94,7 +94,7 @@ jobs:
     build: './build -v ${version}'
 
   - name: 'Form'
-    repo: form
+    repo: mygov-forms
     type: java
     host: sitapp01
     site: mygov
