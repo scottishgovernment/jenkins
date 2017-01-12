@@ -149,14 +149,6 @@ jobs:
     debian: mygov-site
     maven: org.mygovscot.beta:web-site
 
-  - name: 'Pictor'
-    repo: pictor
-    type: java
-    host: sitapp01
-    site: gov
-    debian: pictor
-    maven: scot.mygov.pictor:pictor-deb
-
   - name: 'Press Releases'
     repo: press-releases
     type: java
