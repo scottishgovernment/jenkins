@@ -44,14 +44,6 @@ jobs:
     type: java
     snapshot: ''
 
-  - name: 'Brexit Form'
-    repo: brexit-form
-    type: java
-    host: sitapp01
-    site: mygov
-    debian: brexit-form
-    maven: scot.mygov.business.brexit:brexit-deb
-
   - name: 'Business Rates'
     repo: business-rates-service
     type: java
@@ -67,14 +59,6 @@ jobs:
     site: both
     debian: decommission-tool
     maven: org.mygovscot.decommission-tool:decommission-tool-deb
-
-  - name: 'Disclosure'
-    repo: disclosure
-    type: java
-    host: sitapp01
-    site: mygov
-    debian: disclosure
-    maven: scot.mygov.disclosure:disclosure-deb
 
   - name: 'Feedback'
     repo: feedback
@@ -132,14 +116,6 @@ jobs:
     site: both
     debian: json2csv
     maven: scot.mygov.rubric:json2csv
-
-  - name: 'Marine Service'
-    repo: marine-service
-    type: java
-    host: sitapp01
-    site: mygov
-    debian: marine-service
-    maven: scot.mygov.marine:marine-service-deb
 
   - name: 'MyGov Site'
     repo: mygov-site
