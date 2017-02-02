@@ -109,7 +109,7 @@ jobs << job('backup-sonar') {
     }
     displayName('Backup SonarQube')
     steps {
-        shell(readFileFromWorkspace('resources/backup-sonarqube.sh'))
+        shell(readFileFromWorkspace('resources/backup-sonarqube'))
     }
 }
 
