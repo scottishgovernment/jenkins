@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 set -e
-ssh -o StrictHostKeyChecking=no devops@sonar "sudo su - sonar -c 'sonarqube-db backup'"
-scp devops@sonar:/opt/sonar/backups/sonarqube.ar .
-aws s3 cp sonarqube.ar s3://scotgovdigitalbackups/sonar/sonarqube.ar
-scp sonarqube.ar devops@repo:/srv/backups/services/sonarqube.ar
-rm sonarqube.ar
+ssh -o StrictHostKeyChecking=no devops@sonar sonarqube-db backup
+files="sonarqube.ar sonarqube.sql.gz"
+for file in $files; do
+  scp "devops@sonar:/opt/sonar/backups/${file}" .
+  aws s3 cp "$file" "s3://scotgovdigitalbackups/sonar/${file}"
+  scp "$file" "devops@repo:/srv/backups/services/${file}"
+  rm "$file"
+done
