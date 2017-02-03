@@ -2,6 +2,10 @@ import static build.Utils.repo
 import static build.Utils.trim
 import static build.Utils.awsRepo
 
+import org.yaml.snakeyaml.Yaml
+
+def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
+def sites = yaml.sites
 def view = []
 
 view << job('blue-green-switch') {
@@ -47,15 +51,50 @@ view << job('bgv-ggv-govscot-switch') {
 }
 
 view << job('site-fail-trigger') {
+    site = sites.grep { it.id == "mygov" }.first()
+    envNames = site.environments.collect { it.name }
+    envNames << "mygov"
+
     displayName('MyGov Site Fail Trigger')
+    parameters {
+        choiceParam('env', envNames, trim('''\
+            Your chosen Environment will be redirected to a holding page.
+            WARNING MyGov option will redirect the live site!'''))
+    }
     scm {
         awsRepo(delegate)
     }
     steps {
         shell(trim('''\
             cd tools/management/
-            ./aws_sitefail_trigger.sh \
+            ./aws_sitefail_trigger.sh ${env}
         '''))
+    }
+}
+
+view << job('site-fail-recover') {
+    siteName = "mygov"
+    site = sites.grep { it.id == siteName }.first()
+    envNames = site.environments.collect { it.name }
+    prod = site.environments.grep { it.perform }.collect { it.name }
+    prod.each { env ->
+      envNames << "${siteName}_${env}"
+    }
+
+    displayName('MyGov Site Fail Recover')
+    parameters {
+        choiceParam('env', envNames, trim('''\
+            The holding page will be removed on your chosen environment
+            (mygov_blu mygov_grn redirect live site to blu or grn ENV)'''))
+    }
+    scm {
+        awsRepo(delegate)
+    }
+    steps {
+        shell(trim('''\
+            cd tools/management/
+            ./aws_sitefail_recover.sh ${env}
+            '''))
     }
 }
 
