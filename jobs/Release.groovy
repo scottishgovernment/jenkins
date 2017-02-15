@@ -4,9 +4,19 @@ import static build.Utils.awsRepo
 
 import org.yaml.snakeyaml.Yaml
 
-def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
-def sites = yaml.sites
 def view = []
+
+def trigger() {
+    yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
+    sites = yaml.sites
+    site = sites.grep { it.id == siteName }.first()
+    envNames = site.environments.collect { it.name }
+}
+
+def recover() {
+    trigger()
+    prod = site.environments.grep { it.perform }.collect { it.name }
+}
 
 view << job('blue-green-switch') {
     displayName('Blue-Green Switch')
@@ -50,11 +60,10 @@ view << job('bgv-ggv-govscot-switch') {
     }
 }
 
-view << job('site-fail-trigger') {
-    site = sites.grep { it.id == "mygov" }.first()
-    envNames = site.environments.collect { it.name }
+view << job('mygov-site-fail-trigger') {
+    siteName = "mygov"
+    trigger()
     envNames << "mygov"
-
     displayName('MyGov Site Fail Trigger')
     parameters {
         choiceParam('env', envNames, trim('''\
@@ -67,25 +76,44 @@ view << job('site-fail-trigger') {
     steps {
         shell(trim('''\
             cd tools/management/
-            ./aws_sitefail_trigger.sh ${env}
+            ./mygov_sitefail_trigger ${env}
         '''))
     }
 }
 
-view << job('site-fail-recover') {
+view << job('gov-site-fail-trigger') {
+    siteName = "gov"
+    trigger()
+    envNames << "gov"
+    displayName('Gov Site Fail Trigger')
+    parameters {
+        choiceParam('env', envNames, trim('''\
+            Your chosen Environment will be redirected to a holding page.
+            WARNING Gov option will redirect the live site!'''))
+    }
+      scm {
+          awsRepo(delegate)
+      }
+      steps {
+          shell(trim('''\
+              cd tools/management/
+              ./gov_sitefail_trigger ${env}
+          '''))
+      }
+}
+
+
+view << job('mygov-site-fail-recover') {
     siteName = "mygov"
-    site = sites.grep { it.id == siteName }.first()
-    envNames = site.environments.collect { it.name }
-    prod = site.environments.grep { it.perform }.collect { it.name }
+    recover()
     prod.each { env ->
       envNames << "${siteName}_${env}"
     }
-
     displayName('MyGov Site Fail Recover')
     parameters {
         choiceParam('env', envNames, trim('''\
             The holding page will be removed on your chosen environment
-            (mygov_blu mygov_grn redirect live site to blu or grn ENV)'''))
+            (mygov_blu or mygov_grn redirects live site to blue or green ENV)'''))
     }
     scm {
         awsRepo(delegate)
@@ -93,7 +121,30 @@ view << job('site-fail-recover') {
     steps {
         shell(trim('''\
             cd tools/management/
-            ./aws_sitefail_recover.sh ${env}
+            ./mygov_sitefail_recover ${env}
+            '''))
+    }
+}
+
+view << job('gov-site-fail-recover') {
+    siteName = "gov"
+    recover()
+    prod.each { env ->
+      envNames << "${siteName}_${env}"
+    }
+    displayName('Gov Site Fail Recover')
+    parameters {
+        choiceParam('env', envNames, trim('''\
+            The holding page will be removed on your chosen environment
+            (gov_bgv or gov_ggv redirects live site to gov blue or gov green ENV)'''))
+    }
+    scm {
+        awsRepo(delegate)
+    }
+    steps {
+        shell(trim('''\
+            cd tools/management/
+            ./gov_sitefail_recover ${env}
             '''))
     }
 }
