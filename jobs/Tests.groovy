@@ -193,6 +193,13 @@ jobs << job('accessibility-tests') {
                   keepAll()
                   alwaysLinkToLastBuild()
              }
+             report("logs/gov/html") {
+                  reportName("Gov Topic page Report")
+                  reportFiles("topic-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
 
         }
     }
