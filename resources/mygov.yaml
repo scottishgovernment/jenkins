@@ -52,6 +52,14 @@ jobs:
     debian: business-rates
     maven: org.mygovscot.business-rates:business-rates-deb
 
+  - name: 'Certbot'
+    repo: certbot
+    type: upstream
+    site: both
+    debian: certbot
+    maven: scot.mygov.upstream:certbot
+    build: './build -v ${version}'
+
   - name: 'Decommission Tool'
     repo: decommission-tool
     type: java
@@ -83,7 +91,7 @@ jobs:
     host: sitapp01
     site: mygov
     debian: mygov-forms
-    maven: scot.mygov.form:mygov-forms-deb    
+    maven: scot.mygov.form:mygov-forms-deb
 
   - name: 'Funding Tool'
     repo: funding-tool
