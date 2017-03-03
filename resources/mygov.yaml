@@ -55,7 +55,7 @@ jobs:
   - name: 'Certbot'
     repo: certbot
     type: upstream
-    site: both
+    site: mygov
     debian: certbot
     maven: scot.mygov.upstream:certbot
     build: './build -v ${version}'
