@@ -149,8 +149,8 @@ view << job('gov-site-fail-recover') {
     }
 }
 
-view << job('mygov-publishing-ctl') {
-    displayName('Start/stop publishing')
+view << job('authentication-ctl') {
+    displayName('Start/stop authentication')
     parameters {
         choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
         choiceParam('domain', ['mygov.scot', 'gov.scot'], 'domain')
@@ -161,7 +161,7 @@ view << job('mygov-publishing-ctl') {
         awsRepo(delegate)
     }
     steps {
-        shell('./tools/management/publishing_ctl ${env} ${domain} ${action}')
+        shell('./tools/management/authentication_ctl ${env} ${domain} ${action}')
         shell('./tools/management/event_handlers.sh ${env} ${eventhandlers_action}')
     }
 }
