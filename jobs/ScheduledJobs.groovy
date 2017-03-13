@@ -1,7 +1,19 @@
 import static build.Utils.trim
 import static build.Utils.awsRepo
-
+import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
+import javaposse.jobdsl.dsl.helpers.publisher.SlackNotificationsContext
 def jobs = []
+
+def void slack(def PublisherContext delegate) {
+    delegate.slackNotifications {
+        notifyAborted()
+        notifyFailure()
+        notifyNotBuilt()
+        notifyUnstable()
+        notifyBackToNormal()
+    }
+}
+
 
 // define vars for conditional triggering based on environment
 def env = System.getenv()
@@ -75,6 +87,9 @@ jobs << job('backup-jira') {
     steps {
         shell(readFileFromWorkspace('resources/backup-jira.sh'))
     }
+    publishers {
+        slack(delegate)
+    }
 }
 
 jobs << job('backup-confluence') {
@@ -87,6 +102,10 @@ jobs << job('backup-confluence') {
     steps {
         shell(readFileFromWorkspace('resources/backup-confluence.sh'))
     }
+    publishers {
+        slack(delegate)
+    }
+
 }
 
 jobs << job('backup-stash') {
@@ -99,6 +118,9 @@ jobs << job('backup-stash') {
     steps {
       shell(readFileFromWorkspace('resources/backup-bitbucket.sh'))
     }
+    publishers {
+        slack(delegate)
+    }
 }
 
 jobs << job('backup-sonar') {
@@ -110,6 +132,9 @@ jobs << job('backup-sonar') {
     displayName('Backup SonarQube')
     steps {
         shell(readFileFromWorkspace('resources/backup-sonarqube'))
+    }
+    publishers {
+        slack(delegate)
     }
 }
 
@@ -125,6 +150,9 @@ jobs << job('macfs-backup') {
         ssh -o StrictHostKeyChecking=no devops@macfs "sudo -iu macfsbackup sudo aws s3 sync --delete /opt/shared/ s3://macfs-backup/shared/"
         '''))
     }
+    publishers {
+        slack(delegate)
+    }
 }
 
 jobs << job('backup-repo') {
@@ -136,6 +164,9 @@ jobs << job('backup-repo') {
     }
     steps {
         shell(readFileFromWorkspace('resources/backup-repo.sh'))
+    }
+    publishers {
+        slack(delegate)
     }
 }
 
@@ -151,6 +182,9 @@ jobs << job('backup-jenkins') {
     }
     steps {
         shell(readFileFromWorkspace('resources/backup-jenkins.sh'))
+    }
+    publishers {
+        slack(delegate)
     }
 }
 
