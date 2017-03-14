@@ -9,9 +9,6 @@ def build(site, List<String> envs) {
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
             choiceParam('dbrestore', ['false', 'true'], 'restore databases')
-            if (site.domain == "gov.scot" ) {
-              choiceParam('imagesrestore', ['false', 'true'], 'restore images')
-            }
         }
         scm {
             awsRepo(delegate)
@@ -23,7 +20,7 @@ def build(site, List<String> envs) {
              tools/management/s3_restore ${site.domain} \${env}
            fi
            cd tools/management/aws_fabric
-           fab -P -z 8 --set dbrestore=\${dbrestore},imagesrestore=\${imagesrestore} \${env} apply
+           fab -P -z 8 --set dbrestore=\${dbrestore} \${env} apply
          """)))
         }
     }
