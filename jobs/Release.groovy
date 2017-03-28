@@ -5,17 +5,30 @@ import static build.Utils.awsRepo
 import org.yaml.snakeyaml.Yaml
 
 def view = []
+yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
+sites = yaml.sites
 
-def trigger() {
-    yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
-    sites = yaml.sites
-    site = sites.grep { it.id == siteName }.first()
-    envNames = site.environments.collect { it.name }
-}
-
-def recover() {
-    trigger()
-    prod = site.environments.grep { it.perform }.collect { it.name }
+sites.collect { site ->
+  envNames = site.environments.collect { it.name }
+  view << job("${site.id}-authentication-ctl") {
+      displayName("${site.id} start/stop authentication")
+      parameters {
+          choiceParam('env', envNames, 'environment')
+          choiceParam('action', ['start', 'stop'], 'action')
+          choiceParam('eventhandlers_action', ['enable', 'disable'], 'eventhandlers_action')
+      }
+      scm {
+          awsRepo(delegate)
+      }
+      steps {
+        shell(trim("""\
+            tools/notifications \${env} \${action} ${site.id}
+            cd tools/management/
+            ./event_handlers.sh \${env} \${eventhandlers_action}
+            ./authentication_ctl \${env} ${site.id}.scot \${action}
+        """))
+      }
+  }
 }
 
 view << job('blue-green-switch') {
@@ -61,8 +74,8 @@ view << job('bgv-ggv-govscot-switch') {
 }
 
 view << job('mygov-site-fail-trigger') {
-    siteName = "mygov"
-    trigger()
+    site = sites.grep { it.id == "mygov" }.first()
+    envNames = site.environments.collect { it.name }
     envNames << "mygov"
     displayName('MyGov Site Fail Trigger')
     parameters {
@@ -82,8 +95,8 @@ view << job('mygov-site-fail-trigger') {
 }
 
 view << job('gov-site-fail-trigger') {
-    siteName = "gov"
-    trigger()
+    site = sites.grep { it.id == "gov" }.first()
+    envNames = site.environments.collect { it.name }
     envNames << "gov"
     displayName('Gov Site Fail Trigger')
     parameters {
@@ -102,10 +115,11 @@ view << job('gov-site-fail-trigger') {
       }
 }
 
-
 view << job('mygov-site-fail-recover') {
     siteName = "mygov"
-    recover()
+    site = sites.grep { it.id == "mygov" }.first()
+    envNames = site.environments.collect { it.name }
+    prod = site.environments.grep { it.perform }.collect { it.name }
     prod.each { env ->
       envNames << "${siteName}_${env}"
     }
@@ -127,8 +141,10 @@ view << job('mygov-site-fail-recover') {
 }
 
 view << job('gov-site-fail-recover') {
-    siteName = "gov"
-    recover()
+    siteName= "gov"
+    site = sites.grep { it.id == "gov" }.first()
+    envNames = site.environments.collect { it.name }
+    prod = site.environments.grep { it.perform }.collect { it.name }
     prod.each { env ->
       envNames << "${siteName}_${env}"
     }
@@ -149,27 +165,30 @@ view << job('gov-site-fail-recover') {
     }
 }
 
-view << job('authentication-ctl') {
-    displayName('Start/stop authentication')
+view << job('mygov-eventhandler-ctl') {
+    siteName = "mygov"
+    site = sites.grep { it.id == "mygov" }.first()
+    envNames = site.environments.collect { it.name }
+    displayName('MyGov Enable/disable event handlers')
     parameters {
-        choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
-        choiceParam('domain', ['mygov.scot', 'gov.scot'], 'domain')
-        choiceParam('action', ['start', 'stop'], 'action')
-        choiceParam('eventhandlers_action', ['enable', 'disable'], 'eventhandlers_action')
+        choiceParam('env', envNames, 'environment')
+        choiceParam('action', ['enable', 'disable'], 'action')
     }
     scm {
         awsRepo(delegate)
     }
     steps {
-        shell('./tools/management/authentication_ctl ${env} ${domain} ${action}')
-        shell('./tools/management/event_handlers.sh ${env} ${eventhandlers_action}')
+        shell('./tools/management/event_handlers.sh ${env} ${action}')
     }
 }
 
-view << job('eventhandler-ctl') {
-    displayName('Enable/disable event handlers')
+view << job('gov-eventhandler-ctl') {
+    siteName = "gov"
+    site = sites.grep { it.id == "gov" }.first()
+    envNames = site.environments.collect { it.name }
+    displayName('Gov Enable/disable event handlers')
     parameters {
-        choiceParam('env', ['blu', 'grn', 'dev', 'exp', 'int', 'per', 'tst', 'uat', 'bgv', 'ggv', 'dgv', 'egv', 'igv', 'pgv', 'tgv', 'ugv' ], 'environment')
+        choiceParam('env', envNames, 'environment')
         choiceParam('action', ['enable', 'disable'], 'action')
     }
     scm {
