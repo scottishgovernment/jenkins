@@ -200,6 +200,13 @@ jobs << job('accessibility-tests') {
                   keepAll()
                   alwaysLinkToLastBuild()
              }
+             report("logs/gov/html") {
+                  reportName("Gov Issue Hub page Report")
+                  reportFiles("issue-hub-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
 
         }
     }
