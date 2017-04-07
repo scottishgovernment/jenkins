@@ -145,6 +145,20 @@ view << job('gov-site-fail-recover') {
     }
 }
 
+view << job('pre-release') {
+    displayName('Prevent changes on live environment')
+    description('Makes an environment read-only by stopping authentication')
+    parameters {
+        choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
+    }
+    scm {
+        awsRepo(delegate)
+    }
+    steps {
+        shell('tools/pre-release ${env}')
+    }
+}
+
 view << job('authentication-ctl') {
     displayName('Start/stop authentication')
     parameters {
@@ -157,22 +171,8 @@ view << job('authentication-ctl') {
         awsRepo(delegate)
     }
     steps {
-        shell('./tools/management/authentication_ctl ${env} ${domain} ${action}')
-        shell('./tools/management/event_handlers.sh ${env} ${eventhandlers_action}')
-    }
-}
-
-view << job('eventhandler-ctl') {
-    displayName('Enable/disable event handlers')
-    parameters {
-        choiceParam('env', ['blu', 'grn', 'dev', 'exp', 'int', 'per', 'tst', 'uat', 'bgv', 'ggv', 'dgv', 'egv', 'igv', 'pgv', 'tgv', 'ugv' ], 'environment')
-        choiceParam('action', ['enable', 'disable'], 'action')
-    }
-    scm {
-        awsRepo(delegate)
-    }
-    steps {
-        shell('./tools/management/event_handlers.sh ${env} ${action}')
+        shell('tools/management/authentication_ctl ${env} ${domain} ${action}')
+        shell('tools/management/event_handlers.sh ${env} ${eventhandlers_action}')
     }
 }
 
