@@ -19,7 +19,7 @@ def build(site, List<String> envs) {
            if [ "\$dbrestore" = "true" ]; then
              tools/management/s3_restore ${site.domain} \${env}
            fi
-           cd tools/management/aws_fabric
+           cd puppet
            fab -P -z 8 --set dbrestore=\${dbrestore} \${env} apply
          """)))
         }
