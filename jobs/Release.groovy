@@ -28,10 +28,8 @@ view << job('blue-green-switch') {
     }
     steps {
         shell(trim('''\
-            cd tools/management/
-            ./aws_blugrn_switch.sh ${env}
-            ./monitoring_switch.sh ${env}
-            ./event_handlers.sh ${env} enable
+            tools/switch-nagios ${env}
+            tools/mygov-switch ${env}
         '''))
     }
     publishers {
@@ -49,10 +47,8 @@ view << job('bgv-ggv-govscot-switch') {
     }
     steps {
         shell(trim('''\
-            cd tools/management/
-            ./aws_bgvggv_switch.sh ${env}
-            ./monitoring_switch.sh ${env}
-            ./event_handlers.sh ${env} enable
+            tools/switch-nagios ${env}
+            tools/gov-switch ${env}
         '''))
     }
     publishers {
