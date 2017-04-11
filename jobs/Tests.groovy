@@ -6,7 +6,8 @@ def jobs = []
 jobs << job('accessibility-tests') {
     displayName('Accessibility Tests')
     parameters {
-        choiceParam('website', ['Both', 'MyGov','Gov'], 'Target Website to Validate')
+        choiceParam('environment', ['dev', 'int', 'exp', 'per', 'uat', 'tst', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv'], 'Envirnoment to run the tests')
+        choiceParam('website', ['both', 'mygov','gov'], 'Target Website to Validate')
         choiceParam('standard', ['WCAG2AA', 'Section508', 'WCAG2A', 'WCAG2AAA'], 'Accessibility Standard')
         choiceParam('keyword', ['error', 'warning', 'notice'], 'Keyword to signify errors')
     }
@@ -18,7 +19,7 @@ jobs << job('accessibility-tests') {
     }
     steps {
         shell(trim('''\
-            ./run.sh -w ${website} -s ${standard} -k ${keyword}
+            ./run.sh -e ${environment} -w ${website} -s ${standard} -k ${keyword}
         '''))
     }
     publishers {
