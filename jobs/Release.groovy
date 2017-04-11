@@ -5,18 +5,8 @@ import static build.Utils.awsRepo
 import org.yaml.snakeyaml.Yaml
 
 def view = []
-
-def trigger() {
-    yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
-    sites = yaml.sites
-    site = sites.grep { it.id == siteName }.first()
-    envNames = site.environments.collect { it.name }
-}
-
-def recover() {
-    trigger()
-    prod = site.environments.grep { it.perform }.collect { it.name }
-}
+yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
+sites = yaml.sites
 
 view << job('blue-green-switch') {
     displayName('Blue-Green Switch')
@@ -58,8 +48,8 @@ view << job('bgv-ggv-govscot-switch') {
 
 view << job('mygov-site-fail-trigger') {
     siteName = "mygov"
-    trigger()
-    envNames << "mygov"
+    site = sites.grep { it.id == siteName }.first()
+    envNames = site.environments.collect { it.name } + [ siteName ]
     displayName('MyGov Site Fail Trigger')
     parameters {
         choiceParam('env', envNames, trim('''\
@@ -79,8 +69,8 @@ view << job('mygov-site-fail-trigger') {
 
 view << job('gov-site-fail-trigger') {
     siteName = "gov"
-    trigger()
-    envNames << "gov"
+    site = sites.grep { it.id == siteName }.first()
+    envNames = site.environments.collect { it.name } + [ siteName ]
     displayName('Gov Site Fail Trigger')
     parameters {
         choiceParam('env', envNames, trim('''\
@@ -101,10 +91,11 @@ view << job('gov-site-fail-trigger') {
 
 view << job('mygov-site-fail-recover') {
     siteName = "mygov"
-    recover()
-    prod.each { env ->
-      envNames << "${siteName}_${env}"
-    }
+    site = sites.grep { it.id == siteName }.first()
+    envNames =
+        site.environments.collect { it.name } +
+        site.environments.grep { it.perform }
+            .collect { "${siteName}_${it.name}" }
     displayName('MyGov Site Fail Recover')
     parameters {
         choiceParam('env', envNames, trim('''\
@@ -124,10 +115,11 @@ view << job('mygov-site-fail-recover') {
 
 view << job('gov-site-fail-recover') {
     siteName = "gov"
-    recover()
-    prod.each { env ->
-      envNames << "${siteName}_${env}"
-    }
+    site = sites.grep { it.id == siteName }.first()
+    envNames =
+        site.environments.collect { it.name } +
+        site.environments.grep { it.perform }
+            .collect { "${siteName}_${it.name}" }
     displayName('Gov Site Fail Recover')
     parameters {
         choiceParam('env', envNames, trim('''\
