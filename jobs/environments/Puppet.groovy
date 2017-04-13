@@ -20,7 +20,7 @@ def build(site, List<String> envs) {
              tools/management/s3_restore ${site.domain} \${env}
            fi
            cd puppet
-           fab -P -z 14 --set dbrestore=\${dbrestore} \${env} apply
+           fab -P -z 8 --set dbrestore=\${dbrestore} \${env} apply
          """)))
         }
     }
