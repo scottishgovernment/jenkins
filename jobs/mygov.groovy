@@ -15,6 +15,7 @@ def loadYaml(file) {
 
 def jobs = loadYaml("mygov.yaml").jobs
 def sites = loadYaml("environments.yaml").sites
+def dashboard = []
 def list = []
 list.addAll(jobs.collect {
     out.println("Processing job ${it.name}")
@@ -29,7 +30,11 @@ list.addAll(jobs.collect {
     } else if (type == 'upstream') {
         project = new UpstreamProject(it)
     }
-    project.build(this, sites, out)
+    def job = project.build(this, sites, out)
+    if (type != "upstream") {
+        dashboard << job
+    }
+    job
 })
 
 job("set-build-id") {
@@ -61,7 +66,7 @@ listView('Builds') {
 buildMonitorView('Dashboard') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
-        list.each {
+        dashboard.each {
             name(it.name)
         }
     }
