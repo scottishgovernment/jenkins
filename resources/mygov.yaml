@@ -1,18 +1,4 @@
 jobs:
-  - name: 'Assets'
-    repo: mygov-assets
-    type: node
-    publish: true
-    sonar: false
-
-  - name: 'AWS'
-    repo: aws
-    type: shell
-    site: both
-    debian: aws
-    maven: scot.mygov.infrastructure:aws
-    build: './build -v ${version}'
-
   - name: 'Amphora'
     repo: amphora
     type: java
@@ -30,6 +16,12 @@ jobs:
     debian: aps-importer
     maven: scot.mygov.aps:aps-importer-deb
 
+  - name: 'Assets'
+    repo: mygov-assets
+    type: node
+    publish: true
+    sonar: false
+
   - name: 'Authentication'
     repo: basic-authentication
     type: java
@@ -39,10 +31,26 @@ jobs:
     debian: basic-authentication
     maven: org.mygovscot.beta:authentication-deb
 
+  - name: 'AWS'
+    repo: aws
+    type: shell
+    site: both
+    debian: aws
+    maven: scot.mygov.infrastructure:aws
+    build: './build -v ${version}'
+
   - name: 'Beta Config'
     repo: beta-config
     type: java
     snapshot: ''
+
+  - name: 'Beta Search'
+    repo: beta-web-site-search
+    type: java
+    host: sitapp01
+    site: both
+    debian: mygov-search
+    maven: org.mygovscot.search:search-debian
 
   - name: 'Business Rates'
     repo: business-rates-service
@@ -176,12 +184,12 @@ jobs:
     build: './build -v ${version}'
 
   - name: 'Search'
-    repo: beta-web-site-search
+    repo: search
     type: java
     host: sitapp01
     site: both
-    debian: mygov-search
-    maven: org.mygovscot.search:search-debian
+    debian: search
+    maven: scot.mygov.search:search-deb
 
   - name: 'Site Builder'
     repo: site-builder
