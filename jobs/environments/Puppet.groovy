@@ -10,6 +10,9 @@ def build(site, List<String> envs) {
             choiceParam('env', envs, "${site.domain} environment")
             choiceParam('dbrestore', ['false', 'true'], 'restore databases')
         }
+        logRotator {
+          daysToKeep(90)
+        }
         scm {
             awsRepo(delegate)
         }
