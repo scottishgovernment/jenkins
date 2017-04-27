@@ -32,6 +32,9 @@ def envUp(site, type, List<String> envs) {
             stringParam('ami_override', '',
                 "If the required version isn't available above, specify it here.")
         }
+        logRotator {
+          daysToKeep(90)
+        }
         steps {
             shell(script)
         }
@@ -62,6 +65,9 @@ def envDown(site, type, List<String> envs) {
         displayName("Tear down ${site.domain} ${type} environment")
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
+        }
+        logRotator {
+          daysToKeep(90)
         }
         steps {
             shell(script)
