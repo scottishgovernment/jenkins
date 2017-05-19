@@ -44,14 +44,6 @@ jobs:
     type: java
     snapshot: ''
 
-  - name: 'Beta Search'
-    repo: beta-web-site-search
-    type: java
-    host: sitapp01
-    site: both
-    debian: mygov-search
-    maven: org.mygovscot.search:search-debian
-
   - name: 'Business Rates'
     repo: business-rates-service
     type: java
