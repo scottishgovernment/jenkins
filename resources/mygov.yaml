@@ -75,6 +75,7 @@ jobs:
     site: both
     debian: csp-report
     maven: scot.mygov.rubric:csp-report
+    build: './build -v ${version}'
 
   - name: 'Decommission Tool'
     repo: decommission-tool
