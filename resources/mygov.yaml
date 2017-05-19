@@ -68,6 +68,14 @@ jobs:
     maven: scot.mygov.upstream:certbot
     build: './build -v ${version}'
 
+  - name: 'CSP Report'
+    repo: csp-report
+    type: shell
+    host: fbkapp01
+    site: both
+    debian: csp-report
+    maven: scot.mygov.rubric:csp-report
+
   - name: 'Decommission Tool'
     repo: decommission-tool
     type: java
