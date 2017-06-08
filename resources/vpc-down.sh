@@ -18,4 +18,11 @@ echo "Version:     ${v}"
 dpkg -x aws.deb .
 cd opt/aws
 
-%teardown%
+exitcode=$(mktemp)
+trap 'rm -f $tmp' 0
+(%teardown% 2>&1 || echo $? > "$exitcode") | ts %H:%M:%.S
+if [ -f "$exitcode" ]; then
+  ok=$(cat "$exitcode")
+fi
+
+exit $ok
