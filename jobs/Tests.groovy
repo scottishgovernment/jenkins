@@ -23,6 +23,7 @@ jobs << job('accessibility-tests') {
         '''))
     }
     publishers {
+        buildDescription('', '$website')
         archiveJunit('logs/**/xml/*.xml')
         publishHtml {
              report("logs/mygov/html") {
