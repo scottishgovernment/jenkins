@@ -266,8 +266,8 @@ jobs << job('end-to-end-tests') {
         '''))
     }
     publishers {
-        archiveJunit('reports/xml/*.xml')
         buildDescription('', '$site - $testenv')
+        archiveJunit('reports/xml/*.xml')
     }
 }
 
@@ -344,10 +344,10 @@ jobs << job('layout-tests') {
     parameters {
         choiceParam('site', ['mygov', 'gov'], 'Site to tests, either MyGov.scot or Gov.scot')
         choiceParam('target_platform', ['www', 'pub'], 'To run the tests either on Informational Website or Publishing Platform')
-        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'dgv', 'igv', 'egv'], 'The test environment to be used')
+        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv'], 'The test environment to be used')
         choiceParam('browser', ['all', 'chrome', 'firefox'], 'Browser to test')
-        stringParam('webdriver_ip', '10.21.134.83', 'Use this option to specify the IP address of the machine running Selenium web driver')
-        stringParam('groups', '', 'Groups to run - homepage, searchpage, fundingpage, orglistpage')
+        stringParam('webdriver_ip', '10.21.134.66', 'Use this option to specify the IP address of the machine running Selenium web driver')
+        stringParam('groups', '', 'Leave empty for all. MyGov - articlepage, corporghubpage, doccollectionpage, fundingpage, guidepage, homepage, orglistpage, searchpage; Gov - apspage, cabinetandministerspage, civilservicepage, directoratepage, featuredrolepage, grouppage, homepage, issuehubpage, newspage, nonapspage, policypage, publicationspage, rolepage, searchpage, topicpage, topicspage')
     }
     logRotator {
         daysToKeep(60)
@@ -364,19 +364,20 @@ jobs << job('layout-tests') {
     }
 
     publishers {
+        buildDescription('', '$site $target_platform - $test_env')
         archiveTestNG('reports/**/xml/*.xml'){
           showFailedBuildsInTrendGraph()
           markBuildAsFailureOnFailedConfiguration()
         }
         publishHtml {
              report("reports/www/mygov/html") {
-                  reportName("MyGov Informational Website HTML Report")
+                  reportName("MyGov Site HTML Report")
                   reportFiles("index.html")
                   allowMissing()
                   keepAll()
              }
              report("reports/www/gov/html") {
-                  reportName("Gov Informational Website HTML Report")
+                  reportName("Gov Site HTML Report")
                   reportFiles("index.html")
                   allowMissing()
                   keepAll()
