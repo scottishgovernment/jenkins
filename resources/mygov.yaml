@@ -63,7 +63,7 @@ jobs:
   - name: 'Config'
     repo: config
     type: java
-    snapshot: ''
+    snapshot: .
 
   - name: 'CSP Report'
     repo: csp-report
