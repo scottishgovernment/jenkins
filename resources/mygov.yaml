@@ -60,6 +60,11 @@ jobs:
     maven: scot.mygov.upstream:certbot
     build: './build -v ${version}'
 
+  - name: 'Config'
+    repo: config
+    type: java
+    snapshot: ''
+
   - name: 'CSP Report'
     repo: csp-report
     type: shell
