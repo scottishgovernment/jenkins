@@ -272,7 +272,7 @@ jobs << job('end-to-end-tests') {
 }
 
 jobs << job('perceptual-testing') {
-    displayName('perceptual-tests')
+    displayName('Perceptual Tests')
     parameters {
         choiceParam('install_backstopJS', ['true', 'false'], 'Set to false to NOT install backstopJS')
         choiceParam('platform', ['www', 'pub'], 'Use this option to select tests for the site (www) or for Rubric (pub)')
@@ -296,6 +296,7 @@ jobs << job('perceptual-testing') {
         '''))
     }
     publishers {
+        buildDescription('', '$site $platform - $testenv VS $referenceEnv')
         archiveJunit('backstop_data/**/ci_report/*.xml')
         publishHtml {
              report("backstop_data/www/mygov/html_report/big_res") {
