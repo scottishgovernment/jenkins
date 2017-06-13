@@ -126,6 +126,14 @@ jobs:
     debian: healthcheck
     maven: org.mygovscot.healthcheck:healthcheck-deb
 
+  - name: 'Housing Data'
+    repo: housing-data
+    type: node
+    host: pubapp01
+    site: mygov
+    debian: housing-data
+    maven: scot.mygov.housing:housing-data
+
   - name: 'Json2csv'
     repo: json2csv
     type: node
