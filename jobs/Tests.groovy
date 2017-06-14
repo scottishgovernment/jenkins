@@ -244,7 +244,7 @@ jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
         choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
-        choiceParam('testenv', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'dgv', 'igv', 'egv', 'ugv',' pgv'], 'Use this option to select test environment against which tests shall be executed')
+        choiceParam('testenv', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'dgv', 'igv', 'egv', 'pgv', 'ugv',' tgv'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
         choiceParam('smoke_only', ['false', 'true'], 'Use this option to ONLY run smoke tests')
         stringParam('selenium_ip_address', '10.21.134.66', 'Use this option to specify the IP address of the machine running Selenium web driver')
