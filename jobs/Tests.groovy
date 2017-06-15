@@ -301,36 +301,42 @@ jobs << job('perceptual-testing') {
                   reportFiles("index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
+                  keepAll()
              }
              report("backstop_data/www/mygov/html_report/small_res") {
                   reportName("MyGov website small resolutions Report")
                   reportFiles("index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
+                  keepAll()
              }
              report("backstop_data/www/gov/html_report/big_res") {
                   reportName("Gov website big resolutions Report")
                   reportFiles("index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
+                  keepAll()
              }
              report("backstop_data/www/gov/html_report/small_res") {
                   reportName("Gov website small resolutions Report")
                   reportFiles("index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
+                  keepAll()
              }
              report("backstop_data/pub/mygov/html_report") {
                   reportName("MyGov Rubric Report")
                   reportFiles("index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
+                  keepAll()
              }
              report("backstop_data/pub/gov/html_report") {
                   reportName("Gov Rubric Report")
                   reportFiles("index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
+                  keepAll()
              }
         }
     }
