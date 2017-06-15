@@ -293,49 +293,48 @@ jobs << job('perceptual-testing') {
         '''))
     }
     publishers {
-        buildDescription('', '$site $platform - $testenv VS $referenceEnv')
+        buildDescription('', '$site')
         archiveJunit('backstop_data/**/ci_report/*.xml')
         publishHtml {
              report("backstop_data/www/mygov/html_report/big_res") {
                   reportName("MyGov website big resolutions Report")
                   reportFiles("index.html")
                   allowMissing()
-                  keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("backstop_data/www/mygov/html_report/small_res") {
                   reportName("MyGov website small resolutions Report")
                   reportFiles("index.html")
                   allowMissing()
-                  keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("backstop_data/www/gov/html_report/big_res") {
                   reportName("Gov website big resolutions Report")
                   reportFiles("index.html")
                   allowMissing()
-                  keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("backstop_data/www/gov/html_report/small_res") {
                   reportName("Gov website small resolutions Report")
                   reportFiles("index.html")
                   allowMissing()
-                  keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("backstop_data/pub/mygov/html_report") {
                   reportName("MyGov Rubric Report")
                   reportFiles("index.html")
                   allowMissing()
-                  keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("backstop_data/pub/gov/html_report") {
                   reportName("Gov Rubric Report")
                   reportFiles("index.html")
                   allowMissing()
-                  keepAll()
+                  alwaysLinkToLastBuild()
              }
         }
     }
 }
-
 
 jobs << job('layout-tests') {
     displayName('Layout Tests')
@@ -373,12 +372,14 @@ jobs << job('layout-tests') {
                   reportFiles("index.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
              report("reports/www/gov/html") {
                   reportName("Gov Site HTML Report")
                   reportFiles("index.html")
                   allowMissing()
                   keepAll()
+                  alwaysLinkToLastBuild()
              }
         }
     }
