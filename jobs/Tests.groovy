@@ -23,7 +23,7 @@ jobs << job('accessibility-tests') {
         '''))
     }
     publishers {
-        buildDescription('', '$website')
+        buildDescription('', '$website', '', '$website')
         archiveJunit('logs/**/xml/*.xml')
         publishHtml {
              report("logs/mygov/html") {
@@ -263,7 +263,7 @@ jobs << job('end-to-end-tests') {
         '''))
     }
     publishers {
-        buildDescription('', '$site - $testenv')
+        buildDescription('', '$site - $testenv', '', '$site - $testenv')
         archiveJunit('reports/xml/*.xml')
     }
 }
@@ -367,7 +367,7 @@ jobs << job('layout-tests') {
     }
 
     publishers {
-        buildDescription('', '$site $target_platform - $test_env')
+        buildDescription('', '$site $target_platform - $test_env', '', '$site $target_platform - $test_env')
         archiveTestNG('reports/**/xml/*.xml'){
           showFailedBuildsInTrendGraph()
           markBuildAsFailureOnFailedConfiguration()
