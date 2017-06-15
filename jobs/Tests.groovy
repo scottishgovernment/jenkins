@@ -274,7 +274,7 @@ jobs << job('perceptual-testing') {
         choiceParam('install_backstopJS', ['true', 'false'], 'Set to false to NOT install backstopJS')
         choiceParam('platform', ['www', 'pub'], 'Use this option to select tests for the site (www) or for Rubric (pub)')
         choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
-        choiceParam('testenv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
+        choiceParam('testEnv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
         choiceParam('referenceEnv', ['live', 'int', 'exp','per', 'uat', 'tst', 'blu', 'grn', 'igv', 'egv', 'pgv','ugv', 'tgv', 'bgv', 'ggv'], 'reference environment where base screenshots will be taken from')
     }
     logRotator {
@@ -286,14 +286,14 @@ jobs << job('perceptual-testing') {
     steps {
         shell(trim('''\
             if [ "\$install_backstopJS" = "true" ]; then
-              ./run.sh -i -p ${platform} -s ${site} -r ${referenceEnv} -t ${testenv}
+              ./run.sh -i -p ${platform} -s ${site} -r ${referenceEnv} -t ${testEnv}
             else
-              ./run.sh -p ${platform} -s ${site} -r ${referenceEnv} -t ${testenv}
+              ./run.sh -p ${platform} -s ${site} -r ${referenceEnv} -t ${testEnv}
             fi
         '''))
     }
     publishers {
-        buildDescription('', '$site')
+        buildDescription('', '$site $platform - $testEnv VS $referenceEnv', '', '$site $platform - $testEnv VS $referenceEnv')
         archiveJunit('backstop_data/**/ci_report/*.xml')
         publishHtml {
              report("backstop_data/www/mygov/html_report/big_res") {
