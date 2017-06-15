@@ -210,7 +210,7 @@ jobs << job('accessibility-tests') {
 jobs << job('rubric-api-tests') {
     displayName('Rubric API tests')
     parameters {
-        choiceParam('TESTENV', ['int', 'exp','per','tst','igv','egv','ugv','pgv','uat'], 'Use this option to select test environment against which tests shall be executed')
+        choiceParam('TESTENV', ['int', 'exp', 'per', 'uat', 'tst', 'igv', 'egv', 'pgv', 'ugv', 'tgv'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('groups', ['govsmoke', 'mygovsmoke','govregression','mygovregression'], 'Target Website to Validate')
     }
     logRotator {
@@ -227,18 +227,15 @@ jobs << job('rubric-api-tests') {
     publishers {
         archiveJunit('target/surefire-reports/junitreports/*.xml')
         publishHtml {
-             report("target/surefire-reports") {
+             report("target/surefire-reports/") {
                   reportName("Rubric API Test Report")
                   reportFiles("index.html")
                   allowMissing()
                   keepAll()
              }
-
         }
     }
 }
-
-
 
 jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
@@ -387,24 +384,10 @@ jobs << job('layout-tests') {
     }
 }
 
-jobs << job('publishing-perf-tests') {
-    displayName("Publishing Performance Tests")
-    logRotator {
-        daysToKeep(60)
-    }
-    scm {
-        git(repo('publishing-performance-tests'))
-    }
-    steps {
-         maven('-B clean install sonar:sonar deploy')
-    }
-}
-
 jobs << job('security-tests') {
     displayName('Security Tests')
      parameters {
-        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'blu','grn','dgv', 'igv', 'egv'], 'The test environment to be used')
-
+        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'dgv', 'igv', 'egv', 'pgv'], 'The test environment to be used')
     }
     logRotator {
         daysToKeep(60)
