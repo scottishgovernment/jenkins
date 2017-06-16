@@ -115,6 +115,14 @@ jobs:
     debian: funding
     maven: scot.mygov.business.funding:funding-deb
 
+  - name: 'GeoSearch'
+    repo: geo-search
+    type: java
+    host: sitapp01
+    site: mygov
+    debian: geo-search
+    maven: scot.mygov.geosearch:geo-deb
+
   - name: 'Gov Site'
     repo: gov-site
     type: node
