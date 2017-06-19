@@ -145,7 +145,7 @@ jobs:
     host: sitapp01
     site: mygov
     debian: housing
-    maven: scot.mygov.housing:housing
+    maven: scot.mygov.housing:housing-deb
 
   - name: 'Housing Data'
     repo: housing-data
