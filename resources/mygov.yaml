@@ -138,6 +138,14 @@ jobs:
     site: both
     debian: healthcheck
     maven: org.mygovscot.healthcheck:healthcheck-deb
+    
+  - name: 'Housing'
+    repo: housing
+    type: java
+    host: sitapp01
+    site: mygov
+    debian: housing
+    maven: scot.mygov.housing:housing-deb
 
   - name: 'Housing Data'
     repo: housing-data
