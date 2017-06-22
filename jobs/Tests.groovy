@@ -6,7 +6,7 @@ def jobs = []
 jobs << job('accessibility-tests') {
     displayName('Accessibility Tests')
     parameters {
-        choiceParam('environment', ['dev', 'int', 'exp', 'per', 'uat', 'tst', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv'], 'Envirnoment to run the tests')
+        choiceParam('environment', ['dev', 'int', 'exp', 'per', 'uat', 'tst', 'blu', 'grn', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'Envirnoment to run the tests')
         choiceParam('website', ['mygov','gov'], 'Target Website to Validate')
         choiceParam('standard', ['WCAG2AA', 'Section508', 'WCAG2A', 'WCAG2AAA'], 'Accessibility Standard')
         choiceParam('keyword', ['error', 'warning', 'notice'], 'Keyword to signify errors')
@@ -241,7 +241,7 @@ jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
         choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
-        choiceParam('testenv', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'dgv', 'igv', 'egv', 'pgv', 'ugv',' tgv'], 'Use this option to select test environment against which tests shall be executed')
+        choiceParam('testenv', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'blu', 'grn', 'dgv', 'igv', 'egv', 'pgv', 'ugv',' tgv', 'bgv', 'ggv'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
         choiceParam('smoke_only', ['false', 'true'], 'Use this option to ONLY run smoke tests')
         stringParam('selenium_ip_address', '10.21.134.66', 'Use this option to specify the IP address of the machine running Selenium web driver')
@@ -347,7 +347,7 @@ jobs << job('layout-tests') {
     parameters {
         choiceParam('site', ['mygov', 'gov'], 'Site to tests, either MyGov.scot or Gov.scot')
         choiceParam('target_platform', ['www', 'pub'], 'To run the tests either on Informational Website or Publishing Platform')
-        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv'], 'The test environment to be used')
+        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'blu', 'grn', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'The test environment to be used')
         choiceParam('browser', ['all', 'chrome', 'firefox'], 'Browser to test')
         stringParam('webdriver_ip', '10.21.134.66', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('groups', '', 'Leave empty for all. MyGov - articlepage, corporghubpage, doccollectionpage, fundingpage, guidepage, homepage, orglistpage, searchpage; Gov - apspage, cabinetandministerspage, civilservicepage, directoratepage, featuredrolepage, grouppage, homepage, issuehubpage, newspage, nonapspage, policypage, publicationspage, rolepage, searchpage, topicpage, topicspage')
