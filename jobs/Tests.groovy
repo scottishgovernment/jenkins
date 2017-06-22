@@ -348,7 +348,7 @@ jobs << job('layout-tests') {
         choiceParam('site', ['mygov', 'gov'], 'Site to tests, either MyGov.scot or Gov.scot')
         choiceParam('target_platform', ['www', 'pub'], 'To run the tests either on Informational Website or Publishing Platform')
         choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'blu', 'grn', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'The test environment to be used')
-        choiceParam('browser', ['all', 'chrome', 'firefox'], 'Browser to test')
+        choiceParam('browser', ['chrome', 'firefox', 'all'], 'Browser to test')
         stringParam('webdriver_ip', '10.21.134.66', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('groups', '', 'Leave empty for all. MyGov - articlepage, corporghubpage, doccollectionpage, fundingpage, guidepage, homepage, orglistpage, searchpage; Gov - apspage, cabinetandministerspage, civilservicepage, directoratepage, featuredrolepage, grouppage, homepage, issuehubpage, newspage, nonapspage, policypage, publicationspage, rolepage, searchpage, topicpage, topicspage')
     }
