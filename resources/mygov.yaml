@@ -2,7 +2,7 @@ jobs:
   - name: 'Amphora'
     repo: amphora
     type: java
-    snapshot: 'amphora-client'
+    snapshot: amphora-client
     host: pubapp01
     site: both
     debian: amphora
@@ -118,6 +118,7 @@ jobs:
   - name: 'GeoSearch'
     repo: geo-search
     type: java
+    snapshot: geo-api
     host: sitapp01
     site: mygov
     debian: geo-search
@@ -138,7 +139,7 @@ jobs:
     site: both
     debian: healthcheck
     maven: org.mygovscot.healthcheck:healthcheck-deb
-    
+
   - name: 'Housing'
     repo: housing
     type: java
