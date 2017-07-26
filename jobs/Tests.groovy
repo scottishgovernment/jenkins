@@ -202,6 +202,13 @@ jobs << job('accessibility-tests') {
                   keepAll()
                   alwaysLinkToLastBuild()
              }
+             report("logs/gov/html") {
+                  reportName("Gov Non APS Page Report")
+                  reportFiles("non-aps-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
 
         }
     }
