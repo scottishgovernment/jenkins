@@ -107,14 +107,6 @@ jobs:
     debian: mygov-forms
     maven: scot.mygov.form:mygov-forms-deb
 
-  - name: 'Funding Tool'
-    repo: funding-tool
-    type: java
-    host: pubapp01
-    site: mygov
-    debian: funding
-    maven: scot.mygov.business.funding:funding-deb
-
   - name: 'GeoSearch'
     repo: geo-search
     type: java
