@@ -48,20 +48,6 @@ jobs << job('accessibility-tests') {
                   alwaysLinkToLastBuild()
              }
              report("logs/mygov/html") {
-                  reportName("MyGov Funding opportunities page Report")
-                  reportFiles("funding-opportunities-page.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-             report("logs/mygov/html") {
-                  reportName("MyGov Funding opportunities list Report")
-                  reportFiles("funding-opportunities-list.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-             report("logs/mygov/html") {
                   reportName("MyGov Guide page Report")
                   reportFiles("guide-page.html")
                   allowMissing()
@@ -357,7 +343,7 @@ jobs << job('layout-tests') {
         choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'blu', 'grn', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'The test environment to be used')
         choiceParam('browser', ['chrome', 'firefox', 'all'], 'Browser to test')
         stringParam('webdriver_ip', '10.21.134.66', 'Use this option to specify the IP address of the machine running Selenium web driver')
-        stringParam('groups', '', 'Leave empty for all. MyGov - articlepage, corporghubpage, doccollectionpage, fundingpage, guidepage, homepage, orglistpage, searchpage; Gov - apspage, cabinetandministerspage, civilservicepage, directoratepage, featuredrolepage, grouppage, homepage, issuehubpage, newspage, nonapspage, policypage, publicationspage, rolepage, searchpage, topicpage, topicspage')
+        stringParam('groups', '', 'Leave empty for all. MyGov - articlepage, corporghubpage, doccollectionpage, guidepage, homepage, orglistpage, searchpage; Gov - apspage, cabinetandministerspage, civilservicepage, directoratepage, featuredrolepage, grouppage, homepage, issuehubpage, newspage, nonapspage, policypage, publicationspage, rolepage, searchpage, topicpage, topicspage')
     }
     logRotator {
         daysToKeep(60)
