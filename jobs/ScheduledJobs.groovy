@@ -60,6 +60,9 @@ jobs << buildFlowJob('scheduled-teardown-test-envs') {
 
 jobs << job('backup-production-s3-buckets') {
     displayName('Backup Production S3 Buckets')
+    logRotator {
+        daysToKeep(10)
+    }
     if (enabled) {
         triggers {
            cron('0 * * * 1-5')
