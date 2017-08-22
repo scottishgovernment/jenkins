@@ -15,7 +15,8 @@ resolve() {
     org.apache.maven.plugins:maven-dependency-plugin:3.0.1:copy \
     -DoutputDirectory=. \
     -Dmdep.stripVersion \
-    -Dartifact=${1}
+    -Dartifact=${1} \
+    >/dev/null
 }
 
 vpc=$(vpc_id)
@@ -37,7 +38,7 @@ cd opt/aws
 
 tools/management/s3_restore "${domain}" "${env}"
 exitcode=$(mktemp)
-trap 'rm -f $tmp' 0
+trap 'rm -f $exitcode' 0
 (%build% 2>&1 || echo $? > "$exitcode") | ts %H:%M:%.S
 if [ -f "$exitcode" ]; then
   ok=$(cat "$exitcode")
