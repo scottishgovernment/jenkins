@@ -10,6 +10,14 @@ vpc_id() {
     --output text
 }
 
+resolve() {
+  mvn \
+    org.apache.maven.plugins:maven-dependency-plugin:3.0.1:copy \
+    -DoutputDirectory=. \
+    -Dmdep.stripVersion \
+    -Dartifact=${1}
+}
+
 vpc=$(vpc_id)
 if [ -n "$vpc" ]; then
   echo "VPC already exists for environment ${env}"
@@ -18,9 +26,7 @@ fi
 
 ver=$(pipeline list:"${env}" | awk '/aws:/{print $2}')
 ver=${ver:-RELEASE}
-repo=http://repo/repository/releases
-curl -sSfo aws.deb \
-  "${repo}/scot/mygov/infrastructure/aws/${ver}/aws-${ver}.deb"
+resolve scot.mygov.infrastructure:aws:${ver}:deb
 
 version=$(dpkg --info aws.deb | awk '/Version/{print $2}')
 echo "Environment: ${env}"

@@ -1,15 +1,21 @@
 #!/bin/sh
 set -eu
 
+resolve() {
+  mvn \
+    org.apache.maven.plugins:maven-dependency-plugin:3.0.1:copy \
+    -DoutputDirectory=. \
+    -Dmdep.stripVersion \
+    -Dartifact=${1}
+}
+
 tag=$(aws ec2 describe-vpcs \
   --filters "Name=tag:Name,Values=${env}_vpc" \
   --query Vpcs[].Tags[?Key==\`Version\`].Value \
   --output text)
 
 ver=${tag:-RELEASE}
-repo=http://repo/repository/releases
-curl -sSfo aws.deb \
-  "${repo}/scot/mygov/infrastructure/aws/${ver}/aws-${ver}.deb"
+resolve scot.mygov.infrastructure:aws:${ver}:deb
 
 v=$(dpkg --info aws.deb | awk '/Version/{print $2}')
 echo "Environment: ${env}"
