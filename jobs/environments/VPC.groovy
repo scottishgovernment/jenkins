@@ -22,6 +22,7 @@ def build(site) {
 
 def envUp(site, type, List<String> envs) {
     def script = dsl.readFileFromWorkspace('resources/vpc-up.sh').
+        replace('%id%', site.id).
         replace('%domain%', site.domain).
         replace('%build%', site.types.get(type).up)
 

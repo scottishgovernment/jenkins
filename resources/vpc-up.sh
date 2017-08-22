@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-ami=${ami_override:-$ami_NUMBER}
+ami=${ami_override:-%id%-$ami_NUMBER}
 domain=%domain%
 
 vpc_id() {
