@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set -eu
 ami=${ami_override:-$ami_NUMBER}
 domain=%domain%
 
@@ -16,11 +16,11 @@ if [ -n "$vpc" ]; then
   exit 1
 fi
 
-content=http://nexus/service/local/artifact/maven/content
 ver=$(pipeline list:"${env}" | awk '/aws:/{print $2}')
 ver=${ver:-RELEASE}
+repo=http://repo/repository/releases
 curl -sSfo aws.deb \
-  "${content}?g=scot.mygov.infrastructure&a=aws&v=${ver}&r=releases&p=deb"
+  "${repo}/scot/mygov/infrastructure/aws/${ver}/aws-${ver}.deb"
 
 version=$(dpkg --info aws.deb | awk '/Version/{print $2}')
 echo "Environment: ${env}"
