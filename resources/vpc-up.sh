@@ -14,6 +14,7 @@ resolve() {
   mvn \
     org.apache.maven.plugins:maven-dependency-plugin:3.0.1:copy \
     -DoutputDirectory=. \
+    -Dmdep.overWriteReleases \
     -Dmdep.stripVersion \
     -Dartifact=${1} \
     >/dev/null
