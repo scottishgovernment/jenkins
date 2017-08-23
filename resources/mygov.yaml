@@ -42,7 +42,7 @@ jobs:
   - name: 'Beta Config'
     repo: beta-config
     type: java
-    snapshot: ''
+    snapshot: .
 
   - name: 'Business Rates'
     repo: business-rates-service
