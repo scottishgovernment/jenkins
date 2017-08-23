@@ -48,7 +48,7 @@ git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
 
 {{#publish}}
 npm shrinkwrap
-npm publish --registry=http://nexus/content/repositories/npm/
+npm publish --registry=http://nexus/repository/npm/
 {{/publish}}
 
 {{#debian}}
@@ -60,5 +60,5 @@ mvn deploy:deploy-file \
   -Dversion="${version}" \
   -Dpackaging=deb \
   -DrepositoryId=release \
-  -Durl=http://nexus/content/repositories/releases/
+  -Durl=http://nexus/repository/releases/
 {{/debian}}
