@@ -1,5 +1,6 @@
 import services.Promotion
 import services.Apply
+import services.Upload
 
 def jobs = []
 Binding binding = new Binding()
@@ -7,6 +8,7 @@ binding.setVariable("dsl", this)
 binding.setVariable("out", out)
 jobs << new Promotion(binding).build()
 jobs << new Apply(binding).build()
+jobs << new Upload(binding).build()
 
 listView('Services') {
     statusFilter(StatusFilter.ENABLED)
