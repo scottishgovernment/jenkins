@@ -8,14 +8,15 @@ def build() {
         displayName("Devnet VPC")
 
         scm {
-            git(repo('devnet'), 'master')
+            git(repo('devnet'))
         }
         triggers {
             scm('# Poll SCM enabled to allow trigger from git hook.')
         }
         steps {
             def script = StringBuilder.newInstance()
-            script << trim("""\
+            shell(trim('''\
+                #!/bin/sh
                 set -ex
                 repo=devnet
                 version="1.0.${BUILD_ID}"
@@ -24,7 +25,7 @@ def build() {
                 git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
 
                 aws s3 sync $WORKSPACE/ s3://mgs-infrastructure/CloudFormationTemplates/
-            """)
+            '''))
             shell(script.toString())
           }
         }
