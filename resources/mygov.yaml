@@ -107,15 +107,6 @@ jobs:
     debian: mygov-forms
     maven: scot.mygov.form:mygov-forms-deb
 
-  - name: 'GeoSearch'
-    repo: geo-search
-    type: java
-    snapshot: geo-api
-    host: sitapp01
-    site: mygov
-    debian: geo-search
-    maven: scot.mygov.geosearch:geo-deb
-
   - name: 'Gov Site'
     repo: gov-site
     type: node
