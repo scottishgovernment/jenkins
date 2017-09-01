@@ -1,5 +1,6 @@
 package services
 
+import static build.Utils.repo
 import static build.Utils.trim
 
 def build() {
@@ -18,7 +19,7 @@ def build() {
                 set -ex
                 repo=devnet
                 version="1.0.${BUILD_ID}"
-                
+
                 git tag -a -m "Build ${version}" ${version}
                 git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
 
