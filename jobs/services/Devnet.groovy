@@ -3,8 +3,8 @@ package services
 import static build.Utils.trim
 
 def build() {
-    dsl.job("upload-cfntemplates") {
-        displayName("Upload CFN Templates to s3")
+    dsl.job("devnet") {
+        displayName("Devnet VPC")
 
         scm {
             git(repo('devnet'), 'master')
@@ -18,8 +18,7 @@ def build() {
                 set -ex
                 repo=devnet
                 version="1.0.${BUILD_ID}"
-
-                git clean -fdx -e .tmp
+                
                 git tag -a -m "Build ${version}" ${version}
                 git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
 
