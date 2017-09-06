@@ -2,13 +2,19 @@ import services.Promotion
 import services.Apply
 import services.Devnet
 
-def jobs = []
 Binding binding = new Binding()
 binding.setVariable("dsl", this)
 binding.setVariable("out", out)
-jobs << new Promotion(binding).build()
-jobs << new Apply(binding).build()
-jobs << new Devnet(binding).build()
+
+def promotion = new Promotion()
+def apply = new Apply()
+def devnet = new Devnet()
+
+def jobs = []
+[promotion, apply, devnet].each { job ->
+  job.setBinding(binding)
+  jobs << job.build()
+}
 
 listView('Services') {
     statusFilter(StatusFilter.ENABLED)

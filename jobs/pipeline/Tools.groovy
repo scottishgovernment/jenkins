@@ -27,7 +27,7 @@ def build(dsl) {
                        name("Build Server")
                        icon("star-blue")
                        conditions {
-                            selfPromotion()
+                            selfPromotion(false)
                        }
                        actions {
                             String version = '1.0.${PROMOTED_ID}'

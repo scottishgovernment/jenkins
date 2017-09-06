@@ -5,7 +5,6 @@ import javaposse.jobdsl.dsl.Job
 import javaposse.jobdsl.dsl.helpers.step.StepContext
 import javaposse.jobdsl.dsl.helpers.properties.PropertiesContext
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
-import javaposse.jobdsl.dsl.helpers.publisher.SlackNotificationsContext
 
 import static build.Utils.repo
 import static build.Utils.slug
@@ -92,12 +91,12 @@ class MyGovProject {
     }
 
     def void slack(def PublisherContext delegate) {
-        delegate.slackNotifications {
-            notifyAborted()
-            notifyFailure()
-            notifyNotBuilt()
-            notifyUnstable()
-            notifyBackToNormal()
+        delegate.slackNotifier {
+            notifyAborted(true)
+            notifyFailure(true)
+            notifyNotBuilt(true)
+            notifyUnstable(true)
+            notifyBackToNormal(true)
         }
     }
 
@@ -121,7 +120,7 @@ class MyGovProject {
                     icon('star-gold')
                     conditions {
                         if (env.auto) {
-                            selfPromotion()
+                            selfPromotion(false)
                         } else {
                             manual(null)
                         }
