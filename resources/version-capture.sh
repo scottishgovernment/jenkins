@@ -9,4 +9,4 @@ mvn deploy:deploy-file \
   -Dversion="${version}" \
   -Dpackaging=yaml \
   -DrepositoryId=release \
-  -Durl=http://repo.digital.gov.uk/nexus/content/repositories/releases/
+  -Durl=http://nexus/repository/releases/

@@ -13,4 +13,4 @@ mvn deploy:deploy-file \
   -Dversion="${version}" \
   -Dpackaging=deb \
   -DrepositoryId=release \
-  -Durl=http://nexus/content/repositories/releases/
+  -Durl=http://nexus/repository/releases/

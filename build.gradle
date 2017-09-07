@@ -9,7 +9,7 @@ sourceSets {
 }
 
 repositories {
-    maven { url 'http://nexus/content/repositories/public/' }
+    maven { url 'http://nexus/repository/public/' }
     jcenter()
     maven { url 'http://repo.jenkins-ci.org/releases/' }
 }

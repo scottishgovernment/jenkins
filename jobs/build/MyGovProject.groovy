@@ -154,7 +154,7 @@ class MyGovProject {
             path="${path}"
             host="${host}"\n""")
         script << trim('''\
-            repo=http://nexus/content/repositories/releases/
+            repo=http://nexus/repository/releases/
             curl -sSf -o "${name}.deb" "${repo}/${path}"
             scp -o StrictHostKeyChecking=no "${name}.deb" "devops@${host}:/tmp/${name}.deb"
             ssh -o StrictHostKeyChecking=no devops@${host} "sudo dpkg -i /tmp/${name}.deb"
