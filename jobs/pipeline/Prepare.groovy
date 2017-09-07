@@ -17,7 +17,7 @@ def build(site) {
                        name("Default")
                        icon("star-blue")
                        conditions {
-                            selfPromotion()
+                            selfPromotion(false)
                        }
                   }
              }

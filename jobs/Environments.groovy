@@ -16,13 +16,17 @@ Binding binding = new Binding()
 binding.setVariable("dsl", this)
 binding.setVariable("out", out)
 
-def vpc = new VPC(binding)
-def prepare = new Prepare(binding)
-def perform = new Perform(binding)
-def puppet = new Puppet(binding)
-def promotion = new Promotion(binding)
-def restore = new Restore(binding)
-def revert = new Revert(binding)
+def vpc = new VPC()
+def prepare = new Prepare()
+def perform = new Perform()
+def puppet = new Puppet()
+def promotion = new Promotion()
+def restore = new Restore()
+def revert = new Revert()
+
+[vpc, prepare, perform, puppet, promotion, restore, revert].each { c ->
+  c.setBinding(binding)
+}
 
 sites.collect { site ->
     out.println("Processing site ${site.domain}")

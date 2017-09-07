@@ -38,18 +38,11 @@ class NodeProject extends MyGovProject {
         def script = compiled.execute(vars)
 
         delegate.shell(script)
-    }
-
-    def void publish(def PublisherContext delegate) {
-        if (!sonar) {
-            return
-        }
-        delegate.postBuildScripts {
-            steps {
-                shell('sonar-check')
+        if (sonar) {
+            delegate.shell {
+                command('sonar-check')
+                unstableReturn(1)
             }
-            onlyIfBuildSucceeds()
-            markBuildUnstable()
         }
     }
 

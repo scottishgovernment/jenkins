@@ -1,16 +1,17 @@
 import static build.Utils.trim
 import static build.Utils.awsRepo
+
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
-import javaposse.jobdsl.dsl.helpers.publisher.SlackNotificationsContext
+
 def jobs = []
 
 def void slack(def PublisherContext delegate) {
-    delegate.slackNotifications {
-        notifyAborted()
-        notifyFailure()
-        notifyNotBuilt()
-        notifyUnstable()
-        notifyBackToNormal()
+    delegate.slackNotifier {
+        notifyAborted(true)
+        notifyFailure(true)
+        notifyNotBuilt(true)
+        notifyUnstable(true)
+        notifyBackToNormal(true)
     }
 }
 
@@ -21,40 +22,61 @@ def myenv = env['FACTER_machine_env']
 def enabled = myenv == "services"
 
 
-jobs << buildFlowJob('scheduled-build-test-envs') {
+jobs << pipelineJob('scheduled-build-test-envs') {
     displayName('Scheduled Build Test Environments')
     if (enabled) {
         triggers {
            cron('00 07 * * 1-5')
         }
     }
-    buildFlow(trim('''
-        build("promote-gov", from: "dgv", to: "igv")\n
-        build("promote-mygov", from: "dev", to: "int")\n
-        build("mygov-test-up", env: "int")\n
-        build("gov-test-up", env: "igv")\n
-        build("mygov-test-up", env: "exp")\n
-        build("mygov-test-up", env: "dev")\n
-        build("gov-test-up", env: "dgv")\n
-        build("gov-test-up", env: "egv")
-    '''))
+    definition {
+      cps {
+        script("""
+          stage('Promote') {
+            build job: 'promote-mygov', parameters: [
+              string(name: 'from', value: 'dev'),
+              string(name: 'to', value: 'int')
+            ]
+            build job: 'promote-gov', parameters: [
+              string(name: 'from', value: 'dgv'),
+              string(name: 'to', value: 'igv')
+            ]
+          }
+          stage('Build') {
+            build job: 'mygov-test-up', parameters: [string(name: 'env', value: 'int')]
+            build job: 'gov-test-up',   parameters: [string(name: 'env', value: 'igv')]
+            build job: 'mygov-test-up', parameters: [string(name: 'env', value: 'exp')]
+            build job: 'mygov-test-up', parameters: [string(name: 'env', value: 'dev')]
+            build job: 'gov-test-up',   parameters: [string(name: 'env', value: 'dgv')]
+            build job: 'gov-test-up',   parameters: [string(name: 'env', value: 'egv')]
+          }
+        """.stripIndent())
+        sandbox()
+      }
+    }
 }
 
-jobs << buildFlowJob('scheduled-teardown-test-envs') {
+
+jobs << pipelineJob('scheduled-teardown-test-envs') {
     displayName('Scheduled Teardown Test Environments')
     if (enabled) {
         triggers {
            cron('30 19 * * 1-5')
+        }
+    }
+    definition {
+      cps {
+        script("""
+          build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'int')]
+          build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'igv')]
+          build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'exp')]
+          build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'dev')]
+          build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'dgv')]
+          build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'egv')]
+        """.stripIndent())
+        sandbox()
       }
     }
-    buildFlow(trim('''
-        build("mygov-test-down", env: "int")\n
-        build("gov-test-down", env: "igv")\n
-        build("mygov-test-down", env: "exp")\n
-        build("gov-test-down", env: "dgv")\n
-        build("mygov-test-down", env: "dev")\n
-        build("gov-test-down", env: "egv")
-    '''))
 }
 
 
