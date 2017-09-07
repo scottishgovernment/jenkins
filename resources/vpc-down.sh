@@ -5,8 +5,10 @@ resolve() {
   mvn \
     org.apache.maven.plugins:maven-dependency-plugin:3.0.1:copy \
     -DoutputDirectory=. \
+    -Dmdep.overWriteReleases \
     -Dmdep.stripVersion \
-    -Dartifact=${1}
+    -Dartifact=${1} \
+    >/dev/null
 }
 
 tag=$(aws ec2 describe-vpcs \
@@ -26,7 +28,7 @@ dpkg -x aws.deb .
 cd opt/aws
 
 exitcode=$(mktemp)
-trap 'rm -f $tmp' 0
+trap 'rm -f $exitcode' 0
 (%teardown% 2>&1 || echo $? > "$exitcode") | ts %H:%M:%.S
 if [ -f "$exitcode" ]; then
   ok=$(cat "$exitcode")
