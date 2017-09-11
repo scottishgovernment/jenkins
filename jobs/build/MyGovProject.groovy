@@ -97,6 +97,7 @@ class MyGovProject {
             notifyNotBuilt(true)
             notifyUnstable(true)
             notifyBackToNormal(true)
+            notifyRepeatedFailure(true)
         }
     }
 

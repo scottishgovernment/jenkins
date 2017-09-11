@@ -12,6 +12,7 @@ def void slack(def PublisherContext delegate) {
         notifyNotBuilt(true)
         notifyUnstable(true)
         notifyBackToNormal(true)
+        notifyRepeatedFailure(true)
     }
 }
 
