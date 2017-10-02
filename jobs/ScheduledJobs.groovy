@@ -68,12 +68,27 @@ jobs << pipelineJob('scheduled-teardown-test-envs') {
     definition {
       cps {
         script("""
-          build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'int')]
-          build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'igv')]
-          build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'exp')]
-          build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'dev')]
-          build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'dgv')]
-          build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'egv')]
+          def tasks = [:]
+
+          tasks["dev"] = {
+            build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'dev')]
+          }
+          tasks["dgv"] = {
+            build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'dgv')]
+          }
+          tasks["exp"] = {
+            build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'exp')]
+          }
+          tasks["egv"] = {
+            build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'egv')]
+          }
+          tasks["int"] = {
+            build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'int')]
+          }
+          tasks["igv"] = {
+            build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'igv')]
+          }
+          parallel tasks
         """.stripIndent())
         sandbox()
       }
