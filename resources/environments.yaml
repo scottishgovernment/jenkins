@@ -12,8 +12,10 @@ sites:
       - name: dev
         type: test
         auto: true
+        scheduled: true
       - name: int
         type: test
+        scheduled: true
       - name: exp
         type: test
       - name: uat
@@ -43,8 +45,10 @@ sites:
       - name: dgv
         type: test
         auto: true
+        scheduled: true
       - name: igv
         type: test
+        scheduled: true
       - name: egv
         type: test
       - name: ugv

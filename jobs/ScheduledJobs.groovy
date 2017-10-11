@@ -1,9 +1,12 @@
+import org.yaml.snakeyaml.Yaml
+import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
+
 import static build.Utils.trim
 import static build.Utils.awsRepo
 
-import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
-
 def jobs = []
+def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
+def sites = yaml.sites
 
 def void slack(def PublisherContext delegate) {
     delegate.slackNotifier {
@@ -46,10 +49,8 @@ jobs << pipelineJob('scheduled-build-test-envs') {
           stage('Build') {
             build job: 'mygov-test-up', parameters: [string(name: 'env', value: 'int')]
             build job: 'gov-test-up',   parameters: [string(name: 'env', value: 'igv')]
-            build job: 'mygov-test-up', parameters: [string(name: 'env', value: 'exp')]
             build job: 'mygov-test-up', parameters: [string(name: 'env', value: 'dev')]
             build job: 'gov-test-up',   parameters: [string(name: 'env', value: 'dgv')]
-            build job: 'gov-test-up',   parameters: [string(name: 'env', value: 'egv')]
           }
         """.stripIndent())
         sandbox()
@@ -67,29 +68,27 @@ jobs << pipelineJob('scheduled-teardown-test-envs') {
     }
     definition {
       cps {
-        script("""
-          def tasks = [:]
-
-          tasks["dev"] = {
-            build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'dev')]
-          }
-          tasks["dgv"] = {
-            build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'dgv')]
-          }
-          tasks["exp"] = {
-            build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'exp')]
-          }
-          tasks["egv"] = {
-            build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'egv')]
-          }
-          tasks["int"] = {
-            build job: 'mygov-test-down', parameters: [string(name: 'env', value: 'int')]
-          }
-          tasks["igv"] = {
-            build job: 'gov-test-down',   parameters: [string(name: 'env', value: 'igv')]
+        environments = sites.collectMany { site ->
+            site.environments
+                .grep { it.scheduled }
+                .collect { environment ->
+                    [environment.name, site.id]
+                }
+        }.flatten().toSpreadMap()
+        def pipeline = StringBuilder.newInstance()
+        pipeline << "def envs = " << environments.inspect() << "\n"
+        pipeline << """
+          def tasks = envs.collectEntries { name, site ->
+              job = {
+                  build job: site + '-test-down', parameters: [
+                    string(name: 'env', value: name)
+                  ]
+              }
+              [name, job]
           }
           parallel tasks
-        """.stripIndent())
+        """.stripIndent()
+        script(pipeline.toString())
         sandbox()
       }
     }
