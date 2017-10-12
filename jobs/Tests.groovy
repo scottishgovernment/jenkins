@@ -78,7 +78,7 @@ jobs << job('accessibility-tests') {
 
              report("logs/mygov/html") {
                   reportName("MyGov Brexit From Report")
-                  reportFiles("brexit-form-page.html")
+                  reportFiles("brexit-form.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
@@ -86,7 +86,7 @@ jobs << job('accessibility-tests') {
 
             report("logs/mygov/html") {
                   reportName("MyGov Disclosure From Report")
-                  reportFiles("disclosure-form-page.html")
+                  reportFiles("disclosure-form.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
@@ -94,7 +94,7 @@ jobs << job('accessibility-tests') {
 
             report("logs/mygov/html") {
                   reportName("MyGov PVG From Report")
-                  reportFiles("pvg-form-page.html")
+                  reportFiles("pvg-form.html")
                   allowMissing()
                   keepAll()
                   alwaysLinkToLastBuild()
