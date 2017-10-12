@@ -76,6 +76,30 @@ jobs << job('accessibility-tests') {
                   alwaysLinkToLastBuild()
              }
 
+             report("logs/mygov/html") {
+                  reportName("MyGov Brexit From Report")
+                  reportFiles("brexit-form-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+
+            report("logs/mygov/html") {
+                  reportName("MyGov Disclosure From Report")
+                  reportFiles("disclosure-form-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+
+            report("logs/mygov/html") {
+                  reportName("MyGov PVG From Report")
+                  reportFiles("pvg-form-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+
              report("logs/gov/html") {
                   reportName("Gov Home page Report")
                   reportFiles("home-page.html")
