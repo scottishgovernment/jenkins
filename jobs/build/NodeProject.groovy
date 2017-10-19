@@ -12,6 +12,9 @@ class NodeProject extends MyGovProject {
     /* Publish this artefact to the local npm registry */
     boolean publish
 
+    /* Publish this artefact to the npmjs registry */
+    boolean npmjs
+
     boolean sonar = true
 
     def boolean clean() {
@@ -25,7 +28,9 @@ class NodeProject extends MyGovProject {
         def vars = [
           repo: repo,
           debian: debian,
-          publish: publish
+          publish: publish || npmjs,
+          local: publish,
+          npmjs: npmjs,
         ]
         if (maven) {
             def colon = maven.indexOf(':')

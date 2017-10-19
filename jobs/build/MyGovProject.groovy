@@ -38,6 +38,9 @@ class MyGovProject {
     /* Maven coordinates, in the form groupId:artifactId  */
     String maven
 
+    /* Remote git repository to push to after a successful build */
+    String mirror
+
     Job build(DslFactory dslFactory, sites, out) {
         this.dsl = dslFactory
         this.sites = sites
@@ -67,6 +70,16 @@ class MyGovProject {
             }
             steps {
                 build(delegate)
+                if (mirror) {
+                    shell("""\
+                        git config remote.source.fetch +refs/*:refs/mirror/*
+                        git config remote.source.url \$(git config remote.origin.url)
+                        git fetch source
+                        git config remote.target.url ${mirror}
+                        git config remote.target.push refs/mirror/*:refs/*
+                        git push --prune target
+                    """.stripIndent())
+                }
             }
             triggers {
                 scm('# Poll SCM enabled to allow trigger from git hook.')

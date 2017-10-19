@@ -21,6 +21,8 @@ jobs:
     type: node
     publish: true
     sonar: false
+    npmjs: true
+    mirror: git@github.com:scottishgovernment/mygov-assets.git
 
   - name: 'Authentication'
     repo: basic-authentication
