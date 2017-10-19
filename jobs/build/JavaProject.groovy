@@ -14,23 +14,23 @@ class JavaProject extends MyGovProject {
      */
     String snapshot
 
-    def void build(def StepContext delegate) {
-      def template = dsl.readFileFromWorkspace('resources/build-java')
-      def compiled = Mustache.compiler().compile(template);
+    void build(def StepContext delegate) {
+        def template = dsl.readFileFromWorkspace('resources/build-java')
+        def compiled = Mustache.compiler().compile(template);
 
-      def script = compiled.execute([
-        repo: repo,
-        snapshot: snapshot
-      ])
+        def script = compiled.execute([
+          repo: repo,
+          snapshot: snapshot
+        ])
 
-      delegate.shell(script)
-      delegate.shell {
-        command('sonar-check')
-        unstableReturn(1)
-      }
+        delegate.shell(script)
+        delegate.shell {
+            command('sonar-check')
+            unstableReturn(1)
+        }
     }
 
-    def void publish(def PublisherContext delegate) {
+    void publish(def PublisherContext delegate) {
         delegate.archiveJunit('**/target/surefire-reports/*.xml')
     }
 
