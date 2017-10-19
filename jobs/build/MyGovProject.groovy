@@ -20,16 +20,22 @@ class MyGovProject {
 
     List sites
 
+    /* Display name of the project */
     String name
 
+    /* Slug of the git repository, without any path or .git extension */
     String repo
 
+    /* Host name (without environment prefix) on which to deploy builds */
     String host
 
+    /* Site that uses this project: mygov, gov, or both */
     String site
 
+    /* Name of the Debian pacakge built by this job */
     String debian
 
+    /* Maven coordinates, in the form groupId:artifactId  */
     String maven
 
     Job build(DslFactory dslFactory, sites, out) {

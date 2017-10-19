@@ -9,6 +9,7 @@ import static build.Utils.repo
 
 class NodeProject extends MyGovProject {
 
+    /* Publish this artefact to the local npm registry */
     boolean publish
 
     boolean sonar = true
