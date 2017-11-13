@@ -299,7 +299,7 @@ jobs << job('end-to-end-tests') {
              }
         }
     }
-
+ }
 jobs << job('perceptual-testing') {
     displayName('Perceptual Tests')
     parameters {
@@ -457,4 +457,4 @@ listView('Test') {
         lastDuration()
         buildButton()
     }
-}
+  }
