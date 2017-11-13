@@ -280,10 +280,25 @@ jobs << job('end-to-end-tests') {
         '''))
     }
     publishers {
-        buildDescription('', '$site - $testenv', '', '$site - $testenv')
+        buildDescription('', '$site - $testenv -$tests', '', '$site - $testenv - $tests')
         archiveJunit('reports/xml/*.xml')
+        publishHtml {
+             report("reports/e2e") {
+                  reportName("MyGov Site HTML Report")
+                  reportFiles("chrome-test-report.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+             report("reports/e2e") {
+                  reportName("Gov Site HTML Report")
+                  reportFiles("chrome-test-report.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+        }
     }
-}
 
 jobs << job('perceptual-testing') {
     displayName('Perceptual Tests')
