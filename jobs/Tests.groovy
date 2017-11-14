@@ -261,7 +261,7 @@ jobs << job('end-to-end-tests') {
         choiceParam('testenv', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'blu', 'grn', 'dgv', 'igv', 'egv', 'pgv', 'ugv',' tgv', 'bgv', 'ggv'], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
         choiceParam('smoke_only', ['false', 'true'], 'Use this option to ONLY run smoke tests')
-        stringParam('selenium_ip_address', '10.21.134.66', 'Use this option to specify the IP address of the machine running Selenium web driver')
+        stringParam('selenium_ip_address', '10.21.138.61', 'Use this option to specify the IP address of the machine running Selenium web driver')
         stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E')
     }
     logRotator {
