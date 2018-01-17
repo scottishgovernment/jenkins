@@ -117,6 +117,14 @@ jobs:
     debian: gov-site
     maven: org.mygovscot.beta:gov-site
 
+  - name: 'Hippo Libraries'
+    repo: hippo-libs
+    type: java
+    host: pubapp01
+    site: gov
+    debian: hippo-libs
+    maven: scot.mygov.hippo:hippo-libs
+
   - name: 'Housing'
     repo: housing
     type: java
