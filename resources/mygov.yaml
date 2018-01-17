@@ -117,14 +117,6 @@ jobs:
     debian: gov-site
     maven: org.mygovscot.beta:gov-site
 
-  - name: 'Health Check'
-    repo: health-check
-    type: java
-    host: pubapp01
-    site: both
-    debian: healthcheck
-    maven: org.mygovscot.healthcheck:healthcheck-deb
-
   - name: 'Housing'
     repo: housing
     type: java
