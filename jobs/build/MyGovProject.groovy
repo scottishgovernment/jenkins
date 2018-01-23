@@ -26,11 +26,14 @@ class MyGovProject {
     /* Slug of the git repository, without any path or .git extension */
     String repo
 
-    /* Host name (without environment prefix) on which to deploy builds */
-    String host
-
     /* Site that uses this project: mygov, gov, or both */
     String site
+
+    /* Artifacts by package name, if this is job creates multiple artifacts */
+    Map<String, Artifact> artifacts
+
+    /* Host name (without environment prefix) on which to deploy builds */
+    String host
 
     /* Name of the Debian pacakge built by this job */
     String debian
@@ -120,12 +123,8 @@ class MyGovProject {
         }
     }
 
-    def String deployVersion(String debian, String env) {
-        return "pipeline deploy:${debian},${VERSION},${env} sync"
-    }
-
     def deploy(PropertiesContext properties) {
-        if (!site || !debian) {
+        if (!site || !(debian || artifacts)) {
             return
         }
         def targets = site == 'both' ? sites : sites.grep { it.id == site }
@@ -146,9 +145,10 @@ class MyGovProject {
                         }
                     }
                     actions {
-                        shell(deployVersion(debian, nm))
-                        if (env.auto && host) {
-                            shell(deploySshStep(nm + host, out))
+                        def artifacts = artifacts()
+                        shell(pipelineDeploy(artifacts, nm))
+                        if (env.auto) {
+                            shell(sshDeploy(artifacts, nm))
                         }
                     }
                 }
@@ -156,7 +156,46 @@ class MyGovProject {
         }
     }
 
-    def String deploySshStep(String host, PrintStream out) {
+    def artifacts() {
+        def artifacts = []
+        if (this.artifacts) {
+            artifacts += this.artifacts.values()
+        }
+        if (debian && maven && host) {
+            artifacts.add(new Artifact([
+                debian: debian,
+                maven: maven,
+                host: host
+            ]))
+        }
+        return artifacts
+    }
+
+    def String pipelineDeploy(List<Artifact> artifacts, String env) {
+        def script = new StringBuilder()
+        def delimiter = artifacts.size() == 1 ? ' ' : ' \\\n  '
+        script << 'pipeline' << delimiter
+        script << artifacts.collect {
+            "deploy:${it.debian},${VERSION},${env}"
+        }.join(delimiter)
+        script << delimiter
+        script << 'sync\n'
+        return script.toString()
+    }
+
+    def String sshDeploy(List<Artifact> artifacts, String env) {
+        def script = new StringBuilder()
+        script << "repo=http://nexus/repository/releases/\n"
+        artifacts.collect {
+            deployArtifactBySSH(it, env, script)
+        }
+        return script.toString()
+    }
+
+    def String deployArtifactBySSH(Artifact artifact, String env, StringBuilder script) {
+        def debian = artifact.debian
+        def maven = artifact.maven
+        def host = env + artifact.host
         def colon = maven.indexOf(':')
         def groupId = maven.substring(0, colon)
         def artifactId = maven.substring(colon + 1)
@@ -167,17 +206,12 @@ class MyGovProject {
         path << VERSION << '/'
         path << artifactId << '-' << VERSION << '.deb'
 
-        def script = new StringBuilder("set -e\n")
+        script << "\n"
         script << trim("""\
-            name="${repo}"
-            path="${path}"
-            host="${host}"\n""")
-        script << trim('''\
-            repo=http://nexus/repository/releases/
-            curl -sSf -o "${name}.deb" "${repo}/${path}"
-            scp -o StrictHostKeyChecking=no "${name}.deb" "devops@${host}:/tmp/${name}.deb"
-            ssh -o StrictHostKeyChecking=no devops@${host} "sudo dpkg -i /tmp/${name}.deb"
-        ''')
+            curl -sSf -o "${debian}.deb" "\${repo}/${path}"
+            scp -o StrictHostKeyChecking=no "${debian}.deb" "devops@${host}:/tmp/${debian}.deb"
+            ssh -o StrictHostKeyChecking=no devops@${host} "sudo dpkg -i /tmp/${debian}.deb"
+            """)
         return script
     }
 

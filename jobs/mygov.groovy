@@ -1,4 +1,5 @@
 import org.yaml.snakeyaml.Yaml
+import build.Artifact
 import build.JavaProject
 import build.MyGovProject
 import build.NodeProject
@@ -20,6 +21,7 @@ def list = []
 list.addAll(jobs.collect {
     out.println("Processing job ${it.name}")
     def type = it.remove('type')
+    def artifacts = it.remove('artifacts')
     MyGovProject project
     if (type == 'java') {
         project = new JavaProject(it)
@@ -29,6 +31,12 @@ list.addAll(jobs.collect {
         project = new NodeProject(it)
     } else if (type == 'upstream') {
         project = new UpstreamProject(it)
+    }
+    project.artifacts = artifacts?.collectEntries { k, v ->
+        def artifact = new Artifact(v)
+        artifact.debian = v.debian ?: k
+        artifact.host = artifact.host ?: project.host
+        [k, artifact]
     }
     def job = project.build(this, sites, out)
     if (type != "upstream") {
