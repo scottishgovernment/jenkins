@@ -153,6 +153,14 @@ jobs:
     debian: json2csv
     maven: scot.mygov.rubric:json2csv
 
+  - name: Migration
+    repo: migration
+    type: java
+    host: pubapp01
+    site: gov
+    debian: migration
+    maven: scot.gov.migration:migration-deb
+
   - name: 'Mygov Forms'
     repo: mygov-forms
     type: java
