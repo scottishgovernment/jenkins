@@ -1,5 +1,5 @@
 jobs:
-  - name: 'Amphora'
+  - name: Amphora
     repo: amphora
     type: java
     snapshot: amphora-client
@@ -8,7 +8,7 @@ jobs:
     debian: amphora
     maven: scot.mygov.amphora:amphora-deb
 
-  - name: 'APS Importer'
+  - name: APS Importer
     repo: aps-importer
     type: java
     host: pubapp01
@@ -16,7 +16,7 @@ jobs:
     debian: aps-importer
     maven: scot.mygov.aps:aps-importer-deb
 
-  - name: 'Assets'
+  - name: Assets
     repo: mygov-assets
     type: node
     publish: true
@@ -24,7 +24,7 @@ jobs:
     npmjs: true
     mirror: git@github.com:scottishgovernment/mygov-assets.git
 
-  - name: 'Authentication'
+  - name: Authentication
     repo: basic-authentication
     type: java
     snapshot: 'authentication-client,authentication-spring'
@@ -33,7 +33,7 @@ jobs:
     debian: basic-authentication
     maven: org.mygovscot.beta:authentication-deb
 
-  - name: 'AWS'
+  - name: AWS
     repo: aws
     type: shell
     site: both
@@ -41,12 +41,12 @@ jobs:
     maven: scot.mygov.infrastructure:aws
     build: './build -v ${version}'
 
-  - name: 'Beta Config'
+  - name: Beta Config
     repo: beta-config
     type: java
     snapshot: .
 
-  - name: 'Business Rates'
+  - name: Business Rates
     repo: business-rates-service
     type: java
     host: sitapp01
@@ -54,7 +54,7 @@ jobs:
     debian: business-rates
     maven: org.mygovscot.business-rates:business-rates-deb
 
-  - name: 'Certbot'
+  - name: Certbot
     repo: certbot
     type: upstream
     site: mygov
@@ -62,12 +62,12 @@ jobs:
     maven: scot.mygov.upstream:certbot
     build: './build -v ${version}'
 
-  - name: 'Config'
+  - name: Config
     repo: config
     type: java
     snapshot: .
 
-  - name: 'CSP Report'
+  - name: CSP Report
     repo: csp-report
     type: shell
     host: fbkapp01
@@ -76,7 +76,7 @@ jobs:
     maven: scot.mygov.rubric:csp-report
     build: './build -v ${version}'
 
-  - name: 'Decommission Tool'
+  - name: Decommission Tool
     repo: decommission-tool
     type: java
     host: pubapp01
@@ -84,7 +84,7 @@ jobs:
     debian: decommission-tool
     maven: org.mygovscot.decommission-tool:decommission-tool-deb
 
-  - name: 'Feedback'
+  - name: Feedback
     repo: feedback
     type: java
     host: fbkapp01
@@ -92,7 +92,7 @@ jobs:
     debian: feedback
     maven: org.mygovscot.feedback:feedback-deb
 
-  - name: 'Fetchor'
+  - name: Fetchor
     repo: fetchor
     type: shell
     host: sitwww01
@@ -101,7 +101,7 @@ jobs:
     maven: scot.mygov.rubric:fetchor
     build: './build -v ${version}'
 
-  - name: 'Gov Site'
+  - name: Gov Site
     repo: gov-site
     type: node
     host: pubapp01
@@ -109,7 +109,7 @@ jobs:
     debian: gov-site
     maven: org.mygovscot.beta:gov-site
 
-  - name: 'Gov Scot'
+  - name: Gov Scot
     repo: gov-scot
     type: java
     site: gov
@@ -121,7 +121,7 @@ jobs:
         host: pubapp01
         maven: scot.gov.www:gov-scot-site-deb
 
-  - name: 'Hippo Libraries'
+  - name: Hippo Libraries
     repo: hippo-libs
     type: java
     host: pubapp01
@@ -129,7 +129,7 @@ jobs:
     debian: hippo-libs
     maven: scot.mygov.hippo:hippo-libs
 
-  - name: 'Housing'
+  - name: Housing
     repo: housing
     type: java
     host: sitapp01
@@ -137,7 +137,7 @@ jobs:
     debian: housing
     maven: scot.mygov.housing:housing-deb
 
-  - name: 'Housing Data'
+  - name: Housing Data
     repo: housing-data
     type: node
     host: pubapp01
@@ -145,7 +145,7 @@ jobs:
     debian: housing-data
     maven: scot.mygov.housing:housing-data
 
-  - name: 'Json2csv'
+  - name: Json2csv
     repo: json2csv
     type: node
     host: pubapp01
@@ -161,7 +161,7 @@ jobs:
     debian: migration
     maven: scot.gov.migration:migration-deb
 
-  - name: 'Mygov Forms'
+  - name: Mygov Forms
     repo: mygov-forms
     type: java
     host: sitapp01
@@ -169,7 +169,7 @@ jobs:
     debian: mygov-forms
     maven: scot.mygov.form:mygov-forms-deb
 
-  - name: 'MyGov Site'
+  - name: MyGov Site
     repo: mygov-site
     type: node
     host: pubapp01
@@ -177,7 +177,7 @@ jobs:
     debian: mygov-site
     maven: org.mygovscot.beta:web-site
 
-  - name: 'Press Releases'
+  - name: Press Releases
     repo: press-releases
     type: java
     host: pubapp01
@@ -185,7 +185,7 @@ jobs:
     debian: press-releases
     maven: scot.mygov.pressreleases:pressreleases-deb
 
-  - name: 'Proxette'
+  - name: Proxette
     repo: proxette
     type: node
     host: pubapp01
@@ -193,7 +193,7 @@ jobs:
     debian: proxette
     maven: scot.mygov.rubric:proxette
 
-  - name: 'Publishing'
+  - name: Publishing
     repo: beta-publishing
     type: java
     snapshot: publishing-api
@@ -202,7 +202,7 @@ jobs:
     debian: publishing
     maven: org.mygovscot.publishing:publishing-deb
 
-  - name: 'Publishing Site'
+  - name: Publishing Site
     repo: publishing-site
     type: node
     host: pubwww01
@@ -210,7 +210,7 @@ jobs:
     debian: publishing-site
     maven: org.mygovscot:publishing-site
 
-  - name: 'Puppet Manifests'
+  - name: Puppet Manifests
     repo: puppet
     type: shell
     site: both
@@ -219,7 +219,7 @@ jobs:
     clean: 'git clean -fdx -e .tmp'
     build: './build -v ${version}'
 
-  - name: 'Search'
+  - name: Search
     repo: search
     type: java
     host: sitapp01
@@ -227,7 +227,7 @@ jobs:
     debian: search
     maven: scot.mygov.search:search-deb
 
-  - name: 'Site Builder'
+  - name: Site Builder
     repo: site-builder
     type: node
     host: pubapp01
@@ -236,7 +236,7 @@ jobs:
     maven: scot.mygov.site:site-builder
     publish: true
 
-  - name: 'Thumbor'
+  - name: Thumbor
     repo: thumbor
     type: upstream
     host: pubapp01
@@ -245,7 +245,7 @@ jobs:
     maven: scot.mygov.upstream:thumbor
     build: './build -v ${version}'
 
-  - name: 'Trigger'
+  - name: Trigger
     repo: trigger
     type: node
     host: pubapp01
@@ -253,7 +253,7 @@ jobs:
     debian: trigger
     maven: scot.mygov.rubric:trigger
 
-  - name: 'Utils'
+  - name: Utils
     repo: mygovscot_utils
     type: java
     snapshot: ''
