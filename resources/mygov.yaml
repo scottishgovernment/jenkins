@@ -101,14 +101,6 @@ jobs:
     maven: scot.mygov.rubric:fetchor
     build: './build -v ${version}'
 
-  - name: 'Mygov Forms'
-    repo: mygov-forms
-    type: java
-    host: sitapp01
-    site: mygov
-    debian: mygov-forms
-    maven: scot.mygov.form:mygov-forms-deb
-
   - name: 'Gov Site'
     repo: gov-site
     type: node
@@ -160,6 +152,14 @@ jobs:
     site: both
     debian: json2csv
     maven: scot.mygov.rubric:json2csv
+
+  - name: 'Mygov Forms'
+    repo: mygov-forms
+    type: java
+    host: sitapp01
+    site: mygov
+    debian: mygov-forms
+    maven: scot.mygov.form:mygov-forms-deb
 
   - name: 'MyGov Site'
     repo: mygov-site
