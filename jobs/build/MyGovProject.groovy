@@ -147,8 +147,9 @@ class MyGovProject {
                     actions {
                         def artifacts = artifacts()
                         shell(pipelineDeploy(artifacts, nm))
-                        if (env.auto) {
-                            shell(sshDeploy(artifacts, nm))
+                        def toDeploy = artifacts.grep { it.host }
+                        if (env.auto && toDeploy) {
+                            shell(sshDeploy(toDeploy, nm))
                         }
                     }
                 }
@@ -161,7 +162,7 @@ class MyGovProject {
         if (this.artifacts) {
             artifacts += this.artifacts.values()
         }
-        if (debian && maven && host) {
+        if (debian && maven) {
             artifacts.add(new Artifact([
                 debian: debian,
                 maven: maven,
