@@ -120,6 +120,9 @@ jobs:
       gov-scot-site:
         host: pubapp01
         maven: scot.gov.www:gov-scot-site-deb
+      gov-scot-repo:
+        host: sitapp01
+        maven: scot.gov.www:gov-scot-repository-deb
 
   - name: Hippo Libraries
     repo: hippo-libs
