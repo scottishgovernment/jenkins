@@ -1,4 +1,5 @@
 import org.yaml.snakeyaml.Yaml
+import data.Migration
 import data.Restore
 import data.Revert
 import environments.Puppet
@@ -17,6 +18,7 @@ binding.setVariable("dsl", this)
 binding.setVariable("out", out)
 
 def vpc = new VPC()
+def migration = new Migration()
 def prepare = new Prepare()
 def perform = new Perform()
 def puppet = new Puppet()
@@ -24,7 +26,7 @@ def promotion = new Promotion()
 def restore = new Restore()
 def revert = new Revert()
 
-[vpc, prepare, perform, puppet, promotion, restore, revert].each { c ->
+[vpc, migration, prepare, perform, puppet, promotion, restore, revert].each { c ->
   c.setBinding(binding)
 }
 
@@ -40,6 +42,9 @@ sites.collect { site ->
     pipelineView << promotion.build(site, envNames)
     pipelineView << restore.build(site, envNames)
     pipelineView << revert.build(site, envNames)
+    if (site.id == "gov") {
+        pipelineView << migration.build(site, envNames)
+    }
 }
 
 pipelineView << job('sync-repo') {
