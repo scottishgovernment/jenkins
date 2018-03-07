@@ -27,7 +27,7 @@ jobs:
   - name: Authentication
     repo: basic-authentication
     type: java
-    snapshot: 'authentication-client,authentication-spring'
+    snapshot: 'authentication-api,authentication-client,authentication-spring'
     host: pubapp01
     site: both
     debian: basic-authentication
