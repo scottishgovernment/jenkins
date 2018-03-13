@@ -115,13 +115,17 @@ jobs:
     site: gov
     artifacts:
       gov-scot-cms:
-        host: pubapp01
+        hosts:
+          - pubapp01
         maven: scot.gov.www:gov-scot-cms-deb
       gov-scot-site:
-        host: pubapp01
+        hosts:
+          - pubapp01
+          - sitapp01
         maven: scot.gov.www:gov-scot-site-deb
       gov-scot-repo:
-        host: sitapp01
+        hosts:
+          - sitapp01
         maven: scot.gov.www:gov-scot-repository-deb
 
   - name: Hippo Libraries

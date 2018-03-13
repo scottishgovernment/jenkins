@@ -35,7 +35,7 @@ list.addAll(jobs.collect {
     project.artifacts = artifacts?.collectEntries { k, v ->
         def artifact = new Artifact(v)
         artifact.debian = v.debian ?: k
-        artifact.host = artifact.host ?: project.host
+        artifact.hosts = artifact.hosts ?: [project.host]
         [k, artifact]
     }
     def job = project.build(this, sites, out)

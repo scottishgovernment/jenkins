@@ -147,7 +147,7 @@ class MyGovProject {
                     actions {
                         def artifacts = artifacts()
                         shell(pipelineDeploy(artifacts, nm))
-                        def toDeploy = artifacts.grep { it.host }
+                        def toDeploy = artifacts.grep { it.hosts }
                         if (env.auto && toDeploy) {
                             shell(sshDeploy(toDeploy, nm))
                         }
@@ -166,7 +166,7 @@ class MyGovProject {
             artifacts.add(new Artifact([
                 debian: debian,
                 maven: maven,
-                host: host
+                hosts: [host,]
             ]))
         }
         return artifacts
@@ -196,7 +196,6 @@ class MyGovProject {
     def String deployArtifactBySSH(Artifact artifact, String env, StringBuilder script) {
         def debian = artifact.debian
         def maven = artifact.maven
-        def host = env + artifact.host
         def colon = maven.indexOf(':')
         def groupId = maven.substring(0, colon)
         def artifactId = maven.substring(colon + 1)
@@ -207,12 +206,15 @@ class MyGovProject {
         path << VERSION << '/'
         path << artifactId << '-' << VERSION << '.deb'
 
-        script << "\n"
-        script << trim("""\
-            curl -sSf -o "${debian}.deb" "\${repo}/${path}"
-            scp -o StrictHostKeyChecking=no "${debian}.deb" "devops@${host}:/tmp/${debian}.deb"
-            ssh -o StrictHostKeyChecking=no devops@${host} "sudo dpkg -i /tmp/${debian}.deb"
-            """)
+        for (x in artifact.hosts) {
+          def host = env + x
+          script << "\n"
+          script << trim("""\
+              curl -sSf -o "${debian}.deb" "\${repo}/${path}"
+              scp -o StrictHostKeyChecking=no "${debian}.deb" "devops@${host}:/tmp/${debian}.deb"
+              ssh -o StrictHostKeyChecking=no devops@${host} "sudo dpkg -i /tmp/${debian}.deb"
+              """)
+          }
         return script
     }
 

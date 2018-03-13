@@ -9,6 +9,6 @@ class Artifact {
   String maven
 
   /* Host name (without environment prefix) on which to deploy builds */
-  String host
+  List<String> hosts
 
 }
