@@ -166,7 +166,7 @@ class MyGovProject {
             artifacts.add(new Artifact([
                 debian: debian,
                 maven: maven,
-                hosts: [host,]
+                hosts: [host]
             ]))
         }
         return artifacts
