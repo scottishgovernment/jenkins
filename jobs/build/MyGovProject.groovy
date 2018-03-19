@@ -207,6 +207,9 @@ class MyGovProject {
         path << artifactId << '-' << VERSION << '.deb'
 
         for (x in artifact.hosts) {
+          if (x == null) {
+              continue
+          }
           def host = env + x
           script << "\n"
           script << trim("""\
