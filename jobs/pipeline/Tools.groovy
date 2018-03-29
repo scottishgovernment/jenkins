@@ -38,8 +38,8 @@ def build(dsl) {
              }
         }
     }
-    dsl.job('repo-clean') {
-        displayName('Repo Clean')
+    dsl.job('repo-clean-build') {
+        displayName('Repo Clean - Build')
         scm {
             git {
                 remote {
@@ -70,6 +70,18 @@ def build(dsl) {
                        }
                   }
              }
+        }
+    }
+    dsl.job('repo-clean-run') {
+        displayName('Repo Clean - Run')
+        parameters {
+          choiceParam('runtype', ['dry-run', 'run'], 'Dry-Run or actual Run')
+        }
+        logRotator {
+          daysToKeep(90)
+        }
+        steps {
+            shell(dsl.readFileFromWorkspace('resources/repo-clean-run.sh'))
         }
     }
 }
