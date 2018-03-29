@@ -83,5 +83,8 @@ def build(dsl) {
         steps {
             shell(dsl.readFileFromWorkspace('resources/repo-clean-run.sh'))
         }
+        publishers {
+            buildDescription('', '${runtype}')
+        }
     }
 }
