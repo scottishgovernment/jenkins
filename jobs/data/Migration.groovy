@@ -11,6 +11,7 @@ def build(site, List<String> envs) {
             choiceParam('migration', [
                 'default',
                 'all',
+                'aps',
                 'articles',
                 'convert-links',
                 'directorates',
@@ -22,6 +23,10 @@ def build(site, List<String> envs) {
                 'topics',
                 'users',
             ], 'Select migration to run')
+
+            choiceParam('type', ['full', 'partial'], 'Select migration type')
+
+            stringParam('slugs', '', 'Specific publication slugs')
         }
 
         logRotator {
@@ -31,7 +36,7 @@ def build(site, List<String> envs) {
         steps {
             def script = StringBuilder.newInstance()
             script << 'ssh devops@${env}${host}.${env}.gov.scot \\\n'
-            script << '  sudo su - migration -c \\"/opt/migration/run ${migration}\\"'
+            script << '  sudo su - migration -c \\"/opt/migration/run ${migration} ${type} ${slugs} \\"'
             shell(script.toString())
         }
 
