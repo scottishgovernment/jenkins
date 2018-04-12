@@ -1,0 +1,5 @@
+ssh devops@${env}${host}.${env}.gov.scot sh -eu <<EOF
+  sudo su - migration -c "/bin/sh -eu" <<EOS
+    /opt/migration/run ${migration} ${type} ${slugs}
+EOS
+EOF

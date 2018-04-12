@@ -34,10 +34,8 @@ def build(site, List<String> envs) {
         }
 
         steps {
-            def script = StringBuilder.newInstance()
-            script << 'ssh devops@${env}${host}.${env}.gov.scot \\\n'
-            script << '  sudo su - migration -c \\"/opt/migration/run ${migration} ${type} ${slugs} \\"'
-            shell(script.toString())
+            def script = dsl.readFileFromWorkspace('resources/migrate')
+            shell(script)
         }
 
     }
