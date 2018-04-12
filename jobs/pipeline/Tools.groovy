@@ -66,7 +66,7 @@ def build(dsl) {
                        actions {
                             String version = '1.0.${PROMOTED_ID}'
                             shell("pipeline deploy:repo-clean,${version},build sync")
-                            shell(dsl.readFileFromWorkspace('resources/repo-clean-deploy.sh'))
+                            shell(dsl.readFileFromWorkspace('resources/repo-clean-deploy'))
                        }
                   }
              }
@@ -81,7 +81,7 @@ def build(dsl) {
           daysToKeep(90)
         }
         steps {
-            shell(dsl.readFileFromWorkspace('resources/repo-clean-run.sh'))
+            shell(dsl.readFileFromWorkspace('resources/repo-clean-run'))
         }
         publishers {
             buildDescription('', '${runtype}')
