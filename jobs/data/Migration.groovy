@@ -1,5 +1,7 @@
 package data
 
+import static build.Utils.trim
+
 def build(site, List<String> envs) {
     dsl.job("migration-${site.id}") {
 
@@ -7,7 +9,11 @@ def build(site, List<String> envs) {
 
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
+
+            booleanParam('clean', false, 'Delete existing data')
+
             choiceParam('host', ["pubapp01", "pubapp02"], "host to run on")
+
             choiceParam('migration', [
                 'all',
                 'default',
@@ -25,12 +31,22 @@ def build(site, List<String> envs) {
                 'siteitems',
                 'topics',
                 'users',
-            ], 'Select migration(s) to run. \nall: run all available migrations\ndefault: run any migrations not already run.')
+            ], trim('''\
+                Select migration(s) to run.
+                all: run all available migrations
+                default: run any migrations not already run.
+            '''))
 
-            choiceParam('type', ['full', 'partial'],
-                'Publications only\nfull: migrate all content \npartial: only migrate subset of the content (lastest 50)')
+            choiceParam('type', ['full', 'partial'], trim('''\
+                Publications only
+                full: migrate all content
+                partial: only migrate subset of the content (lastest 50)
+            '''))
 
-            stringParam('slugs', '', 'Publications only\nSpace separated list of slugs to migrate')
+            stringParam('slugs', '', trim('''\
+                Publications only
+                Space separated list of slugs to migrate
+            '''))
         }
 
         logRotator {
