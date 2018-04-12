@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+
+case "$runtype" in
+  run)
+    args="";;
+  dry-run)
+    args="--dry-run";;
+  *)
+    echo "Unrecognised runtype ${runtype}"
+    exit 1
+    ;;
+esac
+
+repo-clean $args

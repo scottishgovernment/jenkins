@@ -50,7 +50,7 @@ def build(dsl) {
             }
         }
         steps {
-            shell(dsl.readFileFromWorkspace('resources/repo-clean-build.sh'))
+            shell(dsl.readFileFromWorkspace('resources/repo-clean-build'))
         }
         triggers {
             scm('# Poll SCM enabled to allow trigger from git hook.')
