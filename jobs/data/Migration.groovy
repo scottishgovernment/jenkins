@@ -9,24 +9,28 @@ def build(site, List<String> envs) {
             choiceParam('env', envs, "${site.domain} environment")
             choiceParam('host', ["pubapp01", "pubapp02"], "host to run on")
             choiceParam('migration', [
-                'default',
                 'all',
+                'default',
                 'aps',
                 'articles',
                 'convert-links',
                 'directorates',
                 'groups',
+                'home',
+                'metadata',
                 'orgroles',
                 'people',
                 'policies',
                 'roles',
+                'siteitems',
                 'topics',
                 'users',
-            ], 'Select migration to run')
+            ], 'Select migration(s) to run. \nall: run all available migrations\ndefault: run any migrations not already run.')
 
-            choiceParam('type', ['full', 'partial'], 'Select migration type')
+            choiceParam('type', ['full', 'partial'],
+                'Publications only\nfull: migrate all content \npartial: only migrate subset of the content (lastest 50)')
 
-            stringParam('slugs', '', 'Specific publication slugs')
+            stringParam('slugs', '', 'Publications only\nSpace separated list of slugs to migrate')
         }
 
         logRotator {
