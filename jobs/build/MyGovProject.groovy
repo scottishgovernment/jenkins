@@ -80,7 +80,7 @@ class MyGovProject {
                         git fetch source
                         git config remote.target.url ${mirror}
                         git config remote.target.push refs/mirror/*:refs/*
-                        git push --prune target
+                        git push --mirror target
                     """.stripIndent())
                 }
             }
