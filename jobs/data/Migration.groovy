@@ -16,7 +16,6 @@ def build(site, List<String> envs) {
 
             choiceParam('migration', [
                 'all',
-                'default',
                 'users',
                 'siteitems',
                 'metadata',
@@ -32,11 +31,10 @@ def build(site, List<String> envs) {
                 'orgroles',
                 'home',
                 'convert-links',
-                'ordertweaker'
+                'node-order'
             ], trim('''\
                 Select migration(s) to run.
-                all: run all available migrations
-                default: run any migrations not already run.
+                all: run all available migrations.
             '''))
 
             choiceParam('type', ['full', 'partial'], trim('''\
