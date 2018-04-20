@@ -22,8 +22,7 @@ def build(site, List<String> envs) {
                 'topics',
                 'people',
                 'roles',
-                'aps-publications',
-                'non-aps-publications',
+                'publications',
                 'directorates',
                 'policies',
                 'groups',
@@ -36,6 +35,8 @@ def build(site, List<String> envs) {
                 Select migration(s) to run.
                 all: run all available migrations.
             '''))
+
+            choiceParam('include-disabled', ['', 'include-disabled'], 'Include disabled migrations')
 
             choiceParam('type', ['full', 'partial'], trim('''\
                 Publications only
