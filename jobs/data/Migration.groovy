@@ -45,8 +45,8 @@ def build(site, List<String> envs) {
             '''))
 
             stringParam('slugs', '', trim('''\
-                Publications only
-                Space separated list of slugs to migrate
+                Publications: space separated list of slugs to migrate
+                Users: space separated list of users who should be admins
             '''))
         }
 
