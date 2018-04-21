@@ -36,12 +36,12 @@ def build(site, List<String> envs) {
                 all: run all available migrations.
             '''))
 
-            choiceParam('include-disabled', ['', 'include-disabled'], 'Include disabled migrations')
+            choiceParam('include disabled', ['', 'includedisabled'], 'Include disabled migrations')
 
             choiceParam('type', ['full', 'partial'], trim('''\
                 Publications only
                 full: migrate all content
-                partial: only migrate subset of the content (lastest 50)
+                partial: only migrate subset of the content (latest 50)
             '''))
 
             stringParam('slugs', '', trim('''\
