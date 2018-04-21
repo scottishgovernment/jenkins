@@ -36,7 +36,7 @@ def build(site, List<String> envs) {
                 all: run all available migrations.
             '''))
 
-            choiceParam('include disabled', ['', 'includedisabled'], 'Include disabled migrations')
+            choiceParam('includedisabled', ['', 'includedisabled'], 'Include disabled migrations')
 
             choiceParam('type', ['full', 'partial'], trim('''\
                 Publications only
