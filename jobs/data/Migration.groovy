@@ -20,8 +20,10 @@ def build(site, List<String> envs) {
                 'siteitems',
                 'metadata',
                 'topics',
+                'issues',
                 'people',
                 'roles',
+                'news',
                 'publications',
                 'directorates',
                 'policies',
@@ -29,6 +31,8 @@ def build(site, List<String> envs) {
                 'articles',
                 'orgroles',
                 'home',
+                'landingpages',
+                'topicrelationships',
                 'convert-links',
                 'node-order'
             ], trim('''\
