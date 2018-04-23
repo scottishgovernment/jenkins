@@ -219,6 +219,13 @@ jobs << job('accessibility-tests') {
                   keepAll()
                   alwaysLinkToLastBuild()
              }
+             report("logs/beta2/html") {
+                  reportName("Beta2 Home page Report")
+                  reportFiles("home-page.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
 
         }
     }
