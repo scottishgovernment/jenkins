@@ -33,6 +33,7 @@ def build(site, List<String> envs) {
                 'home',
                 'landingpages',
                 'topicrelationships',
+                'issuerelationships',
                 'convert-links',
                 'node-order'
             ], trim('''\
