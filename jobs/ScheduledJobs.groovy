@@ -35,7 +35,8 @@ jobs << pipelineJob('scheduled-build-test-envs') {
     }
     definition {
       cps {
-        script("""
+        def pipeline = StringBuilder.newInstance()
+        pipeline << """
           stage('Promote') {
             build job: 'promote-mygov', parameters: [
               string(name: 'from', value: 'dev'),
@@ -47,12 +48,19 @@ jobs << pipelineJob('scheduled-build-test-envs') {
             ]
           }
           stage('Build') {
-            build job: 'mygov-test-up', parameters: [string(name: 'env', value: 'int')]
-            build job: 'gov-test-up',   parameters: [string(name: 'env', value: 'igv')]
-            build job: 'mygov-test-up', parameters: [string(name: 'env', value: 'dev')]
-            build job: 'gov-test-up',   parameters: [string(name: 'env', value: 'dgv')]
+            def envs = ['dgv':'gov', 'dev':'mygov', 'igv':'gov', 'int':'mygov']
+            def tasks = envs.collectEntries { name, site ->
+              job = {
+                  build job: site + '-test-up', parameters: [
+                    string(name: 'env', value: name)
+                  ]
+              }
+              [name, job]
+            }
+            parallel tasks
           }
-        """.stripIndent())
+        """.stripIndent()
+        script(pipeline.toString())
         sandbox()
       }
     }
