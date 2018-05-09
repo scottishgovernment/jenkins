@@ -247,8 +247,12 @@ jobs << job('cleanup-builds') {
         }
     }
     steps {
-        shell("find ~/.m2/repository/scot/gov/www -atime +7 -print -delete")
-        shell("find ~/.m2/repository -atime +90 -print -delete")
+        shell(trim('''\
+            if [ -d ~/.m2/repository ]; then
+              rm -rfv ~/.m2/repository/scot/gov/www
+              find ~/.m2/repository -atime +90 -print -delete
+            fi
+        '''))
     }
     publishers {
         slack(delegate)
