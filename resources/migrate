@@ -1,7 +1,7 @@
 ssh devops@${env}${host}.${env}.gov.scot sh -eu <<EOF
 
   running() {
-    serf query -node "$(hostname)" -format json repository |
+    serf query -node "\$(hostname)" -format json repository |
       jq -e '.Responses |
         to_entries |
         map(select(.value == "OK")) |
@@ -9,11 +9,15 @@ ssh devops@${env}${host}.${env}.gov.scot sh -eu <<EOF
   }
 
   wait() {
-    local tries=10
+    local tries=30
     while ! running && [ \$tries -ge 0 ]; do
       sleep 5
       tries=\$(( tries - 1 ))
     done
+    if ! running; then
+      echo "Timed out waiting for Hippo"
+      return 1
+    fi
   }
 
   if [ "$clean" = "true" ]; then
