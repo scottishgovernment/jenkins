@@ -207,7 +207,7 @@ jobs << job('backup-repo') {
     displayName('Backup Repo')
     if (enabled) {
         triggers {
-            cron('H 4 * * 1-5')
+            cron('H(0-29) 4 * * 1-5')
         }
     }
     steps {
@@ -230,6 +230,25 @@ jobs << job('backup-jenkins') {
     }
     steps {
         shell(readFileFromWorkspace('resources/backup-jenkins.sh'))
+    }
+    publishers {
+        slack(delegate)
+    }
+}
+
+jobs << job('cleanup-builds') {
+    displayName('Clean up old builds')
+    logRotator {
+        numToKeep(1)
+    }
+    if (enabled) {
+        triggers {
+            cron('H(50-59) 4 * * 1-5')
+        }
+    }
+    steps {
+        shell("find ~/.m2/repository/scot/gov/www -atime +7 -print -delete")
+        shell("find ~/.m2/repository -atime +90 -print -delete")
     }
     publishers {
         slack(delegate)
