@@ -32,7 +32,7 @@ resolve scot.mygov.infrastructure:aws:${ver}:deb
 
 version=$(dpkg --info aws.deb | awk '/Version/{print $2}')
 echo "Environment: ${env}"
-echo "Version:     ${version}"
+echo "AWS Version: ${version}"
 echo "AMI:         ${ami}"
 dpkg -x aws.deb .
 cd opt/aws
