@@ -18,6 +18,7 @@ def build(site, List<String> envs) {
                 'all',
                 'users',
                 'siteitems',
+                'statuspages',
                 'metadata',
                 'topics',
                 'issues',
