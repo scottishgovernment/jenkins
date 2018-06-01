@@ -36,7 +36,8 @@ def build(site, List<String> envs) {
                 'topicrelationships',
                 'issuerelationships',
                 'convert-links',
-                'node-order'
+                'node-order',
+                'feedback'
             ], trim('''\
                 Select migration(s) to run.
                 all: run all available migrations.
