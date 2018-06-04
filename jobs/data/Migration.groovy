@@ -26,6 +26,7 @@ def build(site, List<String> envs) {
                 'roles',
                 'news',
                 'publications',
+                'historicalpublicationurls',
                 'directorates',
                 'policies',
                 'groups',
