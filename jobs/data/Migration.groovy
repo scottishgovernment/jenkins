@@ -12,6 +12,8 @@ def build(site, List<String> envs) {
 
             booleanParam('clean', false, 'Delete existing data')
 
+            booleanParam('background', true, 'Use false to hog a jenkins executor')
+
             choiceParam('host', ["pubapp01", "pubapp02"], "host to run on")
 
             choiceParam('migration', [
