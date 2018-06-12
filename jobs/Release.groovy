@@ -46,6 +46,25 @@ view << job('bgv-ggv-govscot-switch') {
     }
 }
 
+
+view << job('hippo-switch') {
+    displayName('Hippo Blue-Green Switch')
+    parameters {
+        choiceParam('env', ['bgv', 'ggv'], 'gov.scot production environment')
+    }
+    scm {
+        awsRepo(delegate)
+    }
+    steps {
+        shell(trim('''\
+            tools/hippo-switch ${env}
+        '''))
+    }
+    publishers {
+        buildDescription('', '$env')
+    }
+}
+
 view << job('mygov-site-fail-trigger') {
     siteName = "mygov"
     site = sites.grep { it.id == siteName }.first()
