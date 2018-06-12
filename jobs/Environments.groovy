@@ -42,10 +42,11 @@ sites.collect { site ->
     pipelineView << promotion.build(site, envNames)
     pipelineView << restore.build(site, envNames)
     pipelineView << revert.build(site, envNames)
-    if (site.id == "gov") {
-        pipelineView << migration.build(site, envNames)
-    }
 }
+
+gov = sites.find { it.id == "gov" }
+govEnvironments = gov.environments.collect { it.name }
+migrationView = migration.build(gov, govEnvironments)
 
 pipelineView << job('sync-repo') {
     displayName('Update S3 repository')
@@ -75,6 +76,23 @@ listView('Pipeline') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
         pipelineView.each {
+            name(it.name)
+        }
+    }
+    columns {
+        status()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+listView('Migration') {
+    statusFilter(StatusFilter.ENABLED)
+    delegate.jobs {
+        migrationView.each {
             name(it.name)
         }
     }

@@ -1,16 +1,8 @@
 #!/bin/sh -eu
-
-migrations=""
-for m in publications feedback historicalpublicationurls urlaliases; do
-  if [ "$(eval echo \$$m)" = "true" ]; then
-    migrations="${migrations} ${m}"
-  fi
-done
-
 ssh devops@${env}${host}.${env}.gov.scot /bin/sh -eu <<EOS
   export background=${background}
   export clean=${clean}
-  migrate ${task} ${migrations}
+  migrate users ${args}
 EOS
 
 echo
