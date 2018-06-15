@@ -1,8 +1,11 @@
 #!/bin/sh -eu
+
+usernames=${args:-''}
+
 ssh devops@${env}${host}.${env}.gov.scot /bin/sh -eu <<EOS
   export background=${background}
   export clean=${clean}
-  migrate users ${args}
+  migrate users ${usernames}
 EOS
 
 echo
