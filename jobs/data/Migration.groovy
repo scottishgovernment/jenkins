@@ -36,7 +36,6 @@ def migrate(site, envs) {
             booleanParam('publications', false, 'Include publications migration')
             booleanParam('feedback', false, 'Include feedback migration')
             booleanParam('historicalpublicationurls', false, 'Include historicalpublicationurls migration')
-            booleanParam('urlaliases', false, 'Include urlaliases migration')
         }
 
         logRotator {
