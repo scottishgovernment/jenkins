@@ -32,10 +32,6 @@ def migrate(site, envs) {
                 release : migrate all content required for a release,
                 test    : migrate all content required for a test environment
             '''))
-
-            booleanParam('publications', false, 'Include publications migration')
-            booleanParam('feedback', false, 'Include feedback migration')
-            booleanParam('historicalpublicationurls', false, 'Include historicalpublicationurls migration')
         }
 
         logRotator {
