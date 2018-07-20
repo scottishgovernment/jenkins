@@ -1,7 +1,7 @@
 #!/bin/sh -eu
 
 migrations=""
-for m in publications feedback historicalpublicationurls urlaliases; do
+for m in feedback; do
   if [ "$(eval echo \$$m)" = "true" ]; then
     migrations="${migrations} ${m}"
   fi
