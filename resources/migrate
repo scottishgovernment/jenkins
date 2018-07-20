@@ -1,16 +1,9 @@
 #!/bin/sh -eu
 
-migrations=""
-for m in feedback; do
-  if [ "$(eval echo \$$m)" = "true" ]; then
-    migrations="${migrations} ${m}"
-  fi
-done
-
 ssh devops@${env}${host}.${env}.gov.scot /bin/sh -eu <<EOS
   export background=${background}
   export clean=${clean}
-  migrate ${task} ${migrations}
+  migrate ${task}
 EOS
 
 echo
