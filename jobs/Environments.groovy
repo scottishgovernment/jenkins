@@ -2,6 +2,7 @@ import org.yaml.snakeyaml.Yaml
 import data.Migration
 import data.Restore
 import data.Revert
+import data.Dbrestore
 import environments.Puppet
 import environments.VPC
 import pipeline.Perform
@@ -25,8 +26,9 @@ def puppet = new Puppet()
 def promotion = new Promotion()
 def restore = new Restore()
 def revert = new Revert()
+def dbrestore = new Dbrestore()
 
-[vpc, migration, prepare, perform, puppet, promotion, restore, revert].each { c ->
+[vpc, migration, prepare, perform, puppet, promotion, restore, revert, dbrestore].each { c ->
   c.setBinding(binding)
 }
 
@@ -42,6 +44,7 @@ sites.collect { site ->
     pipelineView << promotion.build(site, envNames)
     pipelineView << restore.build(site, envNames)
     pipelineView << revert.build(site, envNames)
+    pipelineView << dbrestore.build(site, envNames)
 }
 
 gov = sites.find { it.id == "gov" }

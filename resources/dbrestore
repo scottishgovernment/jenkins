@@ -1,0 +1,51 @@
+#!/bin/sh
+set -eu
+
+pubapp="${env}pubapp01"
+fbkapp="${env}fbkapp01"
+pubuser="devops@${pubapp}"
+fbkuser="devops@${fbkapp}"
+
+case "${env}" in
+  *gv)
+    dbrestoreurl="s3://govscotdatabase"
+    ;;
+  *)
+    dbrestoreurl="s3://scotgovdatabase"
+    ;;
+esac
+
+ssh="ssh -o StrictHostKeyChecking=no"
+
+#
+# RDS
+#
+
+echo "RDS restore run by ${pubuser}"
+
+cmd="ls .credentials | egrep -v template1"
+rds_dbs=$(${ssh} ${pubuser} "${cmd}")
+
+echo "Restoring:"
+for db in ${rds_dbs}
+do
+  echo ${db}
+  dbrestorefile="${db}_latest.gz"
+  dbfrom="${dbrestoreurl}/${dbrestorefile}"
+  dbrestoredb="${db}"
+  cmd="sudo /usr/local/bin/import_db.sh ${dbfrom} ${db} >> /tmp/${db}.log"
+  echo "from ${dbfrom} to RDS db ${db}"
+  result=$(${ssh} ${pubuser} "${cmd}")
+done
+
+#
+# MongoDB
+#
+
+echo "MongoDB restore run by ${fbkuser}"
+
+dbrestorefile="feedback_latest.gz"
+cmd="/usr/local/bin/import_mongo.sh ${dbrestoreurl} ${dbrestorefile}"
+bashcmd="bash -l -c \"${cmd}\""
+echo "from ${dbrestoreurl}"
+result=$(${ssh} ${fbkuser} "${bashcmd}")

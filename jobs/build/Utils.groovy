@@ -32,4 +32,13 @@ class Utils {
         }
     }
 
+    static def puppetRepo(def ScmContext delegate) {
+        delegate.git {
+            remote {
+                name('origin')
+                url(repo('puppet'))
+            }
+            branch('refs/heads/master')
+        }
+    }
 }
