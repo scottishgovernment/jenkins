@@ -1,19 +1,21 @@
 #!/bin/sh
 set -eu
 
-pubapp="${env}pubapp01"
-fbkapp="${env}fbkapp01"
-pubuser="devops@${pubapp}"
-fbkuser="devops@${fbkapp}"
-
 case "${env}" in
   *gv)
     dbrestoreurl="s3://govscotdatabase"
+    domain="${env}.gov.scot"
     ;;
   *)
     dbrestoreurl="s3://scotgovdatabase"
+    domain="${env}.mygov.scot"
     ;;
 esac
+
+pubapp="${env}pubapp01.${domain}"
+fbkapp="${env}fbkapp01.${domain}"
+pubuser="devops@${pubapp}"
+fbkuser="devops@${fbkapp}"
 
 ssh="ssh -o StrictHostKeyChecking=no"
 
@@ -29,7 +31,7 @@ rds_dbs=$(${ssh} ${pubuser} "${cmd}")
 echo "Restoring:"
 for db in ${rds_dbs}
 do
-  echo ${db}
+  echo "\n${db}"
   dbrestorefile="${db}_latest.gz"
   dbfrom="${dbrestoreurl}/${dbrestorefile}"
   dbrestoredb="${db}"
