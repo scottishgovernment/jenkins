@@ -18,8 +18,6 @@ def migrate(site, envs) {
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
 
-            booleanParam('clean', false, 'Delete existing data')
-
             booleanParam('background', true, 'Use false to hog a jenkins executor')
 
             choiceParam('host', ["pubapp01", "pubapp02"], "host to run on")
@@ -56,8 +54,6 @@ def publications(site, List<String> envs) {
 
             choiceParam('env', envs, "${site.domain} environment")
 
-            booleanParam('clean', false, 'Delete existing data')
-
             booleanParam('background', true, 'Use false to hog a jenkins executor')
 
             choiceParam('host', ["pubapp01", "pubapp02"], "host to run on")
@@ -88,8 +84,6 @@ def users(site, List<String> envs) {
         parameters {
 
             choiceParam('env', envs, "${site.domain} environment")
-
-            booleanParam('clean', false, 'Delete existing data')
 
             booleanParam('background', true, 'Use false to hog a jenkins executor')
 

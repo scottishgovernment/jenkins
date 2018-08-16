@@ -4,7 +4,6 @@ usernames=${args:-''}
 
 ssh devops@${env}${host}.${env}.gov.scot /bin/sh -eu <<EOS
   export background=${background}
-  export clean=${clean}
   migrate users ${usernames}
 EOS
 
