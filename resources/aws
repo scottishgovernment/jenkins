@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+
+resolve() {
+  mvn \
+    org.apache.maven.plugins:maven-dependency-plugin:3.0.1:copy \
+    -DoutputDirectory=. \
+    -Dmdep.overWriteReleases \
+    -Dmdep.stripVersion \
+    -Dartifact=${1} \
+    >/dev/null
+}
+
+ver=$(pipeline list:"${env}" | awk '/aws:/{print $2}')
+ver=${ver:-RELEASE}
+resolve scot.mygov.infrastructure:aws:${ver}:deb
+
+version=$(dpkg --info aws.deb | awk '/Version/{print $2}')
+echo "Environment: ${env}"
+echo "AWS Version: ${version}"
+dpkg -x aws.deb .
+cd opt/aws

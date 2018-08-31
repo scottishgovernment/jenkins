@@ -9,6 +9,11 @@ yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
 sites = yaml.sites
 
 view << job('blue-green-switch') {
+    def script = StringBuilder.newInstance()
+    script << readFileFromWorkspace('resources/aws') << '\n'
+    script << 'tools/switch-nagios ${env}\n'
+    script << 'tools/mygov-switch ${env}\n'
+
     displayName('Blue-Green Switch')
     parameters {
         choiceParam('env', ['blu', 'grn'], 'mygov.scot production environment')
@@ -17,10 +22,7 @@ view << job('blue-green-switch') {
         awsRepo(delegate)
     }
     steps {
-        shell(trim('''\
-            tools/switch-nagios ${env}
-            tools/mygov-switch ${env}
-        '''))
+        shell(script.toString())
     }
     publishers {
         buildDescription('', '$env')
@@ -28,6 +30,11 @@ view << job('blue-green-switch') {
 }
 
 view << job('bgv-ggv-govscot-switch') {
+    def script = StringBuilder.newInstance()
+    script << readFileFromWorkspace('resources/aws') << '\n'
+    script << 'tools/switch-nagios ${env}\n'
+    script << 'tools/gov-switch ${env}\n'
+
     displayName('Blue-Green Switch Gov.scot')
     parameters {
         choiceParam('env', ['bgv', 'ggv'], 'gov.scot production environment')
@@ -36,10 +43,7 @@ view << job('bgv-ggv-govscot-switch') {
         awsRepo(delegate)
     }
     steps {
-        shell(trim('''\
-            tools/switch-nagios ${env}
-            tools/gov-switch ${env}
-        '''))
+        shell(script.toString())
     }
     publishers {
         buildDescription('', '$env')
