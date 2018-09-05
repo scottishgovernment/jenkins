@@ -37,8 +37,10 @@ def migrate(site, envs) {
         }
 
         steps {
-            def script = dsl.readFileFromWorkspace('resources/migrate')
-            shell(script)
+            def script = StringBuilder.newInstance()
+            script << dsl.readFileFromWorkspace('resources/migrate')
+            script << dsl.readFileFromWorkspace('resources/migrate-logs')
+            shell(script.toString())
         }
 
     }
@@ -51,7 +53,6 @@ def publications(site, List<String> envs) {
         displayName("Migrate publications")
 
         parameters {
-
             choiceParam('env', envs, "${site.domain} environment")
 
             booleanParam('background', true, 'Use false to hog a jenkins executor')
@@ -68,8 +69,10 @@ def publications(site, List<String> envs) {
         }
 
         steps {
-            def script = dsl.readFileFromWorkspace('resources/migratePublications')
-            shell(script)
+            def script = StringBuilder.newInstance()
+            script << dsl.readFileFromWorkspace('resources/migratePublications')
+            script << dsl.readFileFromWorkspace('resources/migrate-logs')
+            shell(script.toString())
         }
 
     }
@@ -82,7 +85,6 @@ def users(site, List<String> envs) {
         displayName("Migrate users")
 
         parameters {
-
             choiceParam('env', envs, "${site.domain} environment")
 
             booleanParam('background', true, 'Use false to hog a jenkins executor')
@@ -99,8 +101,10 @@ def users(site, List<String> envs) {
         }
 
         steps {
-            def script = dsl.readFileFromWorkspace('resources/migrateUsers')
-            shell(script)
+            def script = StringBuilder.newInstance()
+            script << dsl.readFileFromWorkspace('resources/migrateUsers')
+            script << dsl.readFileFromWorkspace('resources/migrate-logs')
+            shell(script.toString())
         }
 
     }
