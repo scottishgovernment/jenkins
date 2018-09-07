@@ -6,8 +6,9 @@ case "$env" in
   egv) name=exp;;
   ugv) name=uat;;
   tgv) name=tst;;
+  pgv) name=per;;
   bgv) name=blu;;
-  grn) name=grn;;
+  ggv) name=grn;;
 esac
 
 sed "s/tst/${name}/g;s/tgv/${env}/g;s/pubapp0./${host}/g;s/'/%27/g;s/)/%29/g" <<'EOT'
