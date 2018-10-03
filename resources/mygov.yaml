@@ -201,6 +201,14 @@ jobs:
     debian: proxette
     maven: scot.mygov.rubric:proxette
 
+  - name: Publications
+    repo: publications
+    type: java
+    host: pubapp01
+    site: gov
+    debian: publications
+    maven: scot.gov.publications:publications-deb
+
   - name: Publishing
     repo: beta-publishing
     type: java
