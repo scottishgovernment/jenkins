@@ -9,7 +9,7 @@ def build(dsl) {
         scm {
             git {
                 remote {
-                    name('deploy-pipeline')
+                    name('origin')
                     url(repo('deploy-pipeline'))
                 }
                 branch('refs/heads/master')
@@ -43,7 +43,7 @@ def build(dsl) {
         scm {
             git {
                 remote {
-                    name('repo-clean')
+                    name('origin')
                     url(repo('repo-clean'))
                 }
                 branch('refs/heads/master')
