@@ -208,6 +208,7 @@ jobs:
     site: gov
     debian: publications
     maven: scot.gov.publications:publications-deb
+    mirror: git@github.com:scottishgovernment/publications.git
 
   - name: Publishing
     repo: beta-publishing
