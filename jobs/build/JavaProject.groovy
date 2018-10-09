@@ -31,7 +31,9 @@ class JavaProject extends MyGovProject {
     }
 
     void publish(def PublisherContext delegate) {
-        delegate.archiveJunit('**/target/surefire-reports/*.xml')
+        delegate.archiveJunit('**/target/surefire-reports/*.xml') {
+            allowEmptyResults()
+        }
     }
 
 }

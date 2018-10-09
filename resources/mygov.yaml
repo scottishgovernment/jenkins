@@ -68,7 +68,7 @@ jobs:
     host: pubapp01
     site: gov
     debian: checker
-    maven: scot.gov.hippo:checker
+    maven: scot.gov.hippo:checker-deb
     mirror: git@github.com:scottishgovernment/hippo-checker.git
 
   - name: Config
