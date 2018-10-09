@@ -62,6 +62,15 @@ jobs:
     maven: scot.mygov.upstream:certbot
     build: './build -v ${version}'
 
+  - name: Checker
+    repo: hippo-checker
+    type: java
+    host: pubapp01
+    site: gov
+    debian: checker
+    maven: scot.gov.hippo:checker
+    mirror: git@github.com:scottishgovernment/hippo-checker.git
+
   - name: Config
     repo: config
     type: java
