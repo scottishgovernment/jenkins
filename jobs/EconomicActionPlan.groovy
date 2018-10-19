@@ -11,7 +11,9 @@ jobs << job('economic-action-plan') {
     }
 
     scm {
-        git(repo('economicactionplan.mygov.scot'), 'master')
+        git(repo('economicactionplan.mygov.scot'), 'master') {
+            clean(true)
+        }
     }
 
     triggers {
