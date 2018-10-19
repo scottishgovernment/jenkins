@@ -14,6 +14,10 @@ jobs << job('economic-action-plan') {
         git(repo('economicactionplan.mygov.scot'), 'master')
     }
 
+    triggers {
+        scm('# Poll SCM enabled to allow trigger from git hook.')
+    }
+
     steps {
         shell(trim('''\
             set -eux
