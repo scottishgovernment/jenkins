@@ -1,4 +1,5 @@
 import org.yaml.snakeyaml.Yaml
+import data.Checker
 import data.Migration
 import data.Restore
 import data.Revert
@@ -27,8 +28,20 @@ def promotion = new Promotion()
 def restore = new Restore()
 def revert = new Revert()
 def dbrestore = new Dbrestore()
+def checker = new Checker()
 
-[vpc, migration, prepare, perform, puppet, promotion, restore, revert, dbrestore].each { c ->
+[
+    vpc,
+    migration,
+    prepare,
+    perform,
+    puppet,
+    promotion,
+    restore,
+    revert,
+    dbrestore,
+    checker,
+].each { c ->
   c.setBinding(binding)
 }
 
@@ -50,6 +63,7 @@ sites.collect { site ->
 gov = sites.find { it.id == "gov" }
 govEnvironments = gov.environments.collect { it.name }
 migrationView = migration.build(gov, govEnvironments)
+pipelineView << checker.build(gov, govEnvironments)
 
 pipelineView << job('sync-repo') {
     displayName('Update S3 repository')

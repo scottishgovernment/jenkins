@@ -1,0 +1,15 @@
+#!/bin/sh -eu
+
+ssh devops@${env}${host}.${env}.gov.scot /bin/sh -eu <<EOS
+  cat <<'EOF'
+Starting maintenance.
+Follow `syslog_program: checker` in Kibana for logs.
+EOF
+
+  exec </dev/null >&0 2>&1
+  (
+    [ "$stop" = true ] && sudo systemctl stop hippo || :
+    sudo -iu hippo /opt/checker/run ${type}
+    [ "$stop" = true ] && sudo systemctl start hippo || :
+  ) | logger -t checker &
+EOS
