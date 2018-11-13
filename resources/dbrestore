@@ -35,7 +35,7 @@ do
   dbrestorefile="${db}_latest.gz"
   dbfrom="${dbrestoreurl}/${dbrestorefile}"
   dbrestoredb="${db}"
-  cmd="sudo /usr/local/bin/import_db.sh ${dbfrom} ${db} >> /tmp/${db}.log"
+  cmd="/usr/local/bin/import_db.sh ${dbfrom} ${db} >> /tmp/${db}.log"
   echo "from ${dbfrom} to RDS db ${db}"
   result=$(${ssh} ${pubuser} "${cmd}")
 done
