@@ -224,7 +224,7 @@ jobs:
     type: java
     snapshot: publishing-api
     host: pubapp01
-    site: both
+    site: mygov
     debian: publishing
     maven: org.mygovscot.publishing:publishing-deb
 
