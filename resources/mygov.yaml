@@ -110,14 +110,6 @@ jobs:
     maven: scot.mygov.rubric:fetchor
     build: './build -v ${version}'
 
-  - name: Gov Site
-    repo: gov-site
-    type: node
-    host: pubapp01
-    site: gov
-    debian: gov-site
-    maven: org.mygovscot.beta:gov-site
-
   - name: Gov Scot
     repo: gov-scot
     type: java
