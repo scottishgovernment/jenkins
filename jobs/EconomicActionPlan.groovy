@@ -24,7 +24,12 @@ jobs << job('economic-action-plan') {
         shell(trim('''\
             set -eux
             ./build
-            aws s3 sync --delete --acl public-read _site/ s3://economicactionplan.mygov.scot
+        '''))
+        shell(trim('''\
+            set -eux
+            if [ "$FACTER_machine_env" == "services" ]; then
+              aws s3 sync --delete --acl public-read _site/ s3://economicactionplan.mygov.scot
+            fi
         '''))
     }
 
