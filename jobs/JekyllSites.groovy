@@ -45,12 +45,13 @@ sites.each { site ->
             def script = StringBuilder.newInstance()
             script << "set -eux\n"
             script << "domain=${site.domain}\n"
-            shell(trim('''\
+            script << trim('''\
                 ./build
                 if [ "$FACTER_machine_env" = "services" ]; then
                   aws s3 sync --delete --acl public-read _site/ s3://$domain
                 fi
-            '''))
+            ''')
+            shell(script.toString())
         }
 
         publishers {
