@@ -114,6 +114,8 @@ class MyGovProject {
 
     def void slack(def PublisherContext delegate) {
         delegate.slackNotifier {
+            baseUrl(null)
+            commitInfoChoice('NONE')
             notifyAborted(true)
             notifyFailure(true)
             notifyNotBuilt(true)

@@ -56,6 +56,8 @@ sites.each { site ->
 
         publishers {
             slackNotifier {
+                baseUrl(null)
+                commitInfoChoice('NONE')                    
                 notifyAborted(true)
                 notifyFailure(true)
                 notifyNotBuilt(true)
