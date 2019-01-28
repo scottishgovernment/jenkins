@@ -145,6 +145,7 @@ jobs:
     site: mygov
     debian: housing
     maven: scot.mygov.housing:housing-deb
+    mirror: git@github.com:scottishgovernment/housing.git
 
   - name: Housing Data
     repo: housing-data
@@ -153,6 +154,7 @@ jobs:
     site: mygov
     debian: housing-data
     maven: scot.mygov.housing:housing-data
+    mirror: git@github.com:scottishgovernment/housing-data.git
 
   - name: Json2csv
     repo: json2csv
