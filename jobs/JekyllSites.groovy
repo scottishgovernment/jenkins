@@ -19,6 +19,7 @@ class Site {
 def sites = [
     new Site('resources', 'Resources', 'resources.mygov.scot'),
     new Site('economic-action-plan', 'Economic Action Plan', 'economicactionplan.mygov.scot'),
+    new Site('trading-nation', 'Trading Nation', 'tradingnation.mygov.scot'),
 ]
 
 def jobs = []
@@ -48,7 +49,7 @@ sites.each { site ->
             script << trim('''\
                 ./build
                 if [ "$FACTER_machine_env" = "services" ]; then
-                  aws s3 sync --delete --acl public-read _site/ s3://$domain
+                  aws s3 sync --delete _site/ s3://$domain
                 fi
             ''')
             shell(script.toString())
