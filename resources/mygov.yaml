@@ -105,7 +105,7 @@ jobs:
     repo: fetchor
     type: shell
     host: sitwww01
-    site: both
+    site: mygov
     debian: fetchor
     maven: scot.mygov.rubric:fetchor
     build: './build -v ${version}'
@@ -243,7 +243,7 @@ jobs:
     repo: search
     type: java
     host: sitapp01
-    site: both
+    site: mygov
     debian: search
     maven: scot.mygov.search:search-deb
 
@@ -251,7 +251,7 @@ jobs:
     repo: site-builder
     type: node
     host: pubapp01
-    site: both
+    site: mygov
     debian: site-builder
     maven: scot.mygov.site:site-builder
     publish: true
@@ -269,7 +269,7 @@ jobs:
     repo: trigger
     type: node
     host: pubapp01
-    site: both
+    site: mygov
     debian: trigger
     maven: scot.mygov.rubric:trigger
 
