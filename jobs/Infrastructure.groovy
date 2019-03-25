@@ -24,18 +24,14 @@ sites.each { site ->
             """)
             script << trim("""\
                 packer validate \\
-                    -var-file=${site}_variables.json \\
                     -var ami_name=${site}-\${override:-\$BUILD_ID} \\
-                    -var ami_description=\${override:-\$BUILD_ID} \\
-                    packer.json
+                    templates/aws.json
             """)
             script << trim("""\
                 export PACKER_NO_COLOR=true
                 packer build \\
-                    -var-file=${site}_variables.json \\
                     -var ami_name=${site}-\${override:-\$BUILD_ID} \\
-                    -var ami_description=\${override:-\$BUILD_ID} \\
-                    packer.json -machine-readable | tee build.log
+                    templates/aws.json -machine-readable | tee build.log
                     ami_id=\$(egrep -w -m1 -o ami-[[:xdigit:]]+ build.log)
             """)
             script << trim("""\
