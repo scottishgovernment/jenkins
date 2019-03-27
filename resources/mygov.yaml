@@ -78,7 +78,7 @@ jobs:
 
   - name: CSP Report
     repo: csp-report
-    type: shell
+    type: node
     host: fbkapp01
     site: both
     debian: csp-report
