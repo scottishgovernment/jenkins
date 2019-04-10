@@ -32,7 +32,7 @@ sites.each { site ->
                 packer build \\
                     -var ami_name=${site}-\${override:-\$BUILD_ID} \\
                     templates/aws.json -machine-readable | tee build.log
-                    ami_id=\$(egrep -w -m1 -o ami-[[:xdigit:]]+ build.log)
+                    ami_id=\$(awk -F, '$5=="id" {sub("[a-z0-9-]*:", "", $6); print $6;exit;}' build.log)
             """)
             script << trim("""\
             echo '{}' | jq ".artifactId=\\"${site}\\"
