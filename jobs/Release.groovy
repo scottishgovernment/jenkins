@@ -172,6 +172,18 @@ view << job('authentication-ctl') {
     }
 }
 
+view << job('gov-index-backup') {
+    displayName('Backup Hippo Index')
+    scm {
+        awsRepo(delegate)
+    }
+    steps {
+        shell(trim('''\
+          tools/backup-index
+        '''))
+    }
+}
+
 listView('Release') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
