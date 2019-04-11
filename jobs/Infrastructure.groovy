@@ -30,22 +30,22 @@ sites.each { site ->
                 packer build \
                     -var ami_name=${site}-${override:-$BUILD_ID} \
                     templates/aws.json -machine-readable | tee build.log
-                    ami_id=$(awk -F, '$5=="id" {sub("[a-z0-9-]*:", "", $6); print $6; exit;}' build.log)
+                ami_id=$(awk -F, '$5=="id" {sub("[a-z0-9-]*:", "", $6); print $6; exit;}' build.log)
 
                 echo '{}' | jq ".artifactId=\"${site}\"
-                | .name=\"${site}-${BUILD_ID}\"
-                | .version=${BUILD_ID}
-                | .ami=\"${ami_id}\" > ami.json
+                  | .name=\"${site}-${BUILD_ID}\"
+                  | .version=${BUILD_ID}
+                  | .ami=\"${ami_id}\" > ami.json
 
                 mvn deploy:deploy-file \\
-                    -DgroupId=scot.mygov.ami \\
-                    -DartifactId=${site} \\
-                    -Dversion=${BUILD_ID} \\
-                    -DrepositoryId=release \\
-                    -Dpackaging=json \\
-                    -DgeneratePom \\
-                    -Durl=http://nexus/repository/releases/ \\
-                    -Dfile=ami.json
+                  -DgroupId=scot.mygov.ami \\
+                  -DartifactId=${site} \\
+                  -Dversion=${BUILD_ID} \\
+                  -DrepositoryId=release \\
+                  -Dpackaging=json \\
+                  -DgeneratePom \\
+                  -Durl=http://nexus/repository/releases/ \\
+                  -Dfile=ami.json
             ''')
             shell(script.toString())
         }
