@@ -1,17 +1,17 @@
 #!/bin/sh
 # Creates a backup of the SonarQube instance, and copies to repo and S3.
 # Two backup files are copied:
-# * sonarqube.ar:
-#   includes the database backup and the data directory.
 # * sonarqube.sql.gz:
-#   the database backup only, which is useful when then data directory is not
-#   required. For example, when upgrading.
-set -e
-ssh -o StrictHostKeyChecking=no devops@sonar sonarqube-db backup
-files="sonarqube.ar sonarqube.sql.gz"
+#   the SonarQube database backup
+# * sonarqube.tar.gz:
+#   includes the data directory, which contains the Elasticsearch index backup.
+set -eu
+SSH_OPTS="-o StrictHostKeyChecking=no"
+ssh $SSH_OPTS devops@sonar sonarqube-db backup
+files="sonarqube.sql.gz sonarqube.tar.gz"
 for file in $files; do
-  scp "devops@sonar:/opt/sonar/backups/${file}" .
+  scp $SSH_OPTS "devops@sonar:/opt/sonar/backups/${file}" .
   aws s3 cp "$file" "s3://scotgovdigitalbackups/sonar/${file}"
-  scp "$file" "devops@repo:/srv/backups/services/${file}"
+  scp $SSH_OPTS "$file" "devops@repo:/srv/backups/services/${file}"
   rm "$file"
 done
