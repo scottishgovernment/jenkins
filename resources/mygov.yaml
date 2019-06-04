@@ -53,6 +53,7 @@ jobs:
     site: mygov
     debian: business-rates
     maven: org.mygovscot.business-rates:business-rates-deb
+    mirror: git@github.com:scottishgovernment/business-rates.git
 
   - name: Certbot
     repo: certbot
