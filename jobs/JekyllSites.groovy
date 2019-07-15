@@ -17,8 +17,9 @@ class Site {
 }
 
 def sites = [
-    new Site('resources', 'Resources', 'resources.mygov.scot'),
     new Site('economic-action-plan', 'Economic Action Plan', 'economicactionplan.mygov.scot'),
+    new Site('pattern-library', 'Pattern Library', 'patternlibrary.mygov.scot'),
+    new Site('resources', 'Resources', 'resources.mygov.scot'),
     new Site('trading-nation', 'Trading Nation', 'tradingnation.mygov.scot'),
 ]
 
