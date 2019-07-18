@@ -46,6 +46,15 @@ jobs:
     type: java
     snapshot: .
 
+  - name: Beta Publishing
+    repo: beta-publishing
+    type: java
+    snapshot: publishing-api
+    host: pubapp01
+    site: mygov
+    debian: beta-publishing
+    maven: org.mygovscot.publishing:publishing-deb
+
   - name: Business Rates
     repo: business-rates-service
     type: java
@@ -212,15 +221,6 @@ jobs:
     debian: publications
     maven: scot.gov.publications:publications-deb
     mirror: git@github.com:scottishgovernment/publications.git
-
-  - name: Publishing
-    repo: beta-publishing
-    type: java
-    snapshot: publishing-api
-    host: pubapp01
-    site: mygov
-    debian: publishing
-    maven: org.mygovscot.publishing:publishing-deb
 
   - name: Publishing Site
     repo: publishing-site
