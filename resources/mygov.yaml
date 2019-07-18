@@ -222,14 +222,6 @@ jobs:
     maven: scot.gov.publications:publications-deb
     mirror: git@github.com:scottishgovernment/publications.git
 
-  - name: Publishing Site
-    repo: publishing-site
-    type: node
-    host: pubwww01
-    site: both
-    debian: publishing-site
-    maven: org.mygovscot:publishing-site
-
   - name: Puppet Manifests
     repo: puppet
     type: shell
@@ -238,6 +230,14 @@ jobs:
     maven: org.mygovscot.puppet:puppetry
     clean: 'git clean -fdx -e .tmp'
     build: './build -v ${version}'
+
+  - name: Rubric Site
+    repo: publishing-site
+    type: node
+    host: pubwww01
+    site: both
+    debian: rubric-site
+    maven: org.mygovscot:publishing-site
 
   - name: Search
     repo: search
