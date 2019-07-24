@@ -222,6 +222,31 @@ jobs:
     maven: scot.gov.publications:publications-deb
     mirror: git@github.com:scottishgovernment/publications.git
 
+  - name: Publishing
+    repo: publishing
+    type: java
+    site: mygov
+    artifacts:
+      publishing-cms:
+        hosts:
+          - pubapp01
+        maven: scot.mygov.publishing:publishing-cms-deb
+      publishing-site:
+        hosts:
+          - pubapp01
+          - sitapp01
+        maven: scot.mygov.publishing:publishing-site-deb
+      publishing-platform:
+        hosts:
+          - sitapp01
+        maven: scot.gov.publishing:publishing-platform-deb
+      publishing-libs:
+        hosts:
+          - pubapp01
+          - sitapp01
+        maven: scot.mygov.publishing:publishing-libs
+    mirror: git@github.com:scottishgovernment/publishing.git
+
   - name: Puppet Manifests
     repo: puppet
     type: shell
