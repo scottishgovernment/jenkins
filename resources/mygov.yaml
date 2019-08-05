@@ -239,7 +239,7 @@ jobs:
       publishing-platform:
         hosts:
           - sitapp01
-        maven: scot.gov.publishing:publishing-platform-deb
+        maven: scot.mygov.publishing:publishing-platform-deb
       publishing-libs:
         hosts:
           - pubapp01
