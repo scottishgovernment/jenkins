@@ -177,7 +177,7 @@ jobs:
     repo: migration
     type: java
     host: pubapp01
-    site: gov
+    site: both
     debian: migration
     maven: scot.gov.migration:migration-deb
 
