@@ -1,8 +1,0 @@
-#!/bin/sh -eu
-
-slugs=${args:-''}
-
-ssh devops@${env}${host}.${env}.gov.scot /bin/sh -eu <<EOS
-  export background=${background}
-  migrate publications ${slugs}
-EOS

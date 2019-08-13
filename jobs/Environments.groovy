@@ -60,9 +60,10 @@ sites.collect { site ->
     pipelineView << dbrestore.build(site, envNames)
 }
 
+migrationView = migration.build(sites)
+
 gov = sites.find { it.id == "gov" }
 govEnvironments = gov.environments.collect { it.name }
-migrationView = migration.build(gov, govEnvironments)
 pipelineView << checker.build(gov, govEnvironments)
 
 pipelineView << job('sync-repo') {

@@ -1,6 +1,6 @@
 #!/bin/sh -eu
 
-ssh devops@${env}${host}.${env}.gov.scot /bin/sh -eu <<EOS
+ssh devops@${env}${host}.${env}.<site>.scot /bin/sh -eu <<EOS
   export background=${background}
-  migrate ${task}
+  migrate release
 EOS
