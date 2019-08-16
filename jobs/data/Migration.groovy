@@ -25,13 +25,12 @@ def migrate(site, envs) {
         }
 
         steps {
-            def scriptBuilder = StringBuilder.newInstance()
-            scriptBuilder << dsl.readFileFromWorkspace('resources/migrate')
-            scriptBuilder << dsl.readFileFromWorkspace('resources/migrate-logs')
-            def script = scriptBuilder.toString();
-            script = script.replace('<site>', site.id);
-            shell(script);
+            // build the migration script with site variable defined
+            def script = StringBuilder.newInstance()
+            script << "#!/bin/sh -eu\n"
+            script << "site=${site.id}\n"
+            script << dsl.readFileFromWorkspace('resources/migrate')
+            shell(script.toString());
         }
-
     }
 }
