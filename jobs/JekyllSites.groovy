@@ -49,10 +49,22 @@ sites.each { site ->
             script << "domain=${site.domain}\n"
             script << trim('''\
                 ./build
+
                 if [ "$FACTER_machine_env" = "services" ]; then
-                  aws s3 sync --delete _site/ s3://$domain
+                  aws s3 sync --no-progress --delete _site/ s3://$domain
                 fi
-            ''')
+                '''.stripIndent())
+
+            if (site.key != 'resources') {
+            script << trim('''\
+                git config remote.source.fetch +refs/*:refs/mirror/*
+                git config remote.source.url \$(git config remote.origin.url)
+                git fetch source
+                git config remote.target.url git@github.com:scottishgovernment/${domain}.git
+                git config remote.target.push refs/mirror/*:refs/*
+                git push --mirror target
+                '''.stripIndent())
+            }
             shell(script.toString())
         }
 
