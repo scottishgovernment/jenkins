@@ -23,6 +23,7 @@ class UpstreamProject extends MyGovProject {
     def void build(def StepContext delegate) {
         def vars = [
             repo: repo,
+            version: version,
             build: build,
             clean: clean,
             maven: maven,

@@ -12,8 +12,6 @@ import static build.Utils.trim
 
 class MyGovProject {
 
-    final String VERSION = '1.0.${PROMOTED_ID}'
-
     DslFactory dsl
 
     PrintStream out
@@ -22,6 +20,8 @@ class MyGovProject {
 
     /* Display name of the project */
     String name
+
+    String version = '1.0.${BUILD_ID}'
 
     /* Slug of the git repository, without any path or .git extension */
     String repo
@@ -175,11 +175,12 @@ class MyGovProject {
     }
 
     def String pipelineDeploy(List<Artifact> artifacts, String env) {
+        def promotedVersion = version.replace('BUILD_ID', 'PROMOTED_ID')
         def script = new StringBuilder()
         def delimiter = artifacts.size() == 1 ? ' ' : ' \\\n  '
         script << 'pipeline' << delimiter
         script << artifacts.collect {
-            "deploy:${it.debian},${VERSION},${env}"
+            "deploy:${it.debian},${promotedVersion},${env}"
         }.join(delimiter)
         script << delimiter
         script << 'sync\n'
@@ -196,6 +197,7 @@ class MyGovProject {
     }
 
     def String deployArtifactBySSH(Artifact artifact, String env, StringBuilder script) {
+        def promotedVersion = version.replace('BUILD_ID', 'PROMOTED_ID')
         def debian = artifact.debian
         def maven = artifact.maven
         def colon = maven.indexOf(':')
@@ -205,8 +207,8 @@ class MyGovProject {
         def path = new StringBuilder()
         path << groupId.replace('.', '/') << '/'
         path << artifactId << '/'
-        path << VERSION << '/'
-        path << artifactId << '-' << VERSION << '.deb'
+        path << promotedVersion << '/'
+        path << artifactId << '-' << promotedVersion << '.deb'
 
         for (x in artifact.hosts) {
           if (x == null) {

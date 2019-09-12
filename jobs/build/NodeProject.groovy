@@ -27,6 +27,7 @@ class NodeProject extends MyGovProject {
 
         def vars = [
           repo: repo,
+          version: version,
           debian: debian,
           publish: publish || npmjs,
           local: publish,

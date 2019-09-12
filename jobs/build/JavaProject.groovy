@@ -19,8 +19,9 @@ class JavaProject extends MyGovProject {
         def compiled = Mustache.compiler().compile(template);
 
         def script = compiled.execute([
-          repo: repo,
-          snapshot: snapshot
+            version: version,
+            repo: repo,
+            snapshot: snapshot
         ])
 
         delegate.shell(script)

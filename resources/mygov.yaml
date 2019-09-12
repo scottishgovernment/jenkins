@@ -197,6 +197,15 @@ jobs:
     debian: mygov-site
     maven: org.mygovscot.beta:web-site
 
+  - name: Pattern Library
+    repo: pattern-library
+    version: 0.0.${BUILD_ID}
+    type: node
+    publish: true
+    sonar: false
+    npmjs: true
+    mirror: git@github.com:scottishgovernment/pattern-library.git
+
   - name: Press Releases
     repo: press-releases
     type: java
