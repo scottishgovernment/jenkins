@@ -172,14 +172,26 @@ view << job('authentication-ctl') {
     }
 }
 
-view << job('gov-index-backup') {
-    displayName('Backup Hippo Index')
+view << job('mygov-index-backup') {
+    displayName('Backup mygov hippo index')
     scm {
         awsRepo(delegate)
     }
     steps {
         shell(trim('''\
-          tools/backup-index
+          tools/backup-index mygov
+        '''))
+    }
+}
+
+view << job('gov-index-backup') {
+    displayName('Backup gov hippo index')
+    scm {
+        awsRepo(delegate)
+    }
+    steps {
+        shell(trim('''\
+          tools/backup-index gov
         '''))
     }
 }
