@@ -206,6 +206,15 @@ jobs:
     npmjs: true
     mirror: git@github.com:scottishgovernment/pattern-library.git
 
+  - name: Payment
+    repo: payment
+    type: java
+    host: sitapp01
+    site: gov
+    debian: payment
+    maven: scot.gov.publishing.payment:payment-deb
+    mirror: git@github.com:scottishgovernment/payment.git
+
   - name: Press Releases
     repo: press-releases
     type: java
