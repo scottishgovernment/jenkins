@@ -264,12 +264,11 @@ jobs << job('rubric-api-tests') {
 jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
-        choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
-        choiceParam('testenv', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'blu', 'grn', 'dgv', 'igv', 'egv', 'pgv', 'ugv',' tgv', 'bgv', 'ggv'], 'Use this option to select test environment against which tests shall be executed')
+        choiceParam('site', ["mygov", "gov", "trading nation"], 'use this option to select tests for mygov.scot, gov.scot or trading nation')
+        choiceParam('testenv', ["int", "exp", "per", "uat", "tst", "igv", "egv", "pgv", "ugv", "tgv"], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
         choiceParam('smoke_only', ['false', 'true'], 'Use this option to ONLY run smoke tests')
-        stringParam('selenium_ip_address', '10.21.138.61', 'Use this option to specify the IP address of the machine running Selenium web driver')
-        stringParam('tests', 'all', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E')
+        stringParam('tests', 'webE2E', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E')
     }
     logRotator {
         daysToKeep(60)
@@ -280,9 +279,9 @@ jobs << job('end-to-end-tests') {
     steps {
         shell(trim('''\
             if [ "\$smoke_only" = "true" ]; then
-                ./run.sh -s ${site} -i ${selenium_ip_address} -m ${mode} -t ${tests} -e ${testenv} -k
+                ./run.sh -s ${site} -m ${mode} -t ${tests} -e ${testenv} -k
             else
-                ./run.sh -s ${site} -i ${selenium_ip_address} -m ${mode} -t ${tests} -e ${testenv}
+                ./run.sh -s ${site} -m ${mode} -t ${tests} -e ${testenv}
             fi
         '''))
     }
