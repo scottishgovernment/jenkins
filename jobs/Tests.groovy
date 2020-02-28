@@ -264,7 +264,7 @@ jobs << job('rubric-api-tests') {
 jobs << job('end-to-end-tests') {
     displayName('End-to-end tests')
     parameters {
-        choiceParam('site', ["mygov", "gov", "trading nation"], 'use this option to select tests for mygov.scot, gov.scot or trading nation')
+        choiceParam('site', ["mygov", "gov", "tradingnation"], 'use this option to select tests for mygov.scot, gov.scot or trading nation')
         choiceParam('testenv', ["int", "exp", "per", "uat", "tst", "igv", "egv", "pgv", "ugv", "tgv"], 'Use this option to select test environment against which tests shall be executed')
         choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
         choiceParam('smoke_only', ['false', 'true'], 'Use this option to ONLY run smoke tests')
