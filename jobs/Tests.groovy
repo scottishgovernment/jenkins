@@ -448,6 +448,118 @@ jobs << job('security-tests') {
     }
 }
 
+jobs << pipelineJob('integration-test-mygov') {
+    displayName('Integration Test Mygov')
+    logRotator {
+        daysToKeep(14)
+    }
+    definition {
+        cps {
+            def pipeline = StringBuilder.newInstance()
+            pipeline << """
+
+            stage('Promote') {
+                build job: 'promote-mygov', parameters: [
+                    string(name: 'from', value: 'dev'),
+                    string(name: 'to', value: 'int')
+                ]
+            }
+
+            stage('Build') {
+                build job: 'mygov-test-up', parameters: [
+                    string(name: 'env', value: 'int')
+                ]
+            }
+
+            stage('Pause') {
+                sleep time: 30, unit: 'MINUTES'
+            }
+
+            stage('Migrations') {
+                build job: 'migration-mygov', parameters: [
+                    string(name: 'env', value: 'int'),
+                    string(name: 'background', value: 'true'),
+                    string(name: 'host', value: 'pubapp01')
+            }
+
+            stage('mygov-pube2e') {
+                build job: 'end-to-end-tests', parameters: [
+                    string(name: 'site', value: 'mygov'),
+                    string(name: 'testenv', value: 'int'),
+                    string(name: 'mode', value: 'single'),
+                    string(name: 'smoke_only', value: 'true'),
+                    string(name: 'tests', value: 'pubE2E')
+                ]
+            }
+
+            stage('mygov-webe2e') {
+                build job: 'end-to-end-tests', parameters: [
+                    string(name: 'site', value: 'mygov'),
+                    string(name: 'testenv', value: 'int'),
+                    string(name: 'mode', value: 'single'),
+                    string(name: 'smoke_only', value: 'false'),
+                    string(name: 'tests', value: 'webE2E')
+                ]
+            }
+
+            """.stripIndent()
+            script(pipeline.toString())
+            sandbox()
+        }
+    }
+}
+
+jobs << pipelineJob('integration-test-gov') {
+    displayName('Integration Test Gov')
+    logRotator {
+        daysToKeep(14)
+    }
+    definition {
+        cps {
+            def pipeline = StringBuilder.newInstance()
+            pipeline << """
+
+            stage('Promote') {
+                build job: 'promote-gov', parameters: [
+                    string(name: 'from', value: 'dgv'),
+                    string(name: 'to', value: 'igv')
+                ]
+            }
+
+            stage('Build') {
+                build job: 'gov-test-up', parameters: [
+                    string(name: 'env', value: 'igv')
+                ]
+            }
+
+            stage('Pause') {
+                sleep time: 30, unit: 'MINUTES'
+            }
+
+            stage('Migrations') {
+                build job: 'migration-gov', parameters: [
+                    string(name: 'env', value: 'igv'),
+                    string(name: 'background', value: 'false'),
+                    string(name: 'host', value: 'pubapp01')
+                ]
+            }
+
+            stage('gov-webe2e') {
+                build job: 'end-to-end-tests', parameters: [
+                    string(name: 'site', value: 'gov'),
+                    string(name: 'testenv', value: 'igv'),
+                    string(name: 'mode', value: 'single'),
+                    string(name: 'smoke_only', value: 'false'),
+                    string(name: 'tests', value: 'webE2E')
+                ]
+            }
+            
+            """.stripIndent()
+            script(pipeline.toString())
+            sandbox()
+        }
+    }
+}
 listView('Test') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {

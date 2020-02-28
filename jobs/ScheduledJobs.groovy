@@ -26,8 +26,8 @@ def myenv = env['FACTER_machine_env']
 def enabled = myenv == "services"
 
 
-jobs << pipelineJob('scheduled-build-test-envs') {
-    displayName('Scheduled Build Test Environments')
+jobs << pipelineJob('scheduled-build-dev-envs') {
+    displayName('Scheduled Build Dev Environments')
     if (enabled) {
         triggers {
            cron('00 07 * * 1-5')
@@ -37,18 +37,8 @@ jobs << pipelineJob('scheduled-build-test-envs') {
       cps {
         def pipeline = StringBuilder.newInstance()
         pipeline << """
-          stage('Promote') {
-            build job: 'promote-mygov', parameters: [
-              string(name: 'from', value: 'dev'),
-              string(name: 'to', value: 'int')
-            ]
-            build job: 'promote-gov', parameters: [
-              string(name: 'from', value: 'dgv'),
-              string(name: 'to', value: 'igv')
-            ]
-          }
           stage('Build') {
-            def envs = ['dgv':'gov', 'dev':'mygov', 'igv':'gov', 'int':'mygov']
+            def envs = ['dgv':'gov', 'dev':'mygov']
             def tasks = envs.collectEntries { name, site ->
               job = {
                   build job: site + '-test-up', parameters: [
@@ -65,7 +55,6 @@ jobs << pipelineJob('scheduled-build-test-envs') {
       }
     }
 }
-
 
 jobs << pipelineJob('scheduled-teardown-test-envs') {
     displayName('Scheduled Teardown Test Environments')
@@ -101,7 +90,6 @@ jobs << pipelineJob('scheduled-teardown-test-envs') {
       }
     }
 }
-
 
 jobs << job('backup-production-s3-buckets') {
     displayName('Backup Production S3 Buckets')
@@ -256,6 +244,32 @@ jobs << job('cleanup-builds') {
     }
     publishers {
         slack(delegate)
+    }
+}
+
+jobs << pipelineJob('scheduled-run-integration') {
+    displayName('Scheduled Integration Testing')
+    if (enabled) {
+        triggers {
+           cron('00 07 * * 1-5')
+        }
+    }
+    definition {
+      cps {
+        def pipeline = StringBuilder.newInstance()
+        pipeline << """
+            def envs = ['igv':'gov', 'int':'mygov']
+            def tasks = envs.collectEntries { name, site ->
+              job = {
+                build job: 'integration-test-' + site
+              }
+              [site, job]
+            }
+            parallel tasks
+        """.stripIndent()
+        script(pipeline.toString())
+        sandbox()
+      }
     }
 }
 
