@@ -480,6 +480,7 @@ jobs << pipelineJob('integration-test-mygov') {
                     string(name: 'env', value: 'int'),
                     string(name: 'background', value: 'true'),
                     string(name: 'host', value: 'pubapp01')
+                ]
             }
 
             stage('mygov-pube2e') {
