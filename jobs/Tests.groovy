@@ -508,6 +508,12 @@ jobs << pipelineJob('integration-test-mygov') {
                 }
             }
 
+            stage('teardown int') {
+                build job: 'mygov-test-down', parameters: [
+                    string(name: 'env', value: 'int')
+                ]
+            }
+
             """.stripIndent()
             script(pipeline.toString())
             sandbox()
@@ -561,7 +567,13 @@ jobs << pipelineJob('integration-test-gov') {
                     ]
                 }
             }
-            
+
+            stage('teardown igv') {
+                build job: 'gov-test-down', parameters: [
+                    string(name: 'env', value: 'igv')
+                ]
+            }
+
             """.stripIndent()
             script(pipeline.toString())
             sandbox()

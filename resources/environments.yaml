@@ -15,7 +15,6 @@ sites:
         scheduled: true
       - name: int
         type: test
-        scheduled: true
       - name: exp
         type: test
       - name: uat
@@ -48,7 +47,6 @@ sites:
         scheduled: true
       - name: igv
         type: test
-        scheduled: true
       - name: egv
         type: test
       - name: ugv
