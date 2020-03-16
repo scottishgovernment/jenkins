@@ -472,35 +472,40 @@ jobs << pipelineJob('integration-test-mygov') {
             }
 
             stage('Pause') {
-                sleep time: 30, unit: 'MINUTES'
+                sleep time: 15, unit: 'MINUTES'
             }
 
             stage('Migrations') {
                 build job: 'migration-mygov', parameters: [
                     string(name: 'env', value: 'int'),
-                    string(name: 'background', value: 'true'),
+                    booleanParam(name: 'background', value: false),
                     string(name: 'host', value: 'pubapp01')
                 ]
             }
 
             stage('mygov-pube2e') {
-                build job: 'end-to-end-tests', parameters: [
-                    string(name: 'site', value: 'mygov'),
-                    string(name: 'testenv', value: 'int'),
-                    string(name: 'mode', value: 'single'),
-                    string(name: 'smoke_only', value: 'true'),
-                    string(name: 'tests', value: 'pubE2E')
-                ]
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'end-to-end-tests',
+                    parameters: [
+                        string(name: 'site', value: 'mygov'),
+                        string(name: 'testenv', value: 'int'),
+                        string(name: 'mode', value: 'single'),
+                        string(name: 'smoke_only', value: 'true'),
+                        string(name: 'tests', value: 'pubE2E')
+                    ]
+                }
             }
 
             stage('mygov-webe2e') {
-                build job: 'end-to-end-tests', parameters: [
-                    string(name: 'site', value: 'mygov'),
-                    string(name: 'testenv', value: 'int'),
-                    string(name: 'mode', value: 'single'),
-                    string(name: 'smoke_only', value: 'false'),
-                    string(name: 'tests', value: 'webE2E')
-                ]
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'end-to-end-tests', parameters: [
+                        string(name: 'site', value: 'mygov'),
+                        string(name: 'testenv', value: 'int'),
+                        string(name: 'mode', value: 'single'),
+                        string(name: 'smoke_only', value: 'false'),
+                        string(name: 'tests', value: 'webE2E')
+                    ]
+                }
             }
 
             """.stripIndent()
@@ -534,25 +539,27 @@ jobs << pipelineJob('integration-test-gov') {
             }
 
             stage('Pause') {
-                sleep time: 30, unit: 'MINUTES'
+                sleep time: 15, unit: 'MINUTES'
             }
 
             stage('Migrations') {
                 build job: 'migration-gov', parameters: [
                     string(name: 'env', value: 'igv'),
-                    string(name: 'background', value: 'false'),
+                    booleanParam(name: 'background', value: false),
                     string(name: 'host', value: 'pubapp01')
                 ]
             }
 
             stage('gov-webe2e') {
-                build job: 'end-to-end-tests', parameters: [
-                    string(name: 'site', value: 'gov'),
-                    string(name: 'testenv', value: 'igv'),
-                    string(name: 'mode', value: 'single'),
-                    string(name: 'smoke_only', value: 'false'),
-                    string(name: 'tests', value: 'webE2E')
-                ]
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'end-to-end-tests', parameters: [
+                        string(name: 'site', value: 'gov'),
+                        string(name: 'testenv', value: 'igv'),
+                        string(name: 'mode', value: 'single'),
+                        string(name: 'smoke_only', value: 'false'),
+                        string(name: 'tests', value: 'webE2E')
+                    ]
+                }
             }
             
             """.stripIndent()
