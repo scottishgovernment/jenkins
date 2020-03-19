@@ -258,14 +258,32 @@ jobs << pipelineJob('scheduled-run-integration') {
       cps {
         def pipeline = StringBuilder.newInstance()
         pipeline << """
-            def envs = ['igv':'gov', 'int':'mygov']
-            def tasks = envs.collectEntries { name, site ->
-              job = {
-                build job: 'integration-test-' + site
-              }
-              [site, job]
+            stage('Integrate Test') {
+                def envs = ['igv':'gov', 'int':'mygov']
+                def tasks = envs.collectEntries { name, site ->
+                    job = {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                            build job: 'integration-test-' + site
+                        }
+                    }
+                    [site, job]
+                }
+                parallel tasks
             }
-            parallel tasks
+            
+            stage('Build Exploratory Envs') {
+                def envs = ['egv': 'gov', 'exp': 'mygov']
+                def tasks = envs.collectEntries { name, site -> 
+                    job = {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                            build job: 'build-' + name + '-environment'
+                        }
+                    }
+                    [name, job]
+                }
+                parallel tasks
+            }
+
         """.stripIndent()
         script(pipeline.toString())
         sandbox()

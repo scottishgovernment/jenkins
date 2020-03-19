@@ -580,6 +580,91 @@ jobs << pipelineJob('integration-test-gov') {
         }
     }
 }
+
+jobs << pipelineJob('build-egv-environment') {
+    displayName('Setup Egv Environment')
+    logRotator {
+        daysToKeep(7)
+    }
+    definition {
+        cps {
+            def pipeline = StringBuilder.newInstance()
+            pipeline << """
+
+            stage('Promote') {
+                build job: 'promote-gov', parameters: [
+                    string(name: 'from', value: 'igv'),
+                    string(name: 'to', value: 'egv')
+                ]
+            }
+
+            stage('Build') {
+                build job: 'gov-test-up', parameters: [
+                    string(name: 'env', value: 'egv')
+                ]
+            }
+
+            stage('Pause') {
+                sleep time: 15, unit: 'MINUTES'
+            }
+
+            stage('Migrations') {
+                build job: 'migration-gov', parameters: [
+                    string(name: 'env', value: 'egv'),
+                    booleanParam(name: 'background', value: false),
+                    string(name: 'host', value: 'pubapp01')
+                ]
+            }
+
+            """.stripIndent()
+            script(pipeline.toString())
+            sandbox()
+        }
+    }
+}
+
+jobs << pipelineJob('build-exp-environment') {
+    displayName('Setup Exp Environment')
+    logRotator {
+        daysToKeep(7)
+    }
+    definition {
+        cps {
+            def pipeline = StringBuilder.newInstance()
+            pipeline << """
+
+            stage('Promote') {
+                build job: 'promote-mygov', parameters: [
+                    string(name: 'from', value: 'int'),
+                    string(name: 'to', value: 'exp')
+                ]
+            }
+
+            stage('Build') {
+                build job: 'mygov-test-up', parameters: [
+                    string(name: 'env', value: 'exp')
+                ]
+            }
+
+            stage('Pause') {
+                sleep time: 15, unit: 'MINUTES'
+            }
+
+            stage('Migrations') {
+                build job: 'migration-mygov', parameters: [
+                    string(name: 'env', value: 'exp'),
+                    booleanParam(name: 'background', value: false),
+                    string(name: 'host', value: 'pubapp01')
+                ]
+            }
+
+            """.stripIndent()
+            script(pipeline.toString())
+            sandbox()
+        }
+    }
+}
+
 listView('Test') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
