@@ -17,6 +17,7 @@ sites:
         type: test
       - name: exp
         type: test
+        scheduled: true
       - name: uat
         type: test
       - name: per
@@ -49,6 +50,7 @@ sites:
         type: test
       - name: egv
         type: test
+        scheduled: true
       - name: ugv
         type: test
       - name: pgv
