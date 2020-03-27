@@ -508,6 +508,18 @@ jobs << pipelineJob('integration-test-mygov') {
                 }
             }
 
+            stage('tradingnation-webe2e') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'end-to-end-tests', parameters: [
+                        string(name: 'site', value: 'tradingnation'),
+                        string(name: 'testenv', value: 'int'),
+                        string(name: 'mode', value: 'single'),
+                        string(name: 'smoke_only', value: 'false'),
+                        string(name: 'tests', value: 'webE2E')
+                    ]
+                }
+            }
+
             stage('teardown int') {
                 build job: 'mygov-test-down', parameters: [
                     string(name: 'env', value: 'int')
