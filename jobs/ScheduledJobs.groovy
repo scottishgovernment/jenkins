@@ -91,6 +91,41 @@ jobs << pipelineJob('scheduled-teardown-test-envs') {
     }
 }
 
+jobs << pipelineJob('weekend-teardown-dev-envs') {
+    displayName('Scheduled Weekend Teardown Dev Environments')
+    if (enabled) {
+        triggers {
+           cron('30 19 * * 6,0')
+        }
+    }
+    definition {
+      cps {
+        environments = sites.collectMany { site ->
+            site.environments
+                .grep { it.weekend }
+                .collect { environment ->
+                    [environment.name, site.id]
+                }
+        }.flatten().toSpreadMap()
+        def pipeline = StringBuilder.newInstance()
+        pipeline << "def envs = " << environments.inspect() << "\n"
+        pipeline << """
+          def tasks = envs.collectEntries { name, site ->
+              job = {
+                  build job: site + '-test-down', parameters: [
+                    string(name: 'env', value: name)
+                  ]
+              }
+              [name, job]
+          }
+          parallel tasks
+        """.stripIndent()
+        script(pipeline.toString())
+        sandbox()
+      }
+    }
+}
+
 jobs << job('backup-production-s3-buckets') {
     displayName('Backup Production S3 Buckets')
     logRotator {

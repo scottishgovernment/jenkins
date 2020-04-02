@@ -13,6 +13,7 @@ sites:
         type: test
         auto: true
         scheduled: true
+        weekend: true
       - name: int
         type: test
       - name: exp
@@ -46,6 +47,7 @@ sites:
         type: test
         auto: true
         scheduled: true
+        weekend: true
       - name: igv
         type: test
       - name: egv
