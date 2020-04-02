@@ -37,18 +37,18 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
       cps {
         def pipeline = StringBuilder.newInstance()
         pipeline << """
-          stage('Build') {
-            def envs = ['dgv':'gov', 'dev':'mygov']
-            def tasks = envs.collectEntries { name, site ->
-              job = {
-                  build job: site + '-test-up', parameters: [
-                    string(name: 'env', value: name)
-                  ]
-              }
-              [name, job]
+            stage('Build') {
+                def envs = ['dgv':'gov', 'dev':'mygov']
+                def tasks = envs.collectEntries { name, site ->
+                job = {
+                    build job: site + '-test-up', parameters: [
+                        string(name: 'env', value: name)
+                    ]
+                }
+                [name, job]
+                }
+                parallel tasks
             }
-            parallel tasks
-          }
         """.stripIndent()
         script(pipeline.toString())
         sandbox()
@@ -56,8 +56,36 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
     }
 }
 
-jobs << pipelineJob('scheduled-teardown-test-envs') {
-    displayName('Scheduled Teardown Test Environments')
+jobs << pipelineJob('scheduled-teardown-dev-envs') {
+    displayName('Scheduled Teardown Dev Environments')
+    if (enabled) {
+        triggers {
+           cron('30 19 * * *')
+        }
+    }
+    definition {
+      cps {
+        def pipeline = StringBuilder.newInstance()
+        pipeline << """
+            def envs = ['dgv':'gov', 'dev':'mygov']
+            def tasks = envs.collectEntries { name, site ->
+                job = {
+                    build job: site + '-test-down', parameters: [
+                        string(name: 'env', value: name)
+                    ]
+                }
+                [name, job]
+            }
+            parallel tasks
+        """.stripIndent()
+        script(pipeline.toString())
+        sandbox()
+      }
+    }
+}
+
+jobs << pipelineJob('scheduled-teardown-exp-envs') {
+    displayName('Scheduled Teardown Exp Environments')
     if (enabled) {
         triggers {
            cron('30 19 * * 1-5')
@@ -65,60 +93,18 @@ jobs << pipelineJob('scheduled-teardown-test-envs') {
     }
     definition {
       cps {
-        environments = sites.collectMany { site ->
-            site.environments
-                .grep { it.scheduled }
-                .collect { environment ->
-                    [environment.name, site.id]
-                }
-        }.flatten().toSpreadMap()
         def pipeline = StringBuilder.newInstance()
-        pipeline << "def envs = " << environments.inspect() << "\n"
         pipeline << """
-          def tasks = envs.collectEntries { name, site ->
-              job = {
-                  build job: site + '-test-down', parameters: [
-                    string(name: 'env', value: name)
-                  ]
-              }
-              [name, job]
-          }
-          parallel tasks
-        """.stripIndent()
-        script(pipeline.toString())
-        sandbox()
-      }
-    }
-}
-
-jobs << pipelineJob('weekend-teardown-dev-envs') {
-    displayName('Scheduled Weekend Teardown Dev Environments')
-    if (enabled) {
-        triggers {
-           cron('30 19 * * 6,0')
-        }
-    }
-    definition {
-      cps {
-        environments = sites.collectMany { site ->
-            site.environments
-                .grep { it.weekend }
-                .collect { environment ->
-                    [environment.name, site.id]
+            def envs = ['egv':'gov', 'exp':'mygov']
+            def tasks = envs.collectEntries { name, site ->
+                job = {
+                    build job: site + '-test-down', parameters: [
+                        string(name: 'env', value: name)
+                    ]
                 }
-        }.flatten().toSpreadMap()
-        def pipeline = StringBuilder.newInstance()
-        pipeline << "def envs = " << environments.inspect() << "\n"
-        pipeline << """
-          def tasks = envs.collectEntries { name, site ->
-              job = {
-                  build job: site + '-test-down', parameters: [
-                    string(name: 'env', value: name)
-                  ]
-              }
-              [name, job]
-          }
-          parallel tasks
+                [name, job]
+            }
+            parallel tasks
         """.stripIndent()
         script(pipeline.toString())
         sandbox()

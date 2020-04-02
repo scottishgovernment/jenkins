@@ -12,13 +12,10 @@ sites:
       - name: dev
         type: test
         auto: true
-        scheduled: true
-        weekend: true
       - name: int
         type: test
       - name: exp
         type: test
-        scheduled: true
       - name: uat
         type: test
       - name: per
@@ -46,13 +43,10 @@ sites:
       - name: dgv
         type: test
         auto: true
-        scheduled: true
-        weekend: true
       - name: igv
         type: test
       - name: egv
         type: test
-        scheduled: true
       - name: ugv
         type: test
       - name: pgv
