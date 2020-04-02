@@ -30,7 +30,7 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
     displayName('Scheduled Build Dev Environments')
     if (enabled) {
         triggers {
-           cron('00 07 * * 1-5')
+           cron('00 07 * * *')
         }
     }
     definition {
@@ -98,7 +98,7 @@ jobs << job('backup-production-s3-buckets') {
     }
     if (enabled) {
         triggers {
-           cron('0 * * * 1-5')
+           cron('0 * * * *')
         }
     }
     scm {
