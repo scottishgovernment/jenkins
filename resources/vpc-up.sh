@@ -5,7 +5,7 @@ domain=%domain%
 
 vpc_id() {
   aws ec2 describe-vpcs \
-    --filters "Name=tag:Name,Values=${env}_vpc" \
+    --filters "Name=tag:Name,Values=%env%_vpc" \
     --query Vpcs[].VpcId \
     --output text
 }
@@ -22,22 +22,22 @@ resolve() {
 
 vpc=$(vpc_id)
 if [ -n "$vpc" ]; then
-  echo "VPC already exists for environment ${env}"
+  echo "VPC already exists for environment %env%"
   exit 1
 fi
 
-ver=$(pipeline list:"${env}" | awk '/aws:/{print $2}')
+ver=$(pipeline list:"%env%" | awk '/aws:/{print $2}')
 ver=${ver:-RELEASE}
 resolve scot.mygov.infrastructure:aws:${ver}:deb
 
 version=$(dpkg --info aws.deb | awk '/Version/{print $2}')
-echo "Environment: ${env}"
+echo "Environment: %env%"
 echo "AWS Version: ${version}"
 echo "AMI:         ${ami}"
 dpkg -x aws.deb .
 cd opt/aws
 
-tools/management/s3_restore "${domain}" "${env}"
+tools/management/s3_restore "${domain}" "%env%"
 exitcode=$(mktemp)
 trap 'rm -f $exitcode' 0
 (%build% 2>&1 || echo $? > "$exitcode") | ts %H:%M:%.S

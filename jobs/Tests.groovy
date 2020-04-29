@@ -466,8 +466,8 @@ jobs << pipelineJob('integration-test-mygov') {
             }
 
             stage('Build') {
-                build job: 'mygov-test-up', parameters: [
-                    string(name: 'env', value: 'int')
+                build job: 'int-mygov-test', parameters: [
+                    string(name: 'operation', value: 'build')
                 ]
             }
 
@@ -521,8 +521,8 @@ jobs << pipelineJob('integration-test-mygov') {
             }
 
             stage('teardown int') {
-                build job: 'mygov-test-down', parameters: [
-                    string(name: 'env', value: 'int')
+                build job: 'int-mygov-test', parameters: [
+                    string(name: 'operation', value: 'teardown')
                 ]
             }
 
@@ -551,8 +551,8 @@ jobs << pipelineJob('integration-test-gov') {
             }
 
             stage('Build') {
-                build job: 'gov-test-up', parameters: [
-                    string(name: 'env', value: 'igv')
+                build job: 'igv-gov-test', parameters: [
+                    string(name: 'operation', value: 'build')
                 ]
             }
 
@@ -581,8 +581,8 @@ jobs << pipelineJob('integration-test-gov') {
             }
 
             stage('teardown igv') {
-                build job: 'gov-test-down', parameters: [
-                    string(name: 'env', value: 'igv')
+                build job: 'igv-gov-test', parameters: [
+                    string(name: 'operation', value: 'teardown')
                 ]
             }
 
@@ -611,8 +611,8 @@ jobs << pipelineJob('build-egv-environment') {
             }
 
             stage('Build') {
-                build job: 'gov-test-up', parameters: [
-                    string(name: 'env', value: 'egv')
+                build job: 'egv-gov-test', parameters: [
+                    string(name: 'operation', value: 'build')
                 ]
             }
 
@@ -653,8 +653,8 @@ jobs << pipelineJob('build-exp-environment') {
             }
 
             stage('Build') {
-                build job: 'mygov-test-up', parameters: [
-                    string(name: 'env', value: 'exp')
+                build job: 'exp-mygov-test', parameters: [
+                    string(name: 'operation', value: 'build')
                 ]
             }
 

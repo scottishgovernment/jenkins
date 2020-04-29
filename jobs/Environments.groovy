@@ -11,7 +11,8 @@ import pipeline.Prepare
 import pipeline.Promotion
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
-def environmentsView = []
+def mygovView = []
+def govView = []
 def pipelineView = []
 def sites = yaml.sites
 
@@ -47,7 +48,12 @@ def checker = new Checker()
 
 sites.collect { site ->
     out.println("Processing site ${site.domain}")
-    environmentsView += vpc.build(site)
+    if (site.id == "mygov"){
+        mygovView += vpc.build(site)
+    }
+    if (site.id == "gov"){
+        govView += vpc.build(site)
+    }
 
     prepare.build(site)
     perform.build(site)
@@ -73,10 +79,27 @@ pipelineView << job('sync-repo') {
     }
 }
 
-listView('Environments') {
+listView('Mygov') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
-        environmentsView.each {
+        mygovView.each {
+            name(it.name)
+        }
+    }
+    columns {
+        status()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+        buildButton()
+    }
+}
+
+listView('Gov') {
+    statusFilter(StatusFilter.ENABLED)
+    delegate.jobs {
+        govView.each {
             name(it.name)
         }
     }

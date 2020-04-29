@@ -6,41 +6,53 @@ def build(site) {
     def list = []
     def environments = site.environments
     def types = environments.collect { it.type }.unique(false)
-    types.collect { type ->
-        def envs = environments.
-            grep { it.type == type }.
-            collect { it.name }
-        if (site.types.get(type)?.up) {
-            list << envUp(site, type, envs)
-        }
-        if (site.types.get(type)?.down) {
-            list << envDown(site, type, envs)
-        }
+
+    environments.collect { environment -> 
+        def type = environment.type
+        def envListOrder = environment.number
+        list << createJob(site, type, environment.name, envListOrder)
     }
     list
 }
 
-def envUp(site, type, List<String> envs) {
-    def script = dsl.readFileFromWorkspace('resources/vpc-up.sh').
-        replace('%id%', site.id).
-        replace('%domain%', site.domain).
-        replace('%build%', site.types.get(type).up)
+def createJob(site, type, env, envListOrder) {
 
-    return dsl.job("${site.id}-${type}-up") {
-        displayName("Build ${site.domain} ${type} environment")
+    return dsl.job("${env}-${site.id}-${type}") {
+        displayName("${envListOrder}. ${env} environment")
         parameters {
-            choiceParam('env', envs, "${site.domain} environment")
+            choiceParam('operation', ['build', 'teardown', 'rebuild'],
+                "The operation to be performed.")
             stringParam('ami_override', '',
-                "If the required version isn't available above, specify it here.")
+               "If the required version isn't available above, specify it here.")
         }
         logRotator {
           daysToKeep(90)
         }
         steps {
-            shell(script)
+            def buildScript = dsl.readFileFromWorkspace('resources/vpc-up.sh').
+                replace('%id%', site.id).
+                replace('%domain%', site.domain).
+                replace('%build%', site.types.get(type).up).
+                replace('%env%', env)
+            def teardownScript = dsl.readFileFromWorkspace('resources/vpc-down.sh').
+                replace('%id%', site.id).
+                replace('%domain%', site.domain).
+                replace('%build%', site.types.get(type).down).
+                replace('%env%', env)
+
+            shell("""
+                |if [ "\$operation" = "build" ]; then
+                    |${buildScript}
+                |elif [ "\$operation" = "teardown" ]; then
+                    |${teardownScript}
+                |elif [ "\$operation" = "rebuild" ]; then 
+                    |${teardownScript}
+                    |${buildScript}
+                |fi
+            """.stripMargin().trim())
         }
         publishers {
-            buildDescription('', '${env}')
+            buildDescription('', '$operation')
         }
         configure {
             def params = (it / 'properties'
@@ -54,27 +66,6 @@ def envUp(site, type, List<String> envs) {
                 projectName("${site.id}-ami")
                 promotionProcessName('Default')
             })
-        }
-    }
-}
-
-def envDown(site, type, List<String> envs) {
-    def script = dsl.readFileFromWorkspace('resources/vpc-down.sh').
-        replace('%teardown%', site.types.get(type).down)
-
-    return dsl.job("${site.id}-${type}-down") {
-        displayName("Tear down ${site.domain} ${type} environment")
-        parameters {
-            choiceParam('env', envs, "${site.domain} environment")
-        }
-        logRotator {
-          daysToKeep(90)
-        }
-        steps {
-            shell(script)
-        }
-        publishers {
-            buildDescription('', '${env}')
         }
     }
 }

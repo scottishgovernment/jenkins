@@ -41,8 +41,8 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
                 def envs = ['dgv':'gov', 'dev':'mygov']
                 def tasks = envs.collectEntries { name, site ->
                 job = {
-                    build job: site + '-test-up', parameters: [
-                        string(name: 'env', value: name)
+                    build job: name + '-' + site + '-test', parameters: [
+                        string(name: 'operation', value: 'build')
                     ]
                 }
                 [name, job]
@@ -70,8 +70,8 @@ jobs << pipelineJob('scheduled-teardown-dev-envs') {
             def envs = ['dgv':'gov', 'dev':'mygov']
             def tasks = envs.collectEntries { name, site ->
                 job = {
-                    build job: site + '-test-down', parameters: [
-                        string(name: 'env', value: name)
+                    build job: name + '-' + site + '-test', parameters: [
+                        string(name: 'operation', value: 'teardown')
                     ]
                 }
                 [name, job]
@@ -98,8 +98,8 @@ jobs << pipelineJob('scheduled-teardown-exp-envs') {
             def envs = ['egv':'gov', 'exp':'mygov']
             def tasks = envs.collectEntries { name, site ->
                 job = {
-                    build job: site + '-test-down', parameters: [
-                        string(name: 'env', value: name)
+                    build job: name + '-' + site + '-test', parameters: [
+                        string(name: 'operation', value: 'teardown')
                     ]
                 }
                 [name, job]
