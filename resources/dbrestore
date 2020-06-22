@@ -12,42 +12,21 @@ case "${env}" in
     ;;
 esac
 
-pubapp="${env}pubapp01.${domain}"
-fbkapp="${env}fbkapp01.${domain}"
-pubuser="devops@${pubapp}"
-fbkuser="devops@${fbkapp}"
-
-ssh="ssh -o StrictHostKeyChecking=no"
-
-#
-# RDS
-#
-
-echo "RDS restore run by ${pubuser}"
+pubapp="devops@${env}pubapp01.${domain}"
+fbkapp="devops@${env}fbkapp01.${domain}"
 
 cmd="ls .credentials | egrep -v template1"
-rds_dbs=$(${ssh} ${pubuser} "${cmd}")
+rds_dbs=$(ssh ${pubapp} "${cmd}")
 
-echo "Restoring:"
-for db in ${rds_dbs}
-do
-  echo "\n${db}"
-  dbrestorefile="${db}_latest.gz"
-  dbfrom="${dbrestoreurl}/${dbrestorefile}"
-  dbrestoredb="${db}"
+for db in ${rds_dbs}; do
+  dbfrom="${dbrestoreurl}/${db}.gz"
   cmd="/usr/local/bin/import_db.sh ${dbfrom} ${db} >> /tmp/${db}.log"
-  echo "from ${dbfrom} to RDS db ${db}"
-  result=$(${ssh} ${pubuser} "${cmd}")
+  echo "Restoring ${db} from ${dbfrom}"
+  result=$(ssh ${pubapp} "${cmd}")
 done
 
-#
-# MongoDB
-#
-
-echo "MongoDB restore run by ${fbkuser}"
-
-dbrestorefile="feedback_latest.gz"
+dbrestorefile="feedback.gz"
 cmd="/usr/local/bin/import_mongo.sh ${dbrestoreurl} ${dbrestorefile}"
 bashcmd="bash -l -c \"${cmd}\""
-echo "from ${dbrestoreurl}"
-result=$(${ssh} ${fbkuser} "${bashcmd}")
+echo "Restoring feedback from ${dbrestoreurl}"
+result=$(ssh ${fbkapp} "${bashcmd}")
