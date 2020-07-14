@@ -36,20 +36,20 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
     definition {
       cps {
         def pipeline = StringBuilder.newInstance()
-        pipeline << """
+        pipeline << '''
             stage('Build') {
-                def envs = ['dgv':'gov', 'dev':'mygov']
+                def envs = ['dgv': 'gov', 'dev': 'mygov']
                 def tasks = envs.collectEntries { name, site ->
                 job = {
-                    build job: name + '-' + site + '-test', parameters: [
-                        string(name: 'operation', value: 'build')
+                    build job: "${site}-${name}", parameters: [
+                        string(name: 'action', value: 'build')
                     ]
                 }
                 [name, job]
                 }
                 parallel tasks
             }
-        """.stripIndent()
+        '''.stripIndent()
         script(pipeline.toString())
         sandbox()
       }
@@ -66,18 +66,18 @@ jobs << pipelineJob('scheduled-teardown-dev-envs') {
     definition {
       cps {
         def pipeline = StringBuilder.newInstance()
-        pipeline << """
-            def envs = ['dgv':'gov', 'dev':'mygov']
+        pipeline << '''
+            def envs = ['dgv': 'gov', 'dev': 'mygov']
             def tasks = envs.collectEntries { name, site ->
                 job = {
-                    build job: name + '-' + site + '-test', parameters: [
-                        string(name: 'operation', value: 'teardown')
+                    build job: "${site}-${name}", parameters: [
+                        string(name: 'action', value: 'teardown')
                     ]
                 }
                 [name, job]
             }
             parallel tasks
-        """.stripIndent()
+        '''.stripIndent()
         script(pipeline.toString())
         sandbox()
       }
@@ -94,18 +94,18 @@ jobs << pipelineJob('scheduled-teardown-exp-envs') {
     definition {
       cps {
         def pipeline = StringBuilder.newInstance()
-        pipeline << """
+        pipeline << '''
             def envs = ['egv':'gov', 'exp':'mygov']
             def tasks = envs.collectEntries { name, site ->
                 job = {
-                    build job: name + '-' + site + '-test', parameters: [
-                        string(name: 'operation', value: 'teardown')
+                    build job: "${site}-${name}", parameters: [
+                        string(name: 'action', value: 'teardown')
                     ]
                 }
                 [name, job]
             }
             parallel tasks
-        """.stripIndent()
+        '''.stripIndent()
         script(pipeline.toString())
         sandbox()
       }

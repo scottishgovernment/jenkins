@@ -5,22 +5,20 @@ import static build.Utils.awsRepo
 def build(site) {
     def list = []
     def environments = site.environments
-    def types = environments.collect { it.type }.unique(false)
 
-    environments.collect { environment -> 
+    environments.eachWithIndex { environment, i ->
         def type = environment.type
-        def envListOrder = environment.number
-        list << createJob(site, type, environment.name, envListOrder)
+        list << createJob(site, type, environment.name, i + 1)
     }
     list
 }
 
-def createJob(site, type, env, envListOrder) {
+def createJob(site, type, env, index) {
 
-    return dsl.job("${env}-${site.id}-${type}") {
-        displayName("${envListOrder}. ${env} environment")
+    return dsl.job("${site.id}-${env}") {
+        displayName("${index}. ${env} environment")
         parameters {
-            choiceParam('operation', ['build', 'teardown', 'rebuild'],
+            choiceParam('action', ['build', 'teardown', 'rebuild'],
                 "The operation to be performed.")
             stringParam('ami_override', '',
                "If the required version isn't available above, specify it here.")
@@ -29,30 +27,16 @@ def createJob(site, type, env, envListOrder) {
           daysToKeep(90)
         }
         steps {
-            def buildScript = dsl.readFileFromWorkspace('resources/vpc-up.sh').
+            def script = dsl.readFileFromWorkspace('resources/vpcctl').
                 replace('%id%', site.id).
                 replace('%domain%', site.domain).
                 replace('%build%', site.types.get(type).up).
+                replace('%teardown%', site.types.get(type).down).
                 replace('%env%', env)
-            def teardownScript = dsl.readFileFromWorkspace('resources/vpc-down.sh').
-                replace('%id%', site.id).
-                replace('%domain%', site.domain).
-                replace('%build%', site.types.get(type).down).
-                replace('%env%', env)
-
-            shell("""
-                |if [ "\$operation" = "build" ]; then
-                    |${buildScript}
-                |elif [ "\$operation" = "teardown" ]; then
-                    |${teardownScript}
-                |elif [ "\$operation" = "rebuild" ]; then 
-                    |${teardownScript}
-                    |${buildScript}
-                |fi
-            """.stripMargin().trim())
+            shell(script)
         }
         publishers {
-            buildDescription('', '$operation')
+            buildDescription('', '$action')
         }
         configure {
             def params = (it / 'properties'

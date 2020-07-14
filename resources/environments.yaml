@@ -1,6 +1,7 @@
 sites:
   - id: mygov
     domain: mygov.scot
+    name: Mygov
     types:
       test:
         up:   'vpc/mygov_build_test.sh ${env} ${ami}'
@@ -12,34 +13,27 @@ sites:
       - name: dev
         type: test
         auto: true
-        number: 1
       - name: int
         type: test
-        number: 2
       - name: exp
         type: test
-        number: 3
       - name: uat
         type: test
-        number: 4
       - name: per
         type: full
-        number: 5
         prepare: true
       - name: tst
         type: full
-        number: 6
       - name: blu
         type: full
-        number: 7
         perform: true
       - name: grn
         type: full
-        number: 8
         perform: true
 
   - id: gov
     domain: gov.scot
+    name: Gov
     types:
       test:
         up:   'vpc/gov_build_test.sh ${env} ${ami}'
@@ -50,29 +44,21 @@ sites:
     environments:
       - name: dgv
         type: test
-        number: 1
         auto: true
       - name: igv
         type: test
-        number: 2
       - name: egv
         type: test
-        number: 3
       - name: ugv
         type: test
-        number: 4
       - name: pgv
         type: full
-        number: 5
         prepare: true
       - name: tgv
         type: full
-        number: 6
       - name: bgv
         type: full
-        number: 7
         perform: true
       - name: ggv
         type: full
-        number: 8
         perform: true

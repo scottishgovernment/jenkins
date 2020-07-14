@@ -1,0 +1,99 @@
+#!/bin/sh
+set -eu
+domain=%domain%
+env=%env%
+
+vpc_id() {
+  aws ec2 describe-vpcs \
+    --filters "Name=tag:Name,Values=%env%_vpc" \
+    --query Vpcs[].VpcId \
+    --output text
+}
+
+resolve() {
+  local version="$1"
+  local artifact=scot.mygov.infrastructure:aws:${version}:deb
+  echo "AWS Version: ${version}"
+  echo "Maven ID:    ${artifact}"
+  mvn \
+    org.apache.maven.plugins:maven-dependency-plugin:3.0.1:copy \
+    -DoutputDirectory=. \
+    -Dmdep.overWriteReleases \
+    -Dmdep.stripVersion \
+    -Dartifact="$artifact" \
+    >/dev/null
+
+  deb_version=$(dpkg --info aws.deb | awk '/Version/{print $2}')
+  echo "Deb Version: ${deb_version}"
+  dpkg -x aws.deb .
+  cd opt/aws
+}
+
+pipeline_version() {
+  local version
+  version=$(pipeline list:"%env%" | awk '/aws:/{print $2}')
+  version=${version:-RELEASE}
+  echo "$version"
+}
+
+vpc_version() {
+  local version
+  version=$(aws ec2 describe-vpcs \
+    --filters "Name=tag:Name,Values=%env%_vpc" \
+    --query Vpcs[].Tags[?Key==\`Version\`].Value \
+    --output text)
+  version=${version:-RELEASE}
+  echo "$version"
+}
+
+timestamp() {
+  local exitcode
+  local ok
+  exitcode=$(mktemp)
+  trap "rm -f $exitcode" 0
+  { "$@" 2>&1 || echo $? > "$exitcode"; } | ts %H:%M:%.S
+  ok=$(cat "$exitcode")
+  return "${ok:-0}"
+}
+
+build() {
+  local version
+  local vpc
+  local ami
+
+  vpc=$(vpc_id)
+  if [ -n "$vpc" ]; then
+    echo "VPC already exists for environment %env%"
+    return 1
+  fi
+
+  version="$(pipeline_version)"
+  resolve "$version"
+  ami=${ami_override:-%id%-$ami_NUMBER}
+  echo "AMI:         ${ami}"
+  tools/management/s3_restore "${domain}" "%env%"
+
+  if timestamp %build%; then
+    vpc=$(vpc_id)
+    echo "Tagging VPC ${vpc} with version ${deb_version}"
+    aws ec2 create-tags \
+      --resources "$vpc" \
+      --tags Key=Version,Value="$deb_version"
+  fi
+}
+
+teardown() {
+  resolve "$(vpc_version)"
+  timestamp %teardown%
+}
+
+case "$action" in
+  build)
+    build;;
+  teardown)
+    teardown;;
+  rebuild)
+    teardown
+    build
+    ;;
+esac

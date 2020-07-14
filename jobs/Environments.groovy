@@ -11,8 +11,6 @@ import pipeline.Prepare
 import pipeline.Promotion
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
-def mygovView = []
-def govView = []
 def pipelineView = []
 def sites = yaml.sites
 
@@ -48,12 +46,7 @@ def checker = new Checker()
 
 sites.collect { site ->
     out.println("Processing site ${site.domain}")
-    if (site.id == "mygov"){
-        mygovView += vpc.build(site)
-    }
-    if (site.id == "gov"){
-        govView += vpc.build(site)
-    }
+
 
     prepare.build(site)
     perform.build(site)
@@ -64,6 +57,24 @@ sites.collect { site ->
     pipelineView << restore.build(site, envNames)
     pipelineView << revert.build(site, envNames)
     pipelineView << dbrestore.build(site, envNames)
+
+    def vpcJobs = vpc.build(site)
+    listView(site.name) {
+        statusFilter(StatusFilter.ENABLED)
+        delegate.jobs {
+            vpcJobs.each {
+                name(it.name)
+            }
+        }
+        columns {
+            status()
+            name()
+            lastSuccess()
+            lastFailure()
+            lastDuration()
+            buildButton()
+        }
+    }
 }
 
 migrationView = migration.build(sites)
@@ -76,40 +87,6 @@ pipelineView << job('sync-repo') {
     displayName('Update S3 repository')
     steps {
         shell('pipeline sync')
-    }
-}
-
-listView('Mygov') {
-    statusFilter(StatusFilter.ENABLED)
-    delegate.jobs {
-        mygovView.each {
-            name(it.name)
-        }
-    }
-    columns {
-        status()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
-    }
-}
-
-listView('Gov') {
-    statusFilter(StatusFilter.ENABLED)
-    delegate.jobs {
-        govView.each {
-            name(it.name)
-        }
-    }
-    columns {
-        status()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
     }
 }
 
