@@ -41,9 +41,11 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
                 def envs = ['dgv': 'gov', 'dev': 'mygov']
                 def tasks = envs.collectEntries { name, site ->
                 job = {
-                    build job: "${site}-${name}", parameters: [
-                        string(name: 'action', value: 'build')
-                    ]
+                    catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                        build job: "${site}-${name}", parameters: [
+                            string(name: 'action', value: 'build')
+                        ]
+                    }
                 }
                 [name, job]
                 }

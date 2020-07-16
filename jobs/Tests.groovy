@@ -466,9 +466,11 @@ jobs << pipelineJob('integration-test-mygov') {
             }
 
             stage('Build') {
-                build job: 'mygov-int', parameters: [
-                    string(name: 'action', value: 'build')
-                ]
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'mygov-int', parameters: [
+                        string(name: 'action', value: 'build')
+                    ]
+                }
             }
 
             stage('Pause') {
@@ -551,9 +553,11 @@ jobs << pipelineJob('integration-test-gov') {
             }
 
             stage('Build') {
-                build job: 'gov-igv', parameters: [
-                    string(name: 'action', value: 'build')
-                ]
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'gov-igv', parameters: [
+                        string(name: 'action', value: 'build')
+                    ]
+                }
             }
 
             stage('Pause') {
@@ -611,9 +615,11 @@ jobs << pipelineJob('build-egv-environment') {
             }
 
             stage('Build') {
-                build job: 'gov-egv', parameters: [
-                    string(name: 'action', value: 'build')
-                ]
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'gov-egv', parameters: [
+                        string(name: 'action', value: 'build')
+                    ]
+                }
             }
 
             stage('Pause') {
@@ -653,9 +659,11 @@ jobs << pipelineJob('build-exp-environment') {
             }
 
             stage('Build') {
-                build job: 'mygov-exp', parameters: [
-                    string(name: 'action', value: 'build')
-                ]
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'mygov-exp', parameters: [
+                        string(name: 'action', value: 'build')
+                    ]
+                }
             }
 
             stage('Pause') {
