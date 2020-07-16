@@ -1,4 +1,5 @@
 import org.yaml.snakeyaml.Yaml
+import build.AMI
 import data.Checker
 import data.Migration
 import data.Restore
@@ -11,7 +12,6 @@ import pipeline.Prepare
 import pipeline.Promotion
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
-def pipelineView = []
 def sites = yaml.sites
 
 Binding binding = new Binding()
@@ -19,6 +19,7 @@ binding.setVariable("dsl", this)
 binding.setVariable("out", out)
 
 def vpc = new VPC()
+def ami = new AMI()
 def migration = new Migration()
 def prepare = new Prepare()
 def perform = new Perform()
@@ -31,6 +32,7 @@ def checker = new Checker()
 
 [
     vpc,
+    ami,
     migration,
     prepare,
     perform,
@@ -47,22 +49,27 @@ def checker = new Checker()
 sites.collect { site ->
     out.println("Processing site ${site.domain}")
 
-
-    prepare.build(site)
-    perform.build(site)
-
     def envNames = site.environments.collect { it.name }
-    pipelineView << puppet.build(site, envNames)
-    pipelineView << promotion.build(site, envNames)
-    pipelineView << restore.build(site, envNames)
-    pipelineView << revert.build(site, envNames)
-    pipelineView << dbrestore.build(site, envNames)
+    def jobs = []
+    jobs << ami.build(site)
+    jobs << promotion.build(site, envNames)
+    jobs << dbrestore.build(site, envNames)
+    jobs << restore.build(site, envNames)
+    jobs << migration.build(site, envNames)
+    jobs << prepare.build(site)
+    jobs << perform.build(site)
+    jobs << puppet.build(site, envNames)
+    jobs << revert.build(site, envNames)
+    jobs.addAll(vpc.build(site))
 
-    def vpcJobs = vpc.build(site)
+    if (site.id == "gov") {
+        jobs << checker.build(site, envNames)
+    }
+
     listView(site.name) {
         statusFilter(StatusFilter.ENABLED)
         delegate.jobs {
-            vpcJobs.each {
+            jobs.each {
                 name(it.name)
             }
         }
@@ -74,52 +81,5 @@ sites.collect { site ->
             lastDuration()
             buildButton()
         }
-    }
-}
-
-migrationView = migration.build(sites)
-
-gov = sites.find { it.id == "gov" }
-govEnvironments = gov.environments.collect { it.name }
-pipelineView << checker.build(gov, govEnvironments)
-
-pipelineView << job('sync-repo') {
-    displayName('Update S3 repository')
-    steps {
-        shell('pipeline sync')
-    }
-}
-
-listView('Pipeline') {
-    statusFilter(StatusFilter.ENABLED)
-    delegate.jobs {
-        pipelineView.each {
-            name(it.name)
-        }
-    }
-    columns {
-        status()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
-    }
-}
-
-listView('Migration') {
-    statusFilter(StatusFilter.ENABLED)
-    delegate.jobs {
-        migrationView.each {
-            name(it.name)
-        }
-    }
-    columns {
-        status()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
     }
 }

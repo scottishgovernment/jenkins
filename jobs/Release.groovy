@@ -196,16 +196,19 @@ view << job('gov-index-backup') {
     }
 }
 
+view << job('sync-repo') {
+    displayName('Update S3 repository')
+    steps {
+        shell('pipeline sync')
+    }
+}
+
 listView('Release') {
     statusFilter(StatusFilter.ENABLED)
     delegate.jobs {
         view.each {
             name(it.name)
         }
-        name('mygov-release-prepare')
-        name('mygov-release-perform')
-        name('gov-release-prepare')
-        name('gov-release-perform')
     }
     columns {
         status()

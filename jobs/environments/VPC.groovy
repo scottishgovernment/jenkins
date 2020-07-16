@@ -16,7 +16,7 @@ def build(site) {
 def createJob(site, type, env, index) {
 
     return dsl.job("${site.id}-${env}") {
-        displayName("${index}. ${env} environment")
+        displayName("${index} ${env}")
         parameters {
             choiceParam('action', ['build', 'teardown', 'rebuild'],
                 "The operation to be performed.")

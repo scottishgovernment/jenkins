@@ -1,21 +1,18 @@
+package build
+
 import static build.Utils.repo
 import static build.Utils.trim
 
-def view = []
-
-def sites = [ 'mygov', 'gov' ]
-
-sites.each { site ->
-
-    view << job(site + '-ami') {
-        displayName("Build ${site} AMI")
+def build(site) {
+    dsl.job("${site.id}-ami") {
+        displayName("Build ${site.id} AMI")
         steps {
             def script = StringBuilder.newInstance()
             script << trim("""\
                 set -ex
                 repo=packer
-                site=${site}
-                version=${site}-\${override:-\$BUILD_ID}
+                site=${site.id}
+                version=${site.id}-\${override:-\$BUILD_ID}
             """)
             script << trim('''\
                 git clean -fdx
@@ -61,7 +58,7 @@ sites.each { site ->
              }
         }
         publishers {
-            buildDescription('', "${site}-\${BUILD_ID}")
+            buildDescription('', "${site.id}-\${BUILD_ID}")
         }
         scm {
             git {
@@ -72,22 +69,5 @@ sites.each { site ->
                 branch('refs/heads/master')
             }
         }
-    }
-}
-
-listView('Infrastructure') {
-    statusFilter(StatusFilter.ENABLED)
-    delegate.jobs {
-        view.each {
-            name(it.name)
-        }
-    }
-    columns {
-        status()
-        name()
-        lastSuccess()
-        lastFailure()
-        lastDuration()
-        buildButton()
     }
 }

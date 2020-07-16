@@ -2,14 +2,7 @@ package data
 
 import static build.Utils.trim
 
-def build(sites) {
-  return sites.collect { site ->
-    envs = site.environments.collect { it.name }
-    migrate(site, envs)
-  }
-}
-
-def migrate(site, envs) {
+def build(site, envs) {
     dsl.job("migration-${site.id}") {
 
         displayName("Migrate ${site.id} content")
