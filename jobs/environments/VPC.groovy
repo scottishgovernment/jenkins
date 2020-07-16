@@ -34,6 +34,10 @@ def createJob(site, type, env, index) {
                 replace('%teardown%', site.types.get(type).down).
                 replace('%env%', env)
             shell(script)
+            shell {
+                command('[ "$action" = "${action%build}" ]')
+                unstableReturn(1)
+            }
         }
         publishers {
             buildDescription('', '$action')
