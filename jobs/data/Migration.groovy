@@ -11,6 +11,7 @@ def build(site, envs) {
             choiceParam('env', envs, "${site.domain} environment")
             booleanParam('background', true, 'Use false to hog a jenkins executor')
             choiceParam('host', ['pubapp01', 'pubapp02'], 'host to run on')
+            booleanParam('migration', false, 'Enable mygov migration. Only for dev, tst and uat')
         }
 
         logRotator {
