@@ -12,8 +12,8 @@ ssh devops@${env}${host}.${env}.${site}.scot /bin/sh -eu <<EOS
         ;;
     esac
   fi
-    export background=${background}
-    migrate release
+  export background=${background}
+  migrate release
 EOS
 
 # echo a link to kibana to follow the output of this migration on the right environment and host
