@@ -75,12 +75,10 @@ class MyGovProject {
                 build(delegate)
                 if (mirror) {
                     shell("""\
-                        git config remote.source.fetch +refs/*:refs/mirror/*
-                        git config remote.source.url \$(git config remote.origin.url)
-                        git fetch source
+                        git fetch origin
                         git config remote.target.url ${mirror}
-                        git config remote.target.push refs/mirror/*:refs/*
-                        git push --mirror target
+                        git config remote.target.push refs/remotes/origin/*:refs/heads/*
+                        git push --tags --prune target
                     """.stripIndent())
                 }
             }
