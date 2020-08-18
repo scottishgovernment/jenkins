@@ -57,10 +57,8 @@ sites.each { site ->
 
             if (site.key != 'resources') {
             script << trim('''\
-                git fetch origin
                 git config remote.target.url git@github.com:scottishgovernment/${domain}.git
-                git config remote.target.push refs/remotes/origin/*:refs/heads/*
-                git push --tags --prune target
+                git push --tags --prune target +refs/remotes/origin/*:refs/heads/*
                 '''.stripIndent())
             }
             shell(script.toString())

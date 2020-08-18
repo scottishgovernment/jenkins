@@ -53,10 +53,8 @@ def build(dsl) {
             String mirror = 'git@github.com:scottishgovernment/repo-clean.git'
             shell(dsl.readFileFromWorkspace('resources/repo-clean-build'))
             shell("""\
-                        git fetch origin
                         git config remote.target.url ${mirror}
-                        git config remote.target.push refs/remotes/origin/*:refs/heads/*
-                        git push --tags --prune target
+                        git push --tags --prune target +refs/remotes/origin/*:refs/heads/*
                     """.stripIndent())
         }
         triggers {
