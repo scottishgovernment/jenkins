@@ -289,6 +289,7 @@ jobs:
     site: mygov
     debian: search
     maven: scot.mygov.search:search-deb
+    mirror: git@github.com:scottishgovernment/search.git
 
   - name: Site Builder
     repo: site-builder

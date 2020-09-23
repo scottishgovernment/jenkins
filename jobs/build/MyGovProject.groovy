@@ -76,7 +76,10 @@ class MyGovProject {
                 if (mirror) {
                     shell("""\
                         git config remote.target.url ${mirror}
-                        git push --tags --prune target +refs/remotes/origin/*:refs/heads/*
+                        git fetch target refs/heads/dependabot/*:refs/remotes/target/dependabot/*
+                        git push --tags --prune target \\
+                          +refs/remotes/origin/*:refs/heads/* \\
+                          refs/remotes/target/*:refs/heads/*
                     """.stripIndent())
                 }
             }
