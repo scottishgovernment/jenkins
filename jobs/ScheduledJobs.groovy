@@ -261,6 +261,7 @@ jobs << job('cleanup-builds') {
         shell(trim('''\
             if [ -d ~/.m2/repository ]; then
               rm -rfv ~/.m2/repository/scot/gov/www
+              rm -rfv ~/.m2/repository/scot/mygov/publishing
               find ~/.m2/repository -atime +90 -print -delete
             fi
         '''))
