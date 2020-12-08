@@ -10,10 +10,10 @@ def build(site, List<String> envs) {
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
             choiceParam('resource', [
+                'both',
                 'cms',
-                'site',
-                'both'
-                ], 'resource to whitelist')
+                'site'
+                ], 'resource to whitelist. ("both" will whitelist for site and cms)')
             stringParam('cidr', '', 'Network (in CIDR notation) or IP address')
         }
 
