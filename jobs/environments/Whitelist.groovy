@@ -14,7 +14,8 @@ def build(site, List<String> envs) {
                 'cms',
                 'site'
                 ], 'resource to whitelist. ("both" will whitelist for site and cms)')
-            stringParam('cidr', '', 'Network (in CIDR notation) or IP address')
+            stringParam('cidr', '',
+                'Network in CIDR notation (e.g. 13.248.154.0/24) or IP address')
         }
 
         logRotator {
