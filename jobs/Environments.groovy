@@ -7,6 +7,7 @@ import data.Revert
 import data.Dbrestore
 import environments.Puppet
 import environments.VPC
+import environments.Whitelist
 import pipeline.Perform
 import pipeline.Prepare
 import pipeline.Promotion
@@ -20,6 +21,7 @@ binding.setVariable("out", out)
 
 def vpc = new VPC()
 def ami = new AMI()
+def whitelist = new Whitelist()
 def migration = new Migration()
 def prepare = new Prepare()
 def perform = new Perform()
@@ -42,6 +44,7 @@ def checker = new Checker()
     revert,
     dbrestore,
     checker,
+    whitelist,
 ].each { c ->
   c.setBinding(binding)
 }
@@ -60,6 +63,7 @@ sites.collect { site ->
     jobs << perform.build(site)
     jobs << puppet.build(site, envNames)
     jobs << revert.build(site, envNames)
+    jobs << whitelist.build(site, envNames)
     jobs.addAll(vpc.build(site))
 
     if (site.id == "gov") {
