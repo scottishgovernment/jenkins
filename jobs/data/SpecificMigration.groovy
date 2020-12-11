@@ -2,15 +2,23 @@ package data
 
 import static build.Utils.trim
 
-def build(site, envs) {
-    dsl.job("migration-${site.id}") {
+def build(site) {
 
-        displayName("Migrate ${site.id} content")
+    def envs = site.environments
+            .findAll{it.perform == null & it.prepare == null}
+            .collect{it.name}
+
+
+    dsl.job("specific-migration-${site.id}") {
+
+        displayName("Run Specific Migration on ${site.id} content")
 
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
             booleanParam('background', true, 'Use false to hog a jenkins executor')
             choiceParam('host', ['pubapp01', 'pubapp02'], 'host to run on')
+            stringParam('migrations', '',
+                    "Enter the specific migration you wish to run (case sensitive) eg. Mygov")
         }
 
         logRotator {

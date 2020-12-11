@@ -1,31 +1,21 @@
 # Note that the 'site' variable will be prepended before calling this script
 
 ssh devops@${env}${host}.${env}.${site}.scot /bin/sh -eu <<EOS
-  if [ $migration = "true" ] ; then
-    case "$env" in 
-      dev|tst|uat)
-        export migration_mygov_enabled=true
-        ;;
-      *)
-        echo "Migration cannot be run on $env environment. This feature is only for dev, tst and uat"
-        exit 1
-        ;;
-    esac
-  fi
   export background=${background}
-  migrate release
+  migrations="${migrations-}"
+  if [ -z "\$migrations" ] ; then
+    migrate release
+  else
+    migrate specific_migrations "\$migrations"
+  fi
 EOS
 
 # echo a link to kibana to follow the output of this migration on the right environment and host
 echo "For logs, see:"
 
 if [ "$site" = "mygov" ]; then
-  sed "s/tst/${env}/g;s/pubapp0./${host}/g;s/'/%27/g;s/)/%29/g" << EOT
-  https://tstlog.mygov.scot/app/kibana#/discover?_g=(refreshInterval:('$$hashKey':'object:500',display:'5%20seconds',pause:!f,section:1,value:5000),time:(from:now-15m,mode:quick,to:now))&_a=(columns:!(message),filters:!(('$$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-*',key:service,negate:!f,type:phrase,value:migration),query:(match:(service:(query:migration,type:phrase)))),('$$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-*',key:host.name,negate:!f,type:phrase,value:tstpubapp01),query:(match:(host.name:(query:tstpubapp01,type:phrase))))),index:'logstash-*',interval:auto,query:(match_all:()),sort:!('@timestamp',desc))
-EOT
-fi
-
-if [ "$site" = "gov" ]; then
+  hostname="${env}log.mygov"
+elif [ "$site" = "gov" ]; then
   case "$env" in
     dgv) name=dev;;
     igv) name=int;;
@@ -36,8 +26,13 @@ if [ "$site" = "gov" ]; then
     bgv) name=blu;;
     ggv) name=grn;;
   esac
-
-  sed "s/tst/${name}/g;s/tgv/${env}/g;s/pubapp0./${host}/g;s/'/%27/g;s/)/%29/g" <<'EOT'
-  https://tstlog.publishing.gov.scot/app/kibana#/discover?_g=(refreshInterval:('$$hashKey':'object:500',display:'5%20seconds',pause:!f,section:1,value:5000),time:(from:now-15m,mode:quick,to:now))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-*',key:service,negate:!f,type:phrase,value:migration),query:(match:(service:(query:migration,type:phrase)))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-*',key:host.name,negate:!f,type:phrase,value:tgvpubapp01),query:(match:(host.name:(query:tgvpubapp01,type:phrase))))),index:'logstash-*',interval:auto,query:(match_all:()),sort:!('@timestamp',desc))
-EOT
+  hostname="${name}log.publishing.gov"
 fi
+
+sed "s/tst/${env}/g;s/log.mygov/${hostname}/g;s/pubapp0./${host}/g;s/'/%27/g;s/)/%29/g" << EOT
+  https://log.mygov.scot/app/kibana#/discover?_g=(refreshInterval:('$$hashKey':'object:500',display:'5%20seconds',pause:!f,section:1,value:5000),time:(from:now-15m,mode:quick,to:now))&_a=(columns:!(message),filters:!(('$$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-*',key:service,negate:!f,type:phrase,value:migration),query:(match:(service:(query:migration,type:phrase)))),('$$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-*',key:host.name,negate:!f,type:phrase,value:tstpubapp01),query:(match:(host.name:(query:tstpubapp01,type:phrase))))),index:'logstash-*',interval:auto,query:(match_all:()),sort:!('@timestamp',desc))
+EOT
+
+
+
+

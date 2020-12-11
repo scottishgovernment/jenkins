@@ -2,6 +2,7 @@ import org.yaml.snakeyaml.Yaml
 import build.AMI
 import data.Checker
 import data.Migration
+import data.SpecificMigration
 import data.Restore
 import data.Revert
 import data.Dbrestore
@@ -23,6 +24,7 @@ def vpc = new VPC()
 def ami = new AMI()
 def whitelist = new Whitelist()
 def migration = new Migration()
+def specificmigration = new SpecificMigration()
 def prepare = new Prepare()
 def perform = new Perform()
 def puppet = new Puppet()
@@ -36,6 +38,7 @@ def checker = new Checker()
     vpc,
     ami,
     migration,
+    specificmigration,
     prepare,
     perform,
     puppet,
@@ -59,6 +62,7 @@ sites.collect { site ->
     jobs << dbrestore.build(site, envNames)
     jobs << restore.build(site, envNames)
     jobs << migration.build(site, envNames)
+    jobs << specificmigration.build(site)
     jobs << prepare.build(site)
     jobs << perform.build(site)
     jobs << puppet.build(site, envNames)
