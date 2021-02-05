@@ -138,13 +138,16 @@ jobs:
         hosts:
           - sitapp01
         maven: scot.gov.www:gov-scot-repository-deb
+      gov-scot-libs:
+        hosts:
+          - pubapp01
+          - sitapp01
+        maven: scot.gov.www:gov-scot-libs
     mirror: git@github.com:scottishgovernment/gov-scot.git
 
   - name: Hippo Libraries
     repo: hippo-libs
     type: java
-    host: pubapp01
-    site: gov
     debian: hippo-libs
     maven: scot.mygov.hippo:hippo-libs
 
