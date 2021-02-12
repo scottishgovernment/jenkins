@@ -6,7 +6,6 @@ import data.SpecificMigration
 import data.Restore
 import data.Revert
 import data.Dbrestore
-import environments.Puppet
 import environments.VPC
 import environments.Whitelist
 import pipeline.Perform
@@ -27,7 +26,6 @@ def migration = new Migration()
 def specificmigration = new SpecificMigration()
 def prepare = new Prepare()
 def perform = new Perform()
-def puppet = new Puppet()
 def promotion = new Promotion()
 def restore = new Restore()
 def revert = new Revert()
@@ -41,7 +39,6 @@ def checker = new Checker()
     specificmigration,
     prepare,
     perform,
-    puppet,
     promotion,
     restore,
     revert,
@@ -65,7 +62,6 @@ sites.collect { site ->
     jobs << specificmigration.build(site)
     jobs << prepare.build(site)
     jobs << perform.build(site)
-    jobs << puppet.build(site, envNames)
     jobs << revert.build(site, envNames)
     jobs << whitelist.build(site, envNames)
     jobs.addAll(vpc.build(site))
