@@ -28,6 +28,9 @@ def enabled = myenv == "services"
 
 jobs << pipelineJob('scheduled-build-dev-envs') {
     displayName('Scheduled Build Dev Environments')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
            cron('00 07 * * *')
@@ -60,6 +63,9 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
 
 jobs << pipelineJob('scheduled-teardown-dev-envs') {
     displayName('Scheduled Teardown Dev Environments')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
            cron('30 19 * * *')
@@ -88,6 +94,9 @@ jobs << pipelineJob('scheduled-teardown-dev-envs') {
 
 jobs << pipelineJob('scheduled-teardown-exp-envs') {
     displayName('Scheduled Teardown Exp Environments')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
            cron('30 19 * * 1-5')
@@ -138,6 +147,9 @@ jobs << job('backup-production-s3-buckets') {
 
 jobs << job('backup-jira') {
     displayName('Backup JIRA')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
             cron('00 03 * * 1-5')
@@ -152,12 +164,15 @@ jobs << job('backup-jira') {
 }
 
 jobs << job('backup-confluence') {
+    displayName('Backup Confluence')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
             cron('00 03 * * 1-5')
         }
     }
-    displayName('Backup Confluence')
     steps {
         shell(readFileFromWorkspace('resources/backup-confluence.sh'))
     }
@@ -169,6 +184,9 @@ jobs << job('backup-confluence') {
 
 jobs << job('backup-stash') {
     displayName('Backup Bitbucket')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
             cron('00 04 * * 1-5')
@@ -183,12 +201,15 @@ jobs << job('backup-stash') {
 }
 
 jobs << job('backup-sonar') {
+    displayName('Backup SonarQube')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
             cron('00 05 * * 1-5')
         }
     }
-    displayName('Backup SonarQube')
     steps {
         shell(readFileFromWorkspace('resources/backup-sonarqube'))
     }
@@ -199,6 +220,9 @@ jobs << job('backup-sonar') {
 
 jobs << job('macfs-backup') {
     displayName('MacFS Backup')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
             cron('00 05 * * 1-5')
@@ -216,6 +240,9 @@ jobs << job('macfs-backup') {
 
 jobs << job('backup-repo') {
     displayName('Backup Repo')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
             cron('H(0-29) 4 * * 1-5')
@@ -273,6 +300,9 @@ jobs << job('cleanup-builds') {
 
 jobs << pipelineJob('scheduled-run-integration') {
     displayName('Scheduled Integration Testing')
+    logRotator {
+        daysToKeep(90)
+    }
     if (enabled) {
         triggers {
            cron('00 07 * * 1-5')
