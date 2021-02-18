@@ -23,6 +23,7 @@ def build(site) {
                 export PACKER_NO_COLOR=true
                 packer validate \\
                     -var ami_name=${site}-${override:-$BUILD_ID} \\
+                    -var site=${site} \\
                     templates/aws.json
                 packer build \\
                     -var ami_name=${site}-${override:-$BUILD_ID} \\
