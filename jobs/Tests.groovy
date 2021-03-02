@@ -678,6 +678,15 @@ jobs << pipelineJob('build-exp-environment') {
                 ]
             }
 
+            stage('Mygov specific migration') {
+                build job: 'specific-migration-mygov', parameters: [
+                    string(name: 'env', value: 'exp'),
+                    booleanParam(name: 'background', value: false),
+                    string(name: 'host', value: 'pubapp01')
+                    string(name: 'migrations'), value: 'Mygov')
+                ]
+            }
+
             """.stripIndent()
             script(pipeline.toString())
             sandbox()
