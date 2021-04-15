@@ -155,23 +155,6 @@ view << job('pre-release') {
     }
 }
 
-view << job('authentication-ctl') {
-    displayName('Start/stop authentication')
-    parameters {
-        choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
-        choiceParam('domain', ['mygov.scot', 'gov.scot'], 'domain')
-        choiceParam('action', ['start', 'stop'], 'action')
-        choiceParam('eventhandlers_action', ['enable', 'disable'], 'eventhandlers_action')
-    }
-    scm {
-        awsRepo(delegate)
-    }
-    steps {
-        shell('tools/management/authentication_ctl ${env} ${domain} ${action}')
-        shell('tools/management/event_handlers.sh ${env} ${eventhandlers_action}')
-    }
-}
-
 view << job('mygov-index-backup') {
     displayName('Backup mygov hippo index')
     scm {
