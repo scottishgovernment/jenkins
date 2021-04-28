@@ -128,12 +128,6 @@ jobs:
         maven: scot.gov.www:gov-scot-libs
     mirror: git@github.com:scottishgovernment/gov-scot.git
 
-  - name: Hippo Libraries
-    repo: hippo-libs
-    type: java
-    debian: hippo-libs
-    maven: scot.mygov.hippo:hippo-libs
-
   - name: Housing
     repo: housing
     type: java
