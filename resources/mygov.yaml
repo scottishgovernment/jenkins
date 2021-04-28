@@ -8,14 +8,6 @@ jobs:
     debian: amphora
     maven: scot.mygov.amphora:amphora-deb
 
-  - name: Assets
-    repo: mygov-assets
-    type: node
-    publish: true
-    sonar: false
-    npmjs: true
-    mirror: git@github.com:scottishgovernment/mygov-assets.git
-
   - name: Authentication
     repo: basic-authentication
     type: java
