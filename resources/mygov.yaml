@@ -277,15 +277,6 @@ jobs:
     debian: rubric-site
     maven: org.mygovscot:publishing-site
 
-  - name: Search
-    repo: search
-    type: java
-    host: sitapp01
-    site: mygov
-    debian: search
-    maven: scot.mygov.search:search-deb
-    mirror: git@github.com:scottishgovernment/search.git
-
   - name: Site Builder
     repo: site-builder
     type: node
