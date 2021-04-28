@@ -38,15 +38,6 @@ jobs:
     type: java
     snapshot: .
 
-  - name: Beta Publishing
-    repo: beta-publishing
-    type: java
-    snapshot: publishing-api
-    host: pubapp01
-    site: mygov
-    debian: beta-publishing
-    maven: org.mygovscot.publishing:publishing-deb
-
   - name: Business Rates
     repo: business-rates-service
     type: java
