@@ -32,11 +32,23 @@ list.addAll(jobs.collect {
     } else if (type == 'upstream') {
         project = new UpstreamProject(it)
     }
-    project.artifacts = artifacts?.collectEntries { k, v ->
-        def artifact = new Artifact(v)
-        artifact.debian = v.debian ?: k
-        artifact.hosts = artifact.hosts ?: [project.host]
-        [k, artifact]
+    project.artifacts = [:]
+    if (artifacts) {
+        project.artifacts += artifacts?.collectEntries { k, v ->
+            def artifact = new Artifact(v)
+            artifact.debian = v.debian ?: k
+            artifact.hosts = artifact.hosts ?: [project.host]
+            [k, artifact]
+        }
+    }
+    if (it.debian) {
+        def hosts = it.host ? [it.host] : []
+        def artifact = new Artifact([
+            debian: it.debian,
+            maven: it.maven,
+            hosts: hosts
+        ])
+        project.artifacts += [(it.debian): artifact]
     }
     def job = project.build(this, sites, out)
     if (type != "upstream") {

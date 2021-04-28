@@ -146,11 +146,10 @@ class MyGovProject {
                         }
                     }
                     actions {
-                        def artifacts = artifacts()
-                        shell(pipelineDeploy(artifacts, nm))
-                        def toDeploy = artifacts.grep { it.hosts }
-                        if (env.auto && toDeploy) {
-                            shell(sshDeploy(toDeploy, nm))
+                        def packages = artifacts.keySet().toList()
+                        shell(pipelineDeploy(packages, nm))
+                        if (env.auto && artifacts?.findResult { k, v -> v.hosts }) {
+                            shell(sshDeploy(artifacts.values().toList(), nm))
                         }
                     }
                 }
@@ -158,28 +157,13 @@ class MyGovProject {
         }
     }
 
-    def artifacts() {
-        def artifacts = []
-        if (this.artifacts) {
-            artifacts += this.artifacts.values()
-        }
-        if (debian && maven) {
-            artifacts.add(new Artifact([
-                debian: debian,
-                maven: maven,
-                hosts: [host]
-            ]))
-        }
-        return artifacts
-    }
-
-    def String pipelineDeploy(List<Artifact> artifacts, String env) {
+    def String pipelineDeploy(List<String> packages, String env) {
         def promotedVersion = version.replace('BUILD_ID', 'PROMOTED_ID')
         def script = new StringBuilder()
         def delimiter = artifacts.size() == 1 ? ' ' : ' \\\n  '
         script << 'pipeline' << delimiter
-        script << artifacts.collect {
-            "deploy:${it.debian},${promotedVersion},${env}"
+        script << packages.collect {
+            "deploy:${it},${promotedVersion},${env}"
         }.join(delimiter)
         script << delimiter
         script << 'sync\n'
@@ -188,40 +172,29 @@ class MyGovProject {
 
     def String sshDeploy(List<Artifact> artifacts, String env) {
         def script = new StringBuilder()
-        script << "repo=http://nexus/repository/releases/\n"
-        artifacts.collect {
-            deployArtifactBySSH(it, env, script)
+        def promotedVersion = version.replace('BUILD_ID', 'PROMOTED_ID')
+
+        def hosts = artifacts
+            .collect { it.hosts }
+            .flatten()
+            .toUnique()
+
+        for (host in hosts) {
+            def packages = artifacts
+                .grep { it.hosts?.contains(host) }
+                .collect { "${it.debian}=${promotedVersion}"}
+                .join(' ')
+            script << trim("""\
+                ssh devops@${env}${host} /bin/sh -eu <<EOS
+                    sudo apt-get update \\
+                      -o Dir::Etc::sourcelist="sources.list.d/scotgov.list" \\
+                      -o Dir::Etc::sourceparts="-" \\
+                      -o APT::Get::List-Cleanup="0"
+                    sudo apt-get install -y --allow-downgrades ${packages}
+                EOS
+                """)
         }
         return script.toString()
-    }
-
-    def String deployArtifactBySSH(Artifact artifact, String env, StringBuilder script) {
-        def promotedVersion = version.replace('BUILD_ID', 'PROMOTED_ID')
-        def debian = artifact.debian
-        def maven = artifact.maven
-        def colon = maven.indexOf(':')
-        def groupId = maven.substring(0, colon)
-        def artifactId = maven.substring(colon + 1)
-
-        def path = new StringBuilder()
-        path << groupId.replace('.', '/') << '/'
-        path << artifactId << '/'
-        path << promotedVersion << '/'
-        path << artifactId << '-' << promotedVersion << '.deb'
-
-        for (x in artifact.hosts) {
-          if (x == null) {
-              continue
-          }
-          def host = env + x
-          script << "\n"
-          script << trim("""\
-              curl -sSf -o "${debian}.deb" "\${repo}/${path}"
-              scp -o StrictHostKeyChecking=no "${debian}.deb" "devops@${host}:/tmp/${debian}.deb"
-              ssh -o StrictHostKeyChecking=no devops@${host} "sudo dpkg -i /tmp/${debian}.deb"
-              """)
-          }
-        return script
     }
 
     /**
