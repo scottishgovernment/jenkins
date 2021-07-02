@@ -33,9 +33,5 @@ def build(site) {
             script << dsl.readFileFromWorkspace('resources/migrate')
             shell(script.toString());
         }
-        
-        publishers {
-            buildDescription('', '${migrations} migration on ${env}')
-        }
     }
 }
