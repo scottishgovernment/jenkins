@@ -27,7 +27,7 @@ def build(site, envs) {
         }
         
         publishers {
-            buildDescription('', '${env}')
+            buildDescription('', '$env')
         }
     }
 }
