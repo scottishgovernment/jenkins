@@ -25,5 +25,9 @@ def build(site, envs) {
             script << dsl.readFileFromWorkspace('resources/migrate')
             shell(script.toString());
         }
+
+        publishers {
+            buildDescription('', '${env}')
+        }
     }
 }
