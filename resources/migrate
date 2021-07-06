@@ -30,7 +30,7 @@ elif [ "$site" = "gov" ]; then
 fi
 
 sed "s/tst/${env}/g;s/log.mygov/${hostname}/g;s/pubapp0./${host}/g;s/'/%27/g;s/)/%29/g" << EOT
-  https://log.mygov.scot/app/kibana#/discover?_g=(refreshInterval:('$$hashKey':'object:500',display:'5%20seconds',pause:!f,section:1,value:5000),time:(from:now-15m,mode:quick,to:now))&_a=(columns:!(message),filters:!(('$$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-*',key:service,negate:!f,type:phrase,value:migration),query:(match:(service:(query:migration,type:phrase)))),('$$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logstash-*',key:host.name,negate:!f,type:phrase,value:tstpubapp01),query:(match:(host.name:(query:tstpubapp01,type:phrase))))),index:'logstash-*',interval:auto,query:(match_all:()),sort:!('@timestamp',desc))
+  https://log.mygov.scot/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-15m,to:now))&_a=(columns:!(message),filters:!(('$$state':(store:appState),meta:(alias:!n,disabled:!f,index:logstash,key:service,negate:!f,params:(query:migration),type:phrase),query:(match_phrase:(service:migration))),('$$state':(store:appState),meta:(alias:!n,disabled:!f,index:logstash,key:host.name,negate:!f,params:(query:tstpubapp01),type:phrase),query:(match_phrase:(host.name:tstpubapp01)))),index:logstash,interval:auto,query:(language:kuery,query:''),sort:!())
 EOT
 
 
