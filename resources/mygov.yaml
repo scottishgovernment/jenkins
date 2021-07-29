@@ -73,7 +73,7 @@ jobs:
     repo: decommission-tool
     type: java
     host: pubapp01
-    site: both
+    site: mygov
     debian: decommission-tool
     maven: org.mygovscot.decommission-tool:decommission-tool-deb
 
