@@ -306,17 +306,15 @@ jobs << job('end-to-end-tests') {
         }
     }
  }
-jobs << job('perceptual-testing') {
-    displayName('Perceptual Tests')
+jobs << job('mygov-perceptual-testing') {
+    displayName('Mygov Perceptual Tests')
     parameters {
         choiceParam('install_backstopJS', ['true', 'false'], 'Set to false to NOT install backstopJS')
-        choiceParam('platform', ['www', 'pub'], 'Use this option to select tests for the site (www) or for Rubric (pub)')
-        choiceParam('site', ['mygov', 'gov'], 'Use this option to select tests for mygov.scot or gov.scot')
-        choiceParam('testEnv', ['int', 'exp','per','blu','grn','igv','egv','ugv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
-        choiceParam('referenceEnv', ['live', 'int', 'exp','per', 'uat', 'tst', 'blu', 'grn', 'igv', 'egv', 'pgv','ugv', 'tgv', 'bgv', 'ggv'], 'reference environment where base screenshots will be taken from')
+        choiceParam('testEnv', ['int', 'exp','per','blu','grn','live','local'], 'Use this option to select test environment to be compared against the reference env')
+        choiceParam('referenceEnv', ['live', 'int', 'exp','per', 'uat', 'tst', 'blu', 'grn'], 'reference environment where base screenshots will be taken from')
     }
     logRotator {
-        daysToKeep(60)
+        daysToKeep(10)
     }
     scm {
         git(repo('perceptual-testing'), 'master')
@@ -324,54 +322,88 @@ jobs << job('perceptual-testing') {
     steps {
         shell(trim('''\
             if [ "\$install_backstopJS" = "true" ]; then
-              ./run.sh -i -p ${platform} -s ${site} -r ${referenceEnv} -t ${testEnv}
+              ./run.sh -i -p www -s mygov -r ${referenceEnv} -t ${testEnv}
             else
-              ./run.sh -p ${platform} -s ${site} -r ${referenceEnv} -t ${testEnv}
+              ./run.sh -p www -s mygov -r ${referenceEnv} -t ${testEnv}
             fi
         '''))
     }
     publishers {
-        buildDescription('', '$site $platform - $testEnv VS $referenceEnv', '', '$site $platform - $testEnv VS $referenceEnv')
+        buildDescription('', 'Mygov $platform - $testEnv VS $referenceEnv', '', 'Mygov $platform - $testEnv VS $referenceEnv')
         archiveJunit('backstop_data/**/ci_report/*.xml')
         publishHtml {
-             report("backstop_data/www/mygov/html_report/big_res") {
+             report("backstop_data/www/mygov") {
                   reportName("MyGov website big resolutions Report")
-                  reportFiles("index.html")
+                  reportFiles("html_report/big_res/index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
                   keepAll()
              }
-             report("backstop_data/www/mygov/html_report/small_res") {
+             report("backstop_data/www/mygov") {
                   reportName("MyGov website small resolutions Report")
-                  reportFiles("index.html")
+                  reportFiles("html_report/small_res/index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
                   keepAll()
              }
-             report("backstop_data/www/gov/html_report/big_res") {
+        }
+    }
+}
+
+jobs << job('gov-perceptual-testing') {
+    displayName('Gov Perceptual Tests')
+    parameters {
+        choiceParam('install_backstopJS', ['true', 'false'], 'Set to false to NOT install backstopJS')
+        choiceParam('platform', ['www', 'pub'], 'Use this option to select tests for the site (www) or for Rubric (pub)')
+        choiceParam('testEnv', ['igv', 'egv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
+        choiceParam('referenceEnv', ['live', 'igv', 'egv','pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'reference environment where base screenshots will be taken from')
+    }
+    logRotator {
+        daysToKeep(10)
+    }
+    scm {
+        git(repo('perceptual-testing'), 'master')
+    }
+    steps {
+        shell(trim('''\
+            case "$testEnv" in
+                dgv) env=dev;;
+                igv) env=int;;
+                egv) env=exp;;
+                ugv) env=uat;;
+                tgv) env=tst;;
+                pgv) env=per;;
+                bgv) env=blu;;
+                ggv) env=grn;;
+            esac
+            if [ "\$install_backstopJS" = "true" ]; then
+              ./run.sh -i -p ${platform} -s gov -r ${referenceEnv} -t ${env}
+            else
+              ./run.sh -p ${platform} -s gov -r ${referenceEnv} -t ${env}
+            fi
+        '''))
+    }
+    publishers {
+        buildDescription('', 'Gov $platform - $testEnv VS $referenceEnv', '', 'Gov $platform - $testEnv VS $referenceEnv')
+        archiveJunit('backstop_data/**/ci_report/*.xml')
+        publishHtml {
+             report("backstop_data/www/gov") {
                   reportName("Gov website big resolutions Report")
-                  reportFiles("index.html")
+                  reportFiles("html_report/big_res/index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
                   keepAll()
              }
-             report("backstop_data/www/gov/html_report/small_res") {
+             report("backstop_data/www/gov") {
                   reportName("Gov website small resolutions Report")
-                  reportFiles("index.html")
+                  reportFiles("html_report/small_res/index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
                   keepAll()
              }
-             report("backstop_data/pub/mygov/html_report") {
-                  reportName("MyGov Rubric Report")
-                  reportFiles("index.html")
-                  allowMissing()
-                  alwaysLinkToLastBuild()
-                  keepAll()
-             }
-             report("backstop_data/pub/gov/html_report") {
+             report("backstop_data/pub/gov") {
                   reportName("Gov Rubric Report")
-                  reportFiles("index.html")
+                  reportFiles("html_report/index.html")
                   allowMissing()
                   alwaysLinkToLastBuild()
                   keepAll()
