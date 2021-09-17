@@ -329,7 +329,7 @@ jobs << job('mygov-perceptual-testing') {
         '''))
     }
     publishers {
-        buildDescription('', 'Mygov $platform - $testEnv VS $referenceEnv', '', 'Mygov $platform - $testEnv VS $referenceEnv')
+        buildDescription('', 'Mygov - $testEnv VS $referenceEnv', '', 'Mygov - $testEnv VS $referenceEnv')
         archiveJunit('backstop_data/**/ci_report/*.xml')
         publishHtml {
              report("backstop_data/www/mygov") {
