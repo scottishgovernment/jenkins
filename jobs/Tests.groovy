@@ -554,6 +554,16 @@ jobs << pipelineJob('integration-test-mygov') {
                 }
             }
 
+            stage('mygov-perceptual') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'mygov-perceptual-testing', parameters: [
+                        string(name: 'install_backstopJS', value: 'true'),
+                        string(name: 'testEnv', value: 'int'),
+                        string(name: 'referenceEnv', value: 'live')
+                    ]
+                }
+            }
+
             stage('teardown int') {
                 build job: 'mygov-int', parameters: [
                     string(name: 'action', value: 'teardown')
@@ -612,6 +622,17 @@ jobs << pipelineJob('integration-test-gov') {
                         string(name: 'mode', value: 'single'),
                         string(name: 'smoke_only', value: 'false'),
                         string(name: 'tests', value: 'webE2E')
+                    ]
+                }
+            }
+
+            stage('gov-perceptual') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'gov-perceptual-testing', parameters: [
+                        string(name: 'install_backstopJS', value: 'true'),
+                        string(name: 'testEnv', value: 'igv'),
+                        string(name: 'platform', value: 'www'),
+                        string(name: 'referenceEnv', value: 'live')
                     ]
                 }
             }
