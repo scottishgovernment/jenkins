@@ -179,14 +179,6 @@ jobs:
     debian: mygov-forms
     maven: scot.mygov.form:mygov-forms-deb
 
-  - name: MyGov Site
-    repo: mygov-site
-    type: node
-    host: pubapp01
-    site: mygov
-    debian: mygov-site
-    maven: org.mygovscot.beta:web-site
-
   - name: Pattern Library
     repo: pattern-library
     version: 0.0.${BUILD_ID}
@@ -271,15 +263,6 @@ jobs:
     site: both
     debian: rubric-site
     maven: org.mygovscot:publishing-site
-
-  - name: Site Builder
-    repo: site-builder
-    type: node
-    host: pubapp01
-    site: mygov
-    debian: site-builder
-    maven: scot.mygov.site:site-builder
-    publish: true
 
   - name: Trigger
     repo: trigger
