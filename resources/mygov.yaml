@@ -77,6 +77,15 @@ jobs:
     debian: decommission-tool
     maven: org.mygovscot.decommission-tool:decommission-tool-deb
 
+  - name: Decommissioned Sites
+    repo: decommissioned-sites
+    type: node
+    host: pubapp01
+    site: mygov
+    debian: decommissioned-sites
+    maven: scot.mygov.redirects:decommissioned-sites
+    mirror: git@github.com:scottishgovernment/decommissioned-sites.git
+
   - name: Feedback
     repo: feedback
     type: java
