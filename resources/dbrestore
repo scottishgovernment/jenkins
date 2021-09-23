@@ -14,7 +14,7 @@ esac
 
 pubapp="devops@${env}pubapp01.${domain}"
 fbkapp="devops@${env}fbkapp01.${domain}"
-redapp="devops@${env}fbkapp01.${domain}"
+redapp="devops@${env}redapp01.${domain}"
 
 ssh "$pubapp" "dbrestoreurl=${dbrestoreurl}" /bin/sh -eu <<'EOF'
 dbs=$(ls .credentials | egrep -v template1)
