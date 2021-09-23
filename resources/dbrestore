@@ -14,19 +14,24 @@ esac
 
 pubapp="devops@${env}pubapp01.${domain}"
 fbkapp="devops@${env}fbkapp01.${domain}"
+redapp="devops@${env}fbkapp01.${domain}"
 
-cmd="ls .credentials | egrep -v template1"
-rds_dbs=$(ssh ${pubapp} "${cmd}")
-
-for db in ${rds_dbs}; do
+ssh "$pubapp" "dbrestoreurl=${dbrestoreurl}" /bin/sh -eu <<'EOF'
+dbs=$(ls .credentials | egrep -v template1)
+for db in $dbs; do
   dbfrom="${dbrestoreurl}/${db}.gz"
-  cmd="/usr/local/bin/import_db.sh ${dbfrom} ${db} >> /tmp/${db}.log"
   echo "Restoring ${db} from ${dbfrom}"
-  result=$(ssh ${pubapp} "${cmd}")
+  import_db.sh "$dbfrom" "$db" >> "/tmp/${db}.log"
+  echo
 done
+EOF
 
-dbrestorefile="feedback.gz"
-cmd="/usr/local/bin/import_mongo.sh ${dbrestoreurl} ${dbrestorefile}"
-bashcmd="bash -l -c \"${cmd}\""
+ssh "$fbkapp" "dbrestoreurl=${dbrestoreurl}" /bin/sh -eu <<'EOF'
 echo "Restoring feedback from ${dbrestoreurl}"
-result=$(ssh ${fbkapp} "${bashcmd}")
+import_mongo.sh "$dbrestoreurl" feedback.gz
+EOF
+
+ssh "$redapp" /bin/sh -eu <<'EOF'
+echo "Restoring certbot data"
+restore-certbot
+EOF
