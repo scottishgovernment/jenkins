@@ -322,9 +322,9 @@ jobs << job('mygov-perceptual-testing') {
     steps {
         shell(trim('''\
             if [ "\$install_backstopJS" = "true" ]; then
-              ./run.sh -i -p www -s mygov -r ${referenceEnv} -t ${testEnv}
+              ./run.sh -i -s mygov -r ${referenceEnv} -t ${testEnv}
             else
-              ./run.sh -p www -s mygov -r ${referenceEnv} -t ${testEnv}
+              ./run.sh -s mygov -r ${referenceEnv} -t ${testEnv}
             fi
         '''))
     }
@@ -354,7 +354,6 @@ jobs << job('gov-perceptual-testing') {
     displayName('Gov Perceptual Tests')
     parameters {
         choiceParam('install_backstopJS', ['true', 'false'], 'Set to false to NOT install backstopJS')
-        choiceParam('platform', ['www', 'pub'], 'Use this option to select tests for the site (www) or for Rubric (pub)')
         choiceParam('testEnv', ['igv', 'egv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
         choiceParam('referenceEnv', ['live', 'igv', 'egv','pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'reference environment where base screenshots will be taken from')
     }
@@ -377,14 +376,14 @@ jobs << job('gov-perceptual-testing') {
                 ggv) env=grn;;
             esac
             if [ "\$install_backstopJS" = "true" ]; then
-              ./run.sh -i -p ${platform} -s gov -r ${referenceEnv} -t ${env}
+              ./run.sh -i -s gov -r ${referenceEnv} -t ${env}
             else
-              ./run.sh -p ${platform} -s gov -r ${referenceEnv} -t ${env}
+              ./run.sh -s gov -r ${referenceEnv} -t ${env}
             fi
         '''))
     }
     publishers {
-        buildDescription('', 'Gov $platform - $testEnv VS $referenceEnv', '', 'Gov $platform - $testEnv VS $referenceEnv')
+        buildDescription('', 'Gov - $testEnv vs $referenceEnv', '', 'Gov - $testEnv vs $referenceEnv')
         archiveJunit('backstop_data/**/ci_report/*.xml')
         publishHtml {
              report("backstop_data/www/gov") {
@@ -631,7 +630,6 @@ jobs << pipelineJob('integration-test-gov') {
                     build job: 'gov-perceptual-testing', parameters: [
                         string(name: 'install_backstopJS', value: 'true'),
                         string(name: 'testEnv', value: 'igv'),
-                        string(name: 'platform', value: 'www'),
                         string(name: 'referenceEnv', value: 'live')
                     ]
                 }
