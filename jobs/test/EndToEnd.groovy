@@ -30,7 +30,7 @@ def build(pipeline, site, envs) {
                 fi
                 opts=
                 if [ "\$smoke_only" = "true" ]; then
-                  opts="\${opts }-k"
+                  opts="\${opts} -k"
                 fi
                 ./run.sh -m single -s ${e2eSite} -t ${suite} -e "\$env" \$opts
                 """))
