@@ -11,6 +11,7 @@ import environments.Whitelist
 import pipeline.Perform
 import pipeline.Prepare
 import pipeline.Promotion
+import test.EndToEnd
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
 def sites = yaml.sites
@@ -31,6 +32,7 @@ def restore = new Restore()
 def revert = new Revert()
 def dbrestore = new Dbrestore()
 def checker = new Checker()
+def endtoend = new EndToEnd()
 
 [
     vpc,
@@ -45,6 +47,7 @@ def checker = new Checker()
     dbrestore,
     checker,
     whitelist,
+    endtoend,
 ].each { c ->
   c.setBinding(binding)
 }
@@ -66,7 +69,12 @@ sites.collect { site ->
     jobs << whitelist.build(site, envNames)
     jobs.addAll(vpc.build(site))
 
-    if (site.id == "gov") {
+    if (site.id == 'mygov') {
+        jobs << endtoend.build(site.id, 'rubric', envNames)
+        jobs << endtoend.build(site.id, 'mygov', envNames)
+        jobs << endtoend.build(site.id, 'tradingnation', envNames)
+    } else if (site.id == 'gov') {
+        jobs << endtoend.build(site.id, 'gov', envNames)
         jobs << checker.build(site, envNames)
     }
 
