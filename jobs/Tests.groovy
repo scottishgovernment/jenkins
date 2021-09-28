@@ -518,37 +518,28 @@ jobs << pipelineJob('integration-test-mygov') {
 
             stage('mygov-pube2e') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'end-to-end-tests',
+                    build job: 'mygov-e2e-rubric',
                     parameters: [
-                        string(name: 'site', value: 'mygov'),
-                        string(name: 'testenv', value: 'int'),
-                        string(name: 'mode', value: 'single'),
-                        string(name: 'smoke_only', value: 'true'),
-                        string(name: 'tests', value: 'pubE2E')
+                        string(name: 'env', value: 'int'),
+                        string(name: 'smoke_only', value: 'true')
                     ]
                 }
             }
 
             stage('mygov-webe2e') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'end-to-end-tests', parameters: [
-                        string(name: 'site', value: 'mygov'),
-                        string(name: 'testenv', value: 'int'),
-                        string(name: 'mode', value: 'single'),
-                        string(name: 'smoke_only', value: 'false'),
-                        string(name: 'tests', value: 'webE2E')
+                    build job: 'mygov-e2e-mygov', parameters: [
+                        string(name: 'env', value: 'int'),
+                        string(name: 'smoke_only', value: 'false')
                     ]
                 }
             }
 
             stage('tradingnation-webe2e') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'end-to-end-tests', parameters: [
-                        string(name: 'site', value: 'tradingnation'),
-                        string(name: 'testenv', value: 'int'),
-                        string(name: 'mode', value: 'single'),
-                        string(name: 'smoke_only', value: 'false'),
-                        string(name: 'tests', value: 'webE2E')
+                    build job: 'mygov-e2e-tradingnation', parameters: [
+                        string(name: 'env', value: 'int'),
+                        string(name: 'smoke_only', value: 'false')
                     ]
                 }
             }
@@ -615,12 +606,9 @@ jobs << pipelineJob('integration-test-gov') {
 
             stage('gov-webe2e') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'end-to-end-tests', parameters: [
-                        string(name: 'site', value: 'gov'),
-                        string(name: 'testenv', value: 'igv'),
-                        string(name: 'mode', value: 'single'),
-                        string(name: 'smoke_only', value: 'false'),
-                        string(name: 'tests', value: 'webE2E')
+                    build job: 'gov-e2e-gov', parameters: [
+                        string(name: 'env', value: 'igv'),
+                        string(name: 'smoke_only', value: 'false')
                     ]
                 }
             }
