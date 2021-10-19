@@ -359,7 +359,7 @@ jobs << job('gov-perceptual-testing') {
     }
     steps {
         shell(trim('''\
-            ./run.sh -s gov -r ${referenceEnv} -t ${env}
+            ./run.sh -s gov -r ${referenceEnv} -t ${testEnv}
         '''))
     }
     publishers {
