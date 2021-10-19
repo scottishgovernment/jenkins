@@ -527,7 +527,6 @@ jobs << pipelineJob('integration-test-mygov') {
             stage('mygov-perceptual') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'mygov-perceptual-testing', parameters: [
-                        string(name: 'install_backstopJS', value: 'true'),
                         string(name: 'testEnv', value: 'int'),
                         string(name: 'referenceEnv', value: 'live')
                     ]
@@ -596,7 +595,6 @@ jobs << pipelineJob('integration-test-gov') {
             stage('gov-perceptual') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'gov-perceptual-testing', parameters: [
-                        string(name: 'install_backstopJS', value: 'true'),
                         string(name: 'testEnv', value: 'igv'),
                         string(name: 'referenceEnv', value: 'live')
                     ]
