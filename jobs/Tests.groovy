@@ -309,7 +309,6 @@ jobs << job('end-to-end-tests') {
 jobs << job('mygov-perceptual-testing') {
     displayName('Mygov Perceptual Tests')
     parameters {
-        choiceParam('install_backstopJS', ['true', 'false'], 'Set to false to NOT install backstopJS')
         choiceParam('testEnv', ['int', 'exp','per','blu','grn','live','local'], 'Use this option to select test environment to be compared against the reference env')
         choiceParam('referenceEnv', ['live', 'int', 'exp','per', 'uat', 'tst', 'blu', 'grn'], 'reference environment where base screenshots will be taken from')
     }
@@ -321,15 +320,11 @@ jobs << job('mygov-perceptual-testing') {
     }
     steps {
         shell(trim('''\
-            if [ "\$install_backstopJS" = "true" ]; then
-              ./run.sh -i -s mygov -r ${referenceEnv} -t ${testEnv}
-            else
-              ./run.sh -s mygov -r ${referenceEnv} -t ${testEnv}
-            fi
+            ./run.sh -s mygov -r ${referenceEnv} -t ${testEnv}
         '''))
     }
     publishers {
-        buildDescription('', 'Mygov - $testEnv VS $referenceEnv', '', 'Mygov - $testEnv VS $referenceEnv')
+        buildDescription('', '$testEnv vs $referenceEnv', '', '$testEnv VS $referenceEnv')
         archiveJunit('backstop_data/**/ci_report/*.xml')
         publishHtml {
              report("backstop_data/www/mygov") {
@@ -353,7 +348,6 @@ jobs << job('mygov-perceptual-testing') {
 jobs << job('gov-perceptual-testing') {
     displayName('Gov Perceptual Tests')
     parameters {
-        choiceParam('install_backstopJS', ['true', 'false'], 'Set to false to NOT install backstopJS')
         choiceParam('testEnv', ['igv', 'egv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
         choiceParam('referenceEnv', ['live', 'igv', 'egv','pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'reference environment where base screenshots will be taken from')
     }
@@ -365,25 +359,11 @@ jobs << job('gov-perceptual-testing') {
     }
     steps {
         shell(trim('''\
-            case "$testEnv" in
-                dgv) env=dev;;
-                igv) env=int;;
-                egv) env=exp;;
-                ugv) env=uat;;
-                tgv) env=tst;;
-                pgv) env=per;;
-                bgv) env=blu;;
-                ggv) env=grn;;
-            esac
-            if [ "\$install_backstopJS" = "true" ]; then
-              ./run.sh -i -s gov -r ${referenceEnv} -t ${env}
-            else
-              ./run.sh -s gov -r ${referenceEnv} -t ${env}
-            fi
+            ./run.sh -s gov -r ${referenceEnv} -t ${env}
         '''))
     }
     publishers {
-        buildDescription('', 'Gov - $testEnv vs $referenceEnv', '', 'Gov - $testEnv vs $referenceEnv')
+        buildDescription('', '$testEnv vs $referenceEnv', '', '$testEnv vs $referenceEnv')
         archiveJunit('backstop_data/**/ci_report/*.xml')
         publishHtml {
              report("backstop_data/www/gov") {
