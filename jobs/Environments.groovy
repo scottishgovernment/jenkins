@@ -12,6 +12,7 @@ import pipeline.Perform
 import pipeline.Prepare
 import pipeline.Promotion
 import test.EndToEnd
+import test.Perceptual
 
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
 def sites = yaml.sites
@@ -33,6 +34,7 @@ def revert = new Revert()
 def dbrestore = new Dbrestore()
 def checker = new Checker()
 def endtoend = new EndToEnd()
+def perceptual = new Perceptual()
 
 [
     vpc,
@@ -48,6 +50,7 @@ def endtoend = new EndToEnd()
     checker,
     whitelist,
     endtoend,
+    perceptual,
 ].each { c ->
   c.setBinding(binding)
 }
@@ -77,6 +80,7 @@ sites.collect { site ->
         jobs << endtoend.build(site.id, 'gov', envNames)
         jobs << checker.build(site, envNames)
     }
+    jobs << perceptual.build(site.id, envNames)
 
     listView(site.name) {
         statusFilter(StatusFilter.ENABLED)

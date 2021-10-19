@@ -305,90 +305,6 @@ jobs << job('end-to-end-tests') {
              }
         }
     }
- }
-jobs << job('mygov-perceptual-testing') {
-    displayName('Mygov Perceptual Tests')
-    parameters {
-        choiceParam('testEnv', ['int', 'exp','per','blu','grn','live','local'], 'Use this option to select test environment to be compared against the reference env')
-        choiceParam('referenceEnv', ['live', 'int', 'exp','per', 'uat', 'tst', 'blu', 'grn'], 'reference environment where base screenshots will be taken from')
-    }
-    logRotator {
-        daysToKeep(10)
-    }
-    scm {
-        git(repo('perceptual-testing'), 'master')
-    }
-    steps {
-        shell(trim('''\
-            ./run.sh -s mygov -r ${referenceEnv} -t ${testEnv}
-        '''))
-    }
-    publishers {
-        buildDescription('', '$testEnv vs $referenceEnv', '', '$testEnv VS $referenceEnv')
-        archiveJunit('backstop_data/**/ci_report/*.xml')
-        publishHtml {
-             report("backstop_data/www/mygov") {
-                  reportName("MyGov website big resolutions Report")
-                  reportFiles("html_report/big_res/index.html")
-                  allowMissing()
-                  alwaysLinkToLastBuild()
-                  keepAll()
-             }
-             report("backstop_data/www/mygov") {
-                  reportName("MyGov website small resolutions Report")
-                  reportFiles("html_report/small_res/index.html")
-                  allowMissing()
-                  alwaysLinkToLastBuild()
-                  keepAll()
-             }
-        }
-    }
-}
-
-jobs << job('gov-perceptual-testing') {
-    displayName('Gov Perceptual Tests')
-    parameters {
-        choiceParam('testEnv', ['igv', 'egv','pgv','bgv','ggv','live','local'], 'Use this option to select test environment to be compared against the reference env')
-        choiceParam('referenceEnv', ['live', 'igv', 'egv','pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'reference environment where base screenshots will be taken from')
-    }
-    logRotator {
-        daysToKeep(10)
-    }
-    scm {
-        git(repo('perceptual-testing'), 'master')
-    }
-    steps {
-        shell(trim('''\
-            ./run.sh -s gov -r ${referenceEnv} -t ${testEnv}
-        '''))
-    }
-    publishers {
-        buildDescription('', '$testEnv vs $referenceEnv', '', '$testEnv vs $referenceEnv')
-        archiveJunit('backstop_data/**/ci_report/*.xml')
-        publishHtml {
-             report("backstop_data/www/gov") {
-                  reportName("Gov website big resolutions Report")
-                  reportFiles("html_report/big_res/index.html")
-                  allowMissing()
-                  alwaysLinkToLastBuild()
-                  keepAll()
-             }
-             report("backstop_data/www/gov") {
-                  reportName("Gov website small resolutions Report")
-                  reportFiles("html_report/small_res/index.html")
-                  allowMissing()
-                  alwaysLinkToLastBuild()
-                  keepAll()
-             }
-             report("backstop_data/pub/gov") {
-                  reportName("Gov Rubric Report")
-                  reportFiles("html_report/index.html")
-                  allowMissing()
-                  alwaysLinkToLastBuild()
-                  keepAll()
-             }
-        }
-    }
 }
 
 jobs << job('layout-tests') {
@@ -526,7 +442,7 @@ jobs << pipelineJob('integration-test-mygov') {
 
             stage('mygov-perceptual') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'mygov-perceptual-testing', parameters: [
+                    build job: 'mygov-perceptual-tests', parameters: [
                         string(name: 'testEnv', value: 'int'),
                         string(name: 'referenceEnv', value: 'live')
                     ]
@@ -594,7 +510,7 @@ jobs << pipelineJob('integration-test-gov') {
 
             stage('gov-perceptual') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'gov-perceptual-testing', parameters: [
+                    build job: 'gov-perceptual-tests', parameters: [
                         string(name: 'testEnv', value: 'igv'),
                         string(name: 'referenceEnv', value: 'live')
                     ]
