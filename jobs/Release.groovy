@@ -141,17 +141,25 @@ view << job('gov-site-fail-recover') {
     }
 }
 
-view << job('pre-release') {
-    displayName('Prevent changes on live environment')
-    description('Makes an environment read-only by stopping authentication')
-    parameters {
-        choiceParam('env', ['blu', 'grn', 'bgv', 'ggv'], 'environment')
-    }
-    scm {
-        awsRepo(delegate)
-    }
-    steps {
-        shell('tools/pre-release ${env}')
+sites.collect { site ->
+    view << job("${site.id}-prerelease") {
+        displayName("Prepare for ${site.name} release")
+        description('Prevent changes to live environment and disable notifications')
+        def productionEnvironments = site.environments
+            .grep { it.perform }
+            .collect { it.name }
+        parameters {
+            choiceParam('env', productionEnvironments, 'environment')
+        }
+        scm {
+            awsRepo(delegate)
+        }
+        steps {
+            shell('tools/pre-release ${env}')
+        }
+        publishers {
+            buildDescription('', '$env')
+        }
     }
 }
 
