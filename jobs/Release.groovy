@@ -192,30 +192,17 @@ sites.collect { site ->
             buildDescription('', '$env')
         }
     }
-}
 
-view << job('mygov-index-backup') {
-    displayName('Backup mygov hippo index')
-    scm {
-        awsRepo(delegate)
+    view << job("${site.id}-index-backup") {
+        displayName("Backup ${site.id} hippo index")
+        scm {
+            awsRepo(delegate)
+        }
+        steps {
+            shell("tools/backup-index ${site.id}")
+        }
     }
-    steps {
-        shell(trim('''\
-          tools/backup-index mygov
-        '''))
-    }
-}
 
-view << job('gov-index-backup') {
-    displayName('Backup gov hippo index')
-    scm {
-        awsRepo(delegate)
-    }
-    steps {
-        shell(trim('''\
-          tools/backup-index gov
-        '''))
-    }
 }
 
 view << job('sync-repo') {
