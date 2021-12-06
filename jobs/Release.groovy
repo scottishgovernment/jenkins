@@ -143,8 +143,14 @@ view << job('gov-site-fail-recover') {
 
 sites.collect { site ->
     view << job("${site.id}-prerelease") {
-        displayName("Prepare for ${site.name} release")
-        description('Prevent changes to live environment and disable notifications')
+        displayName("Make ${site.name} environment read-only")
+        description(trim("""\
+          Prevent changes on production environment and disable notifications
+
+          This job stops the CMS and disables the authentication service to
+          prevent changes being made on an environment. This ensures that
+          changes are not lost during a blue/green release.
+        """))
         def productionEnvironments = site.environments
             .grep { it.perform }
             .collect { it.name }
@@ -163,8 +169,13 @@ sites.collect { site ->
     }
 
     view << job("${site.id}-prerelease-rollback") {
-        displayName("Rollback preparation for ${site.name} release")
-        description('Allow changes to live environment and enable notifications')
+        displayName("Make ${site.name} environment read-write")
+        description(trim("""\
+          Allow changes on production environment and enable monitoring notifications.
+
+          This job can be used if a release needs to be cancelled between running the
+          "Make ${site.name} environment read-only" and the blue/green switch job.
+        """))
         def productionEnvironments = site.environments
             .grep { it.perform }
             .collect { it.name }
