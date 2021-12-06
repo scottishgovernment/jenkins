@@ -161,6 +161,26 @@ sites.collect { site ->
             buildDescription('', '$env')
         }
     }
+
+    view << job("${site.id}-prerelease-rollback") {
+        displayName("Rollback preparation for ${site.name} release")
+        description('Allow changes to live environment and enable notifications')
+        def productionEnvironments = site.environments
+            .grep { it.perform }
+            .collect { it.name }
+        parameters {
+            choiceParam('env', productionEnvironments, 'environment')
+        }
+        scm {
+            awsRepo(delegate)
+        }
+        steps {
+            shell('tools/rollback ${env}')
+        }
+        publishers {
+            buildDescription('', '$env')
+        }
+    }
 }
 
 view << job('mygov-index-backup') {
