@@ -68,7 +68,7 @@ jobs << pipelineJob('scheduled-teardown-dev-envs') {
     }
     if (enabled) {
         triggers {
-           cron('30 19 * * 1-5')
+           cron('0 18 * * 1-5')
         }
     }
     definition {
@@ -99,7 +99,7 @@ jobs << pipelineJob('scheduled-teardown-exp-envs') {
     }
     if (enabled) {
         triggers {
-           cron('30 19 * * 1-5')
+           cron('0 18 * * 1-5')
         }
     }
     definition {
