@@ -412,6 +412,15 @@ jobs << pipelineJob('integration-test-mygov') {
                 ]
             }
 
+            stage('mygov-perceptual') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'mygov-perceptual-tests', parameters: [
+                        string(name: 'testEnv', value: 'int'),
+                        string(name: 'referenceEnv', value: 'live')
+                    ]
+                }
+            }
+
             stage('mygov-pube2e') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'mygov-e2e-rubric',
@@ -436,15 +445,6 @@ jobs << pipelineJob('integration-test-mygov') {
                     build job: 'mygov-e2e-tradingnation', parameters: [
                         string(name: 'env', value: 'int'),
                         string(name: 'smoke_only', value: 'false')
-                    ]
-                }
-            }
-
-            stage('mygov-perceptual') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'mygov-perceptual-tests', parameters: [
-                        string(name: 'testEnv', value: 'int'),
-                        string(name: 'referenceEnv', value: 'live')
                     ]
                 }
             }
@@ -499,20 +499,20 @@ jobs << pipelineJob('integration-test-gov') {
                 ]
             }
 
-            stage('gov-webe2e') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'gov-e2e-gov', parameters: [
-                        string(name: 'env', value: 'igv'),
-                        string(name: 'smoke_only', value: 'false')
-                    ]
-                }
-            }
-
             stage('gov-perceptual') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'gov-perceptual-tests', parameters: [
                         string(name: 'testEnv', value: 'igv'),
                         string(name: 'referenceEnv', value: 'live')
+                    ]
+                }
+            }
+            
+            stage('gov-webe2e') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'gov-e2e-gov', parameters: [
+                        string(name: 'env', value: 'igv'),
+                        string(name: 'smoke_only', value: 'false')
                     ]
                 }
             }
