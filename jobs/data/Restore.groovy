@@ -12,7 +12,7 @@ def build(site, List<String> envs) {
             awsRepo(delegate)
         }
         steps {
-            shell("tools/management/s3_restore ${site.domain} \${env}")
+            shell("tools/s3_restore ${site.domain} \${env}")
         }
         publishers {
             buildDescription('', '${env}')

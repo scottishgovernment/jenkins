@@ -71,7 +71,7 @@ build() {
   resolve "$version"
   ami=${ami_override:-%id%-$ami_NUMBER}
   echo "AMI:         ${ami}"
-  tools/management/s3_restore "${domain}" "%env%"
+  tools/s3_restore "${domain}" "%env%"
 
   if timestamp %build%; then
     vpc=$(vpc_id)

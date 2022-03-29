@@ -14,10 +14,10 @@ def build(site, List<String> envs) {
             awsRepo(delegate)
         }
         steps {
-          // Duplication of Restore.groovy
-          shell("tools/management/s3_restore ${site.domain} \${env}")
+          // Restore S3 bucket
+          shell("tools/s3_restore ${site.domain} \${env}")
 
-          // RDS and mongodb
+          // Restore RDS, MongoDB and certificates
           def script = dsl.readFileFromWorkspace('resources/dbrestore')
           shell(script)
         }
