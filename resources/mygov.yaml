@@ -103,15 +103,6 @@ jobs:
     maven: scot.mygov.rubric:fetchor
     build: './build -v ${version}'
 
-  - name: Geosearch
-    repo: geosearch
-    type: java
-    host: sitapp01
-    site: gov
-    debian: geosearch
-    maven: scot.mygov.geosearch:geo-deb
-    mirror: git@github.com:scottishgovernment/geosearch.git
-
   - name: Gov Scot
     repo: gov-scot
     type: java
