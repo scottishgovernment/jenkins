@@ -39,14 +39,6 @@ jobs:
     maven: org.mygovscot.business-rates:business-rates-deb
     mirror: git@github.com:scottishgovernment/business-rates.git
 
-  - name: Certbot
-    repo: certbot
-    type: upstream
-    site: mygov
-    debian: certbot
-    maven: scot.mygov.upstream:certbot
-    build: './build -v ${version}'
-
   - name: Checker
     repo: hippo-checker
     type: java
