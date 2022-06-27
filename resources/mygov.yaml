@@ -53,10 +53,10 @@ jobs:
     type: java
     snapshot: .
 
-  - name: Hippo govscot plugins
+  - name: Hippo plugins
     repo: hippo-govscot
     type: java
-    snapshot: hippo-govscot-hst
+    snapshot: 'hippo-govscot-hst,hippo-govscot-hst-funnelback'
 
   - name: CSP Report
     repo: csp-report
