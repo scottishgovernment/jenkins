@@ -143,6 +143,17 @@ jobs:
     maven: scot.mygov.housing:housing-data
     mirror: git@github.com:scottishgovernment/housing-data.git
 
+  - name: Jolokia
+    repo: jolokia
+    type: java
+    site: both
+    artifacts:
+      jolokia:
+        hosts:
+          - pubapp01
+          - sitapp01
+        maven: scot.mygov.upstream.jolokia:jolokia-deb
+
   - name: Json2csv
     repo: json2csv
     type: node
