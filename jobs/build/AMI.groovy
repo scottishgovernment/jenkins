@@ -26,17 +26,18 @@ def build(site) {
                     -var site=${site} \\
                     templates/aws.json
 
-                status=$(mktemp)
-                trap 'rm -f "$status"' 0
+                status_file=$(mktemp)
+                trap 'rm -f "$status_file"' 0
                 (packer build \
                     -machine-readable \\
                     -var ami_name=${site}-${override:-$BUILD_ID} \\
                     -var site=${site} \\
                     templates/aws.json || \\
-                    printf "$?" > "$status") | \\
+                    printf "$?" > "$status_file") | \\
                 tee build.log
-                if [ -f "$status" ]; then
-                    exit "$(cat "$status")"
+                status="$(cat "$status_file")"
+                if [ -n "$status" ]; then
+                    exit "$status"
                 fi
 
                 ami_id=$(awk -F, '$5=="id" {sub("[a-z0-9-]*:", "", $6); print $6; exit;}' build.log)
