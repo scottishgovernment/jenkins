@@ -25,10 +25,20 @@ def build(site) {
                     -var ami_name=${site}-${override:-$BUILD_ID} \\
                     -var site=${site} \\
                     templates/aws.json
-                packer build \\
+
+                status=$(mktemp)
+                trap 'rm -f "$status"' 0
+                (packer build \
+                    -machine-readable \\
                     -var ami_name=${site}-${override:-$BUILD_ID} \\
                     -var site=${site} \\
-                    templates/aws.json -machine-readable | tee build.log
+                    templates/aws.json || \\
+                    printf "$?" > "$status") | \\
+                tee build.log
+                if [ -f "$status" ]; then
+                    exit "$(cat "$status")"
+                fi
+
                 ami_id=$(awk -F, '$5=="id" {sub("[a-z0-9-]*:", "", $6); print $6; exit;}' build.log)
 
                 echo '{}' | jq ".artifactId=\\"${site}\\"
