@@ -19,7 +19,7 @@ redapp="devops@${env}redapp01.${domain}"
 ssh "$pubapp" "dbrestoreurl=${dbrestoreurl}" /bin/sh -eu <<'EOF'
 dbs=$(ls .credentials | egrep -v template1)
 for db in $dbs; do
-  dbfrom="${dbrestoreurl}/${db}.gz"
+  dbfrom="${dbrestoreurl}/${db}.zst"
   echo "Restoring ${db} from ${dbfrom}"
   import_db.sh "$dbfrom" "$db" >> "/tmp/${db}.log"
   echo
