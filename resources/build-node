@@ -8,10 +8,15 @@ git update-ref --no-deref HEAD HEAD
 
 checksum=node_modules/.npm
 if [ ! -e "$checksum" ] || ! sha1sum --status -c "$checksum" ; then
+  if [ -f package-lock.json ]; then
+    lock_file=package-lock.json
+  else
+    lock_file=npm-shrinkwrap.json
+  fi
   mkdir -p node_modules
   npm prune &&
     npm install &&
-    sha1sum package.json npm-shrinkwrap.json > "$checksum"
+    sha1sum package.json "$lock_file" > "$checksum"
 fi
 
 install_latest() {
