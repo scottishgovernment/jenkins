@@ -182,7 +182,6 @@ jobs:
     repo: pattern-library
     version: 0.0.${BUILD_ID}
     type: node
-    publish: false
     sonar: false
     npmjs: true
     mirror: git@github.com:scottishgovernment/pattern-library.git

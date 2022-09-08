@@ -29,7 +29,6 @@ class NodeProject extends MyGovProject {
           repo: repo,
           version: version,
           debian: debian,
-          publish: publish || npmjs,
           local: publish,
           npmjs: npmjs,
         ]
