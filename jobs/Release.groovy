@@ -168,13 +168,20 @@ sites.collect { site ->
         }
     }
 
-    view << job("${site.id}-prerelease-rollback") {
+    view << job("${site.id}-rollback") {
         displayName("Make ${site.name} environment read-write")
         description(trim("""\
           Allow changes on production environment and enable monitoring notifications.
 
           This job can be used if a release needs to be cancelled between running the
           "Make ${site.name} environment read-only" and the blue/green switch job.
+
+          This job can also be used if a release needs to be rolled back after the
+          blue/green switch job has run but before the teardown of the old production
+          environment. To rollback a release, run this job on the offline environment
+          (the environment to rollback to), and run the blue/green switch, selecting
+          the same environment. Note that rolling back a release will result in a loss
+          of any changes or new data since the release.
         """))
         def productionEnvironments = site.environments
             .grep { it.perform }
