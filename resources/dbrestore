@@ -30,7 +30,6 @@ ssh "$fbkapp" "dbrestoreurl=${dbrestoreurl}" /bin/sh -eu <<'EOF'
 echo "Restoring feedback from ${dbrestoreurl}"
 import_mongo.sh "$dbrestoreurl" feedback.gz
 restore-couch feedback
-migrate-feedback
 EOF
 
 ssh "$redapp" /bin/sh -eu <<'EOF'
