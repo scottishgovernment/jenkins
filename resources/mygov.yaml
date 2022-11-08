@@ -56,7 +56,7 @@ jobs:
   - name: Hippo plugins
     repo: hippo-govscot
     type: java
-    snapshot: 'hippo-govscot-hst,hippo-govscot-hst-funnelback,hippo-govscot-hst-staging,hippo-govscot-platform-funnelback,hippo-govscot-platform-staging,hippo-govscot-cms-funnelback,hippo-govscot-cms-staging'
+    snapshot: 'hippo-govscot-hst,hippo-govscot-funnelback-hst,hippo-govscot-funnelback-cms,hippo-govscot-funnelback-repository,hippo-govscot-staging-hst,hippo-govscot-staging-cms,hippo-govscot-staging-repository'
 
   - name: CSP Report
     repo: csp-report
