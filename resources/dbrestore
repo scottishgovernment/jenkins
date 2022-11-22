@@ -26,9 +26,8 @@ for db in $dbs; do
 done
 EOF
 
-ssh "$fbkapp" "dbrestoreurl=${dbrestoreurl}" /bin/sh -eu <<'EOF'
-echo "Restoring feedback from ${dbrestoreurl}"
-import_mongo.sh "$dbrestoreurl" feedback.gz
+ssh "$fbkapp" /bin/sh -eu <<'EOF'
+echo "Restoring feedback"
 restore-couch feedback
 EOF
 
