@@ -22,7 +22,7 @@ def void slack(def PublisherContext delegate) {
 
 // define vars for conditional triggering based on environment
 def env = System.getenv()
-def myenv = env['FACTER_machine_env']
+def myenv = env['ENVIRONMENT']
 def enabled = myenv == "services"
 
 
