@@ -261,8 +261,3 @@ jobs:
     site: both
     debian: rubric-site
     maven: org.mygovscot:publishing-site
-
-  - name: Utils
-    repo: mygovscot_utils
-    type: java
-    snapshot: ''
