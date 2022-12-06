@@ -31,7 +31,11 @@ def build(dsl) {
                        }
                        actions {
                             String version = '1.0.${PROMOTED_ID}'
-                            shell("pipeline deploy:pipeline,${version},build sync")
+                            shell("""\
+                                pipeline deploy:pipeline,${version},local
+                                pipeline promote:local,services,pipeline
+                                pipeline sync
+                            """.stripIndent())
                             shell(dsl.readFileFromWorkspace('resources/pipeline-deploy.sh'))
                        }
                   }
@@ -71,6 +75,12 @@ def build(dsl) {
                        actions {
                             String version = '1.0.${PROMOTED_ID}'
                             shell("pipeline deploy:repo-clean,${version},build sync")
+                            shell("""\
+                                pipeline deploy:repo-clean,${version},local
+                                pipeline promote:local,services,pipeline
+                                pipeline promote:local,build,pipeline
+                                pipeline sync
+                            """.stripIndent())
                             shell(dsl.readFileFromWorkspace('resources/repo-clean-deploy'))
                        }
                   }
