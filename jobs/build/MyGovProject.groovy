@@ -71,6 +71,7 @@ class MyGovProject {
                     branch('refs/heads/master')
                 }
             }
+            jdk('openjdk-8')
             steps {
                 build(delegate)
                 if (mirror) {
