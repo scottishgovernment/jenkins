@@ -1,13 +1,4 @@
 jobs:
-  - name: Amphora
-    repo: amphora
-    type: java
-    snapshot: amphora-client
-    host: pubapp01
-    site: both
-    debian: amphora
-    maven: scot.mygov.amphora:amphora-deb
-
   - name: Authentication
     repo: basic-authentication
     type: java
