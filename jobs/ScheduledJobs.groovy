@@ -1,5 +1,6 @@
 import org.yaml.snakeyaml.Yaml
 import javaposse.jobdsl.dsl.helpers.publisher.PublisherContext
+import javaposse.jobdsl.dsl.jobs.WorkflowJob
 
 import static build.Utils.trim
 import static build.Utils.awsRepo
@@ -25,6 +26,17 @@ def env = System.getenv()
 def myenv = env['ENVIRONMENT']
 def enabled = myenv == "services"
 
+def pipelineTriggerCron(WorkflowJob delegate, String value) {
+    delegate.properties {
+        pipelineTriggers {
+            triggers {
+                cron {
+                    spec(value)
+                }
+            }
+        }
+    }
+}
 
 jobs << pipelineJob('scheduled-build-dev-envs') {
     displayName('Scheduled Build Dev Environments')
@@ -32,9 +44,7 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
         daysToKeep(90)
     }
     if (enabled) {
-        triggers {
-           cron('00 07 * * 1-5')
-        }
+        pipelineTriggerCron(delegate, '00 07 * * 1-5')
     }
     definition {
       cps {
@@ -67,9 +77,7 @@ jobs << pipelineJob('scheduled-teardown-dev-envs') {
         daysToKeep(90)
     }
     if (enabled) {
-        triggers {
-           cron('0 18 * * 1-5')
-        }
+        pipelineTriggerCron(delegate, '0 18 * * 1-5')
     }
     definition {
       cps {
@@ -98,9 +106,7 @@ jobs << pipelineJob('scheduled-teardown-exp-envs') {
         daysToKeep(90)
     }
     if (enabled) {
-        triggers {
-           cron('0 18 * * 1-5')
-        }
+        pipelineTriggerCron(delegate, '0 18 * * 1-5')
     }
     definition {
       cps {
@@ -304,9 +310,7 @@ jobs << pipelineJob('scheduled-run-integration') {
         daysToKeep(90)
     }
     if (enabled) {
-        triggers {
-           cron('00 07 * * 1-5')
-        }
+        pipelineTriggerCron(delegate, '00 07 * * 1-5')
     }
     definition {
       cps {
