@@ -11,6 +11,10 @@ def build(site) {
     dsl.job(id + '-release-perform') {
         displayName("Perform ${domain} release")
 
+        logRotator {
+            daysToKeep(365)
+        }
+
         parameters {
             choiceParam('env', prod, "${domain} production environment")
             stringParam('override', '',

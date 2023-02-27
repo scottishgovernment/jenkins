@@ -8,6 +8,9 @@ def build(site) {
 
     dsl.job(id + '-release-prepare') {
         displayName("Prepare ${site.domain} release")
+        logRotator {
+            daysToKeep(365)
+        }
         steps {
             shell("pipeline prepare:${test},scot.mygov.release,${artifact},\${BUILD_ID}")
         }

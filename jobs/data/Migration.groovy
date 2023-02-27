@@ -7,14 +7,14 @@ def build(site, envs) {
 
         displayName("Migrate ${site.id} content")
 
+        logRotator {
+            daysToKeep(90)
+        }
+
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
             booleanParam('background', true, 'Use false to hog a jenkins executor')
             choiceParam('host', ['pubapp01', 'pubapp02'], 'host to run on')
-        }
-
-        logRotator {
-            daysToKeep(90)
         }
 
         steps {

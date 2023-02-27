@@ -5,6 +5,11 @@ import static build.Utils.awsRepo
 def build(site, List<String> envs) {
     dsl.job("copy-s3-${site.id}") {
         displayName("Restore S3 data for ${site.domain}")
+
+        logRotator {
+            daysToKeep(90)
+        }
+
         parameters {
             choiceParam('env', envs, 'Environment to which production S3 data is copied')
         }

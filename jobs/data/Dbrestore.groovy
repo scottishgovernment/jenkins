@@ -7,12 +7,18 @@ def build(site, List<String> envs) {
 
         displayName("Restore data for ${site.domain}")
 
+        logRotator {
+            daysToKeep(90)
+        }
+
         parameters {
             choiceParam('env', envs, 'Environment to which production data is copied')
         }
+
         scm {
             awsRepo(delegate)
         }
+
         steps {
           // Restore S3 bucket
           shell("tools/s3_restore ${site.domain} \${env}")
@@ -25,5 +31,6 @@ def build(site, List<String> envs) {
         publishers {
             buildDescription('', '${env}')
         }
+
     }
 }

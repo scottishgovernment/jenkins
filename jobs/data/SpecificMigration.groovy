@@ -13,16 +13,16 @@ def build(site) {
 
         displayName("Run Specific Migration on ${site.id} content")
 
+        logRotator {
+            daysToKeep(90)
+        }
+
         parameters {
             choiceParam('env', envs, "${site.domain} environment")
             booleanParam('background', true, 'Use false to hog a jenkins executor')
             choiceParam('host', ['pubapp01', 'pubapp02'], 'host to run on')
             stringParam('migrations', '',
                     "Enter the specific migration you wish to run (case sensitive) eg. Mygov")
-        }
-
-        logRotator {
-            daysToKeep(90)
         }
 
         steps {
