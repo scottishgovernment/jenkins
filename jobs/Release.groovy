@@ -15,6 +15,11 @@ view << job('blue-green-switch') {
     script << 'tools/mygov-switch ${env}\n'
 
     displayName('Blue-Green Switch')
+
+    logRotator {
+        daysToKeep(365)
+    }
+
     parameters {
         choiceParam('env', ['blu', 'grn'], 'mygov.scot production environment')
     }
@@ -36,6 +41,11 @@ view << job('bgv-ggv-govscot-switch') {
     script << 'tools/gov-switch ${env}\n'
 
     displayName('Blue-Green Switch Gov.scot')
+
+    logRotator {
+        daysToKeep(365)
+    }
+
     parameters {
         choiceParam('env', ['bgv', 'ggv'], 'gov.scot production environment')
     }
