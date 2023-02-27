@@ -81,6 +81,7 @@ jobs:
     site: both
     debian: feedback
     maven: org.mygovscot.feedback:feedback-deb
+    mirror: git@github.com:scottishgovernment/feedback.git
 
   - name: Fetchor
     repo: fetchor
