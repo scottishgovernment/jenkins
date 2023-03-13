@@ -44,6 +44,9 @@ class MyGovProject {
     /* Remote git repository to push to after a successful build */
     String mirror
 
+    /* JDK version - name of JDK in Jenkins Global Tool Configuration */
+    String jdk = 'openjdk-8'
+
     Job build(DslFactory dslFactory, sites, out) {
         this.dsl = dslFactory
         this.sites = sites
@@ -71,7 +74,7 @@ class MyGovProject {
                     branch('refs/heads/master')
                 }
             }
-            jdk('openjdk-8')
+            jdk(this.jdk)
             steps {
                 build(delegate)
                 if (mirror) {

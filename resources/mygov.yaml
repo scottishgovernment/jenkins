@@ -77,6 +77,7 @@ jobs:
   - name: Feedback
     repo: feedback
     type: java
+    jdk: openjdk-11
     host: fbkapp01
     site: both
     debian: feedback

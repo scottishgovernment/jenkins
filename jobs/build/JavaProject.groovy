@@ -21,7 +21,8 @@ class JavaProject extends MyGovProject {
         def script = compiled.execute([
             version: version,
             repo: repo,
-            snapshot: snapshot
+            snapshot: snapshot,
+            sonarCompatibleJdk: this.jdk != 'openjdk-8'
         ])
 
         delegate.shell(script)
