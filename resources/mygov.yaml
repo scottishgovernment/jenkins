@@ -158,6 +158,7 @@ jobs:
   - name: Migration
     repo: migration
     type: java
+    jdk: openjdk-11
     host: pubapp01
     site: both
     debian: migration
