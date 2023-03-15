@@ -82,15 +82,3 @@ listView('Builds') {
         buildButton()
     }
 }
-
-buildMonitorView('Dashboard') {
-    statusFilter(StatusFilter.ENABLED)
-    delegate.jobs {
-        dashboard.each {
-            name(it.name)
-        }
-    }
-    configure { view ->
-        view / title('Builds')
-    }
-}
