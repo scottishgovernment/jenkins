@@ -55,7 +55,7 @@ git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
 npm publish --registry=http://nexus/repository/npm/
 {{/local}}
 {{#npmjs}}
-npm --userconfig ~/npmjs.npmrc publish --access public
+npm publish --registry=https://registry.npmjs.com/ --access public
 {{/npmjs}}
 
 {{#debian}}
