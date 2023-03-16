@@ -333,10 +333,12 @@ jobs << job('layout-tests') {
 
     publishers {
         buildDescription('', '$site $target_platform - $test_env', '', '$site $target_platform - $test_env')
+        /*
         archiveTestNG('reports/**/xml/*.xml'){
           showFailedBuildsInTrendGraph()
           markBuildAsFailureOnFailedConfiguration()
         }
+        */
         publishHtml {
              report("reports/www/mygov/html") {
                   reportName("MyGov Site HTML Report")
