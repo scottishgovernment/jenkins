@@ -358,25 +358,6 @@ jobs << job('layout-tests') {
     }
 }
 
-jobs << job('security-tests') {
-    displayName('Security Tests')
-     parameters {
-        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'dgv', 'igv', 'egv', 'pgv'], 'The test environment to be used')
-    }
-    logRotator {
-        daysToKeep(60)
-    }
-    scm {
-        git(repo('beta-security-tests'))
-    }
-    steps {
-        shell(trim('''\
-            cd SSL-Automated-Security-Tests
-            ./AutomatedSSLSecurityTests.sh -e ${test_env}
-        '''))
-    }
-}
-
 jobs << pipelineJob('integration-test-mygov') {
     displayName('Integration Test Mygov')
     logRotator {
