@@ -12,7 +12,7 @@ mvn -B versions:set versions:use-latest-versions \
 git commit -am "Set version to ${version}"
 git tag -a -m "Build ${version}" ${version}
 
-git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
+git push --tags origin "${version}"
 {{#sonarCompatibleJdk}}
 mvn -B -Prelease deploy sonar:sonar
 {{/sonarCompatibleJdk}}

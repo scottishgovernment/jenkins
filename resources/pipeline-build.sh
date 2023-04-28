@@ -4,7 +4,7 @@ version=1.0.${BUILD_ID}
 git clean -fdx
 ./build -v $version
 git tag -a -m "Build ${version}" ${version}
-git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
+git push --tags origin "${version}"
 mvn deploy:deploy-file \
   --batch-mode \
   -Dfile=pipeline_${version}_all.deb \

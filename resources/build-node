@@ -49,7 +49,7 @@ if [ -x build ]; then
 fi
 
 git tag -a -m "Build ${version}" ${version}
-git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
+git push --tags origin "${version}"
 
 {{#local}}
 npm publish --registry=http://nexus/repository/npm/

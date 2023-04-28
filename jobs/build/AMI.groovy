@@ -18,7 +18,7 @@ def build(site) {
                 git clean -fdx
                 git update-ref --no-deref HEAD HEAD
                 git tag -a -m "Build ${version}" ${version}
-                git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
+                git push --tags origin "${version}"
 
                 export PACKER_NO_COLOR=true
                 packer validate \\

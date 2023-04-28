@@ -22,7 +22,7 @@ def build() {
                 version="1.0.${BUILD_ID}"
 
                 git tag -a -m "Build ${version}" ${version}
-                git push --tags ssh://git@stash.digital.gov.uk:7999/mgv/${repo}.git "${version}"
+                git push --tags origin "${version}"
 
                 aws s3 sync $WORKSPACE/ s3://mgs-infrastructure/CloudFormationTemplates/
             '''))
