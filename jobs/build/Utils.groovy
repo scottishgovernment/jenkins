@@ -6,7 +6,7 @@ import java.util.regex.*
 class Utils {
 
     static def repo(name) {
-        return "ssh://git@stash.digital.gov.uk:7999/mgv/" + name + ".git"
+        return "ssh://git@git.digital.gov.uk/mgv/" + name + ".git"
     }
 
     static def slug(text) {
