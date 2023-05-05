@@ -188,18 +188,18 @@ jobs << job('backup-confluence') {
 
 }
 
-jobs << job('backup-stash') {
-    displayName('Backup Bitbucket')
+jobs << job('backup-git') {
+    displayName('Backup Git')
     logRotator {
         daysToKeep(90)
     }
     if (enabled) {
         triggers {
-            cron('00 04 * * 1-5')
+            cron('00 21 * * 1-5')
         }
     }
     steps {
-      shell(readFileFromWorkspace('resources/backup-bitbucket.sh'))
+      shell('ssh git@git.digital.gov.uk backup offline')
     }
     publishers {
         slack(delegate)
