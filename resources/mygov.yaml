@@ -24,6 +24,7 @@ jobs:
   - name: Business Rates
     repo: business-rates-service
     type: java
+    jdk: openjdk-11
     host: sitapp01
     site: mygov
     debian: business-rates
