@@ -62,6 +62,7 @@ jobs:
   - name: Decommission Tool
     repo: decommission-tool
     type: java
+    jdk: openjdk-11
     host: pubapp01
     site: mygov
     debian: decommission-tool
