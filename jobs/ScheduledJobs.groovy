@@ -44,7 +44,7 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
         daysToKeep(90)
     }
     if (enabled) {
-        pipelineTriggerCron(delegate, '00 07 * * 1-5')
+        pipelineTriggerCron(delegate, '15 07 * * 1-5')
     }
     definition {
       cps {
@@ -53,14 +53,14 @@ jobs << pipelineJob('scheduled-build-dev-envs') {
             stage('Build') {
                 def envs = ['dgv': 'gov', 'dev': 'mygov']
                 def tasks = envs.collectEntries { name, site ->
-                job = {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                        build job: "${site}-${name}", parameters: [
-                            string(name: 'action', value: 'build')
-                        ]
+                    job = {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                            build job: "${site}-${name}", parameters: [
+                                string(name: 'action', value: 'build')
+                            ]
+                        }
                     }
-                }
-                [name, job]
+                    [name, job]
                 }
                 parallel tasks
             }
