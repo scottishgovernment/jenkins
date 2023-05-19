@@ -48,7 +48,7 @@ sites.each { site ->
             script << trim('''\
                 ./build
 
-                if [ "$FACTER_machine_env" = "services" ]; then
+                if [ "$ENVIRONMENT" = "services" ]; then
                   aws s3 sync --no-progress --delete _site/ s3://$domain
                 fi
                 '''.stripIndent())
