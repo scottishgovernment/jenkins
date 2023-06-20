@@ -74,11 +74,9 @@ def build(dsl) {
                        }
                        actions {
                             String version = '1.0.${PROMOTED_ID}'
-                            shell("pipeline deploy:repo-clean,${version},build sync")
                             shell("""\
                                 pipeline deploy:repo-clean,${version},local
-                                pipeline promote:local,services,pipeline
-                                pipeline promote:local,build,pipeline
+                                pipeline promote:local,services,repo-clean
                                 pipeline sync
                             """.stripIndent())
                             shell(dsl.readFileFromWorkspace('resources/repo-clean-deploy'))
