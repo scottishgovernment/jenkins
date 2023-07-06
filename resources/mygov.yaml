@@ -2,6 +2,7 @@ jobs:
   - name: Authentication
     repo: basic-authentication
     type: java
+    jdk: openjdk-11
     snapshot: 'authentication-api,authentication-client,authentication-spring'
     host: pubapp01
     site: both
