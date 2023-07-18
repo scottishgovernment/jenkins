@@ -169,25 +169,6 @@ jobs << job('backup-jira') {
     }
 }
 
-jobs << job('backup-confluence') {
-    displayName('Backup Confluence')
-    logRotator {
-        daysToKeep(90)
-    }
-    if (enabled) {
-        triggers {
-            cron('00 03 * * 1-5')
-        }
-    }
-    steps {
-        shell(readFileFromWorkspace('resources/backup-confluence.sh'))
-    }
-    publishers {
-        slack(delegate)
-    }
-
-}
-
 jobs << job('backup-git') {
     displayName('Backup Git')
     logRotator {
