@@ -17,7 +17,6 @@ class Site {
 }
 
 def sites = [
-    new Site('design-system-site', 'Design System', 'designsystem.gov.scot'),
     new Site('resources', 'Resources', 'resources.mygov.scot'),
 ]
 
