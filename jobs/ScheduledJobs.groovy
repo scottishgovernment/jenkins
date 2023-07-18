@@ -205,26 +205,6 @@ jobs << job('backup-sonar') {
     }
 }
 
-jobs << job('macfs-backup') {
-    displayName('MacFS Backup')
-    logRotator {
-        daysToKeep(90)
-    }
-    if (enabled) {
-        triggers {
-            cron('00 05 * * 1-5')
-        }
-    }
-    steps {
-        shell(trim('''\
-        ssh -o StrictHostKeyChecking=no devops@macfs "sudo -iu macfsbackup sudo aws s3 sync --delete /opt/shared/ s3://macfs-backup/shared/"
-        '''))
-    }
-    publishers {
-        slack(delegate)
-    }
-}
-
 jobs << job('backup-repo') {
     displayName('Backup Repo')
     logRotator {
