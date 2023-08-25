@@ -404,21 +404,21 @@ jobs << pipelineJob('integration-test-mygov') {
                 }
             }
 
+            stage('mygov-webe2e') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'mygov-e2e-mygov', parameters: [
+                        string(name: 'env', value: 'int'),
+                        string(name: 'smoke_only', value: 'false')
+                    ]
+                }
+            }
+
             stage('mygov-pube2e') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'mygov-e2e-rubric',
                     parameters: [
                         string(name: 'env', value: 'int'),
                         string(name: 'smoke_only', value: 'true')
-                    ]
-                }
-            }
-
-            stage('mygov-webe2e') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'mygov-e2e-mygov', parameters: [
-                        string(name: 'env', value: 'int'),
-                        string(name: 'smoke_only', value: 'false')
                     ]
                 }
             }
