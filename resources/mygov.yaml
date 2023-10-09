@@ -177,14 +177,6 @@ jobs:
     debian: mygov-forms
     maven: scot.mygov.form:mygov-forms-deb
 
-  - name: Pattern Library
-    repo: pattern-library
-    version: 0.0.${BUILD_ID}
-    type: node
-    sonar: false
-    npmjs: true
-    mirror: git@github.com:scottishgovernment/pattern-library.git
-
   - name: Payment
     repo: payment
     type: java
