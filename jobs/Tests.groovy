@@ -307,6 +307,38 @@ jobs << job('end-to-end-tests') {
     }
 }
 
+jobs << job('webdriverio-mygov-tests') {
+    displayName('Webdriver mygov tests')
+    parameters {
+        choiceParam('site', ["mygov", "tradingnation"], 'use this option to select tests for mygov.scot or trading nation')
+        choiceParam('testenv', ["int", "exp"], 'Use this option to select test environment against which tests shall be executed (only int and exp available for now)')
+        stringParam('tests', 'webE2E', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E')
+    }
+    logRotator {
+        daysToKeep(60)
+    }
+    scm {
+        git(repo('end-to-end-tests'), 'main')
+    }
+    steps {
+        shell(trim('''\
+            ./run.sh -s ${site} -t ${tests} -e ${testenv}
+        '''))
+    }
+    publishers {
+        buildDescription('', '$site - $testenv -$tests', '', '$site - $testenv - $tests')
+        publishHtml {
+             report("reports/html-reports/") {
+                  reportName("MyGov Site HTML Report")
+                  reportFiles("master-report.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+        }
+    }
+}
+
 jobs << job('layout-tests') {
     displayName('Layout Tests')
     parameters {
