@@ -151,24 +151,6 @@ jobs << job('backup-production-s3-buckets') {
     }
 }
 
-jobs << job('backup-jira') {
-    displayName('Backup JIRA')
-    logRotator {
-        daysToKeep(90)
-    }
-    if (enabled) {
-        triggers {
-            cron('00 03 * * 1-5')
-        }
-    }
-    steps {
-        shell(readFileFromWorkspace('resources/backup-jira.sh'))
-    }
-    publishers {
-        slack(delegate)
-    }
-}
-
 jobs << job('backup-git') {
     displayName('Backup Git')
     logRotator {
