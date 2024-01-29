@@ -322,7 +322,7 @@ jobs << job('webdriverio-mygov-tests') {
     }
     steps {
         shell(trim('''\
-            ./run.sh -s ${site} -t ${tests} -e ${testenv}
+            ./run.sh -m jenkins -s ${site} -t ${tests} -e ${testenv}
         '''))
     }
     publishers {
