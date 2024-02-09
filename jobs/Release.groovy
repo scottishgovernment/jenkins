@@ -210,16 +210,6 @@ sites.collect { site ->
         }
     }
 
-    view << job("${site.id}-index-backup") {
-        displayName("Backup ${site.id} hippo index")
-        scm {
-            awsRepo(delegate)
-        }
-        steps {
-            shell("tools/backup-index ${site.id}")
-        }
-    }
-
 }
 
 view << job('sync-repo') {
