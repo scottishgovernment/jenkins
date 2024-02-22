@@ -23,5 +23,5 @@ JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 mvn -B -Prelease sonar:sonar
 
 {{#snapshot}}
 git checkout HEAD^
-mvn -B source:jar deploy -DskipTests {{#snapshot}}-am -pl {{snapshot}}{{/snapshot}}
+mvn -B source:jar deploy -DskipTests {{^snapshotAll}}-am -pl {{snapshot}}{{/snapshotAll}}
 {{/snapshot}}

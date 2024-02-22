@@ -52,7 +52,7 @@ jobs:
     repo: hippo-govscot
     type: java
     jdk: openjdk-11
-    snapshot: 'hippo-govscot-hst,hippo-govscot-funnelback-hst,hippo-govscot-funnelback-cms,hippo-govscot-funnelback-repository,hippo-govscot-staging-hst,hippo-govscot-staging-cms,hippo-govscot-staging-repository'
+    snapshot: '*'
 
   - name: CSP Report
     repo: csp-report
