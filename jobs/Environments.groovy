@@ -61,6 +61,7 @@ sites.collect { site ->
     def envNames = site.environments.collect { it.name }
     def jobs = []
     jobs << ami.build(site)
+    jobs << checker.build(site, envNames)
     jobs << promotion.build(site, envNames)
     jobs << dbrestore.build(site, envNames)
     jobs << restore.build(site, envNames)
@@ -78,7 +79,6 @@ sites.collect { site ->
         jobs << endtoend.build(site.id, 'tradingnation', envNames)
     } else if (site.id == 'gov') {
         jobs << endtoend.build(site.id, 'gov', envNames)
-        jobs << checker.build(site, envNames)
     }
     jobs << perceptual.build(site.id, envNames)
 
