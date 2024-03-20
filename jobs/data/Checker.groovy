@@ -18,7 +18,10 @@ def build(site, List<String> envs) {
         }
 
         steps {
-          shell(dsl.readFileFromWorkspace('resources/checker'))
+            def script = StringBuilder.newInstance()
+            script << "domain=${site.domain}\n"
+            script << dsl.readFileFromWorkspace('resources/checker')
+            shell(script.toString())
         }
 
         publishers {
