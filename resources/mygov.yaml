@@ -37,7 +37,7 @@ jobs:
     type: java
     jdk: openjdk-11
     host: pubapp01
-    site: gov
+    site: both
     debian: checker
     maven: scot.gov.hippo:checker-deb
     mirror: git@github.com:scottishgovernment/hippo-checker.git
