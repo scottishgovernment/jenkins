@@ -327,6 +327,7 @@ jobs << job('webdriverio-mygov-tests') {
     }
     publishers {
         buildDescription('', '$site - $testenv -$tests', '', '$site - $testenv - $tests')
+        archiveJunit("reports/junit/results-*.xml");
         publishHtml {
              report("reports/html-reports/") {
                   reportName("MyGov Site HTML Report")
@@ -441,6 +442,15 @@ jobs << pipelineJob('integration-test-mygov') {
                     build job: 'mygov-e2e-mygov', parameters: [
                         string(name: 'env', value: 'int'),
                         string(name: 'smoke_only', value: 'false')
+                    ]
+                }
+            }
+            stage('mygov-end-to-end') {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                    build job: 'webdriverio-mygov-tests', parameters: [
+                        string(name: 'site', value: 'mygov'),
+                        string(name: 'testenv', value: 'int'),
+                        string(name: 'tests', value: 'webe2e')
                     ]
                 }
             }
