@@ -340,6 +340,38 @@ jobs << job('webdriverio-mygov-tests') {
     }
 }
 
+jobs << job('webdriverio-gov-tests') {
+    displayName('Webdriver gov tests')
+    parameters {
+        choiceParam('testenv', ["igv", "egv"], 'Use this option to select test environment against which tests shall be executed (only igv and egv available for now)')
+        stringParam('tests', 'webE2E', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E')
+    }
+    logRotator {
+        daysToKeep(60)
+    }
+    scm {
+        git(repo('end-to-end-tests'), 'main')
+    }
+    steps {
+        shell(trim('''\
+            ./run.sh -m jenkins -s gov -t ${tests} -e ${testenv}
+        '''))
+    }
+    publishers {
+        buildDescription('', 'Gov - $testenv -$tests', '', 'Gov - $testenv - $tests')
+        archiveJunit("reports/junit/results-*.xml");
+        publishHtml {
+             report("reports/html-reports/") {
+                  reportName("Gov Site HTML Report")
+                  reportFiles("master-report.html")
+                  allowMissing()
+                  keepAll()
+                  alwaysLinkToLastBuild()
+             }
+        }
+    }
+}
+
 jobs << job('layout-tests') {
     displayName('Layout Tests')
     parameters {
