@@ -577,7 +577,7 @@ jobs << pipelineJob('integration-test-gov') {
             stage('gov-end-to-end') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'webdriverio-gov-tests', parameters: [
-                        string(name: 'testenv', value: 'int'),
+                        string(name: 'testenv', value: 'igv'),
                         string(name: 'tests', value: 'webe2e')
                     ]
                 }
