@@ -261,117 +261,6 @@ jobs << job('rubric-api-tests') {
     }
 }
 
-jobs << job('end-to-end-tests') {
-    displayName('End-to-end tests')
-    parameters {
-        choiceParam('site', ["mygov", "gov", "tradingnation"], 'use this option to select tests for mygov.scot, gov.scot or trading nation')
-        choiceParam('testenv', ["int", "exp", "per", "uat", "tst", "igv", "egv", "pgv", "ugv", "tgv"], 'Use this option to select test environment against which tests shall be executed')
-        choiceParam('mode', ['single', 'multi'], 'Use this option to run the tests only in Chrome (single) or on Chrome, Firefox and Safari (multi)')
-        choiceParam('smoke_only', ['false', 'true'], 'Use this option to ONLY run smoke tests')
-        stringParam('tests', 'webE2E', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E,pubE2E')
-    }
-    logRotator {
-        daysToKeep(60)
-    }
-    scm {
-        git(repo('beta-e2e'), 'master')
-    }
-    steps {
-        shell(trim('''\
-            if [ "\$smoke_only" = "true" ]; then
-                ./run.sh -s ${site} -m ${mode} -t ${tests} -e ${testenv} -k
-            else
-                ./run.sh -s ${site} -m ${mode} -t ${tests} -e ${testenv}
-            fi
-        '''))
-    }
-    publishers {
-        buildDescription('', '$site - $testenv -$tests', '', '$site - $testenv - $tests')
-        archiveJunit('reports/xml/*.xml')
-        publishHtml {
-             report("reports/e2e") {
-                  reportName("MyGov Site HTML Report")
-                  reportFiles("chrome-test-report.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-             report("reports/e2e") {
-                  reportName("Gov Site HTML Report")
-                  reportFiles("chrome-test-report.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-        }
-    }
-}
-
-jobs << job('webdriverio-mygov-tests') {
-    displayName('Webdriver mygov tests')
-    parameters {
-        choiceParam('site', ["mygov", "tradingnation"], 'use this option to select tests for mygov.scot or trading nation')
-        choiceParam('testenv', ["int", "exp"], 'Use this option to select test environment against which tests shall be executed (only int and exp available for now)')
-        stringParam('tests', 'webE2E', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E')
-    }
-    logRotator {
-        daysToKeep(60)
-    }
-    scm {
-        git(repo('end-to-end-tests'), 'main')
-    }
-    steps {
-        shell(trim('''\
-            ./run.sh -m jenkins -s ${site} -t ${tests} -e ${testenv}
-        '''))
-    }
-    publishers {
-        buildDescription('', '$site - $testenv -$tests', '', '$site - $testenv - $tests')
-        archiveJunit("reports/junit/results-*.xml");
-        publishHtml {
-             report("reports/html-reports/") {
-                  reportName("MyGov Site HTML Report")
-                  reportFiles("master-report.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-        }
-    }
-}
-
-jobs << job('webdriverio-gov-tests') {
-    displayName('Webdriver gov tests')
-    parameters {
-        choiceParam('testenv', ["igv", "egv"], 'Use this option to select test environment against which tests shall be executed (only igv and egv available for now)')
-        stringParam('tests', 'webE2E', 'Use this option to specify what tests to run. Enter a comma-separated (NO SPACES) list with any combination of these values: webE2E')
-    }
-    logRotator {
-        daysToKeep(60)
-    }
-    scm {
-        git(repo('end-to-end-tests'), 'main')
-    }
-    steps {
-        shell(trim('''\
-            ./run.sh -m jenkins -s gov -t ${tests} -e ${testenv}
-        '''))
-    }
-    publishers {
-        buildDescription('', 'Gov - $testenv -$tests', '', 'Gov - $testenv - $tests')
-        archiveJunit("reports/junit/results-*.xml");
-        publishHtml {
-             report("reports/html-reports/") {
-                  reportName("Gov Site HTML Report")
-                  reportFiles("master-report.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-        }
-    }
-}
-
 jobs << job('layout-tests') {
     displayName('Layout Tests')
     parameters {
@@ -469,20 +358,10 @@ jobs << pipelineJob('integration-test-mygov') {
                 }
             }
 
-            stage('mygov-webe2e') {
+            stage('mygov-end-to-end') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'mygov-e2e-mygov', parameters: [
                         string(name: 'env', value: 'int'),
-                        string(name: 'smoke_only', value: 'false')
-                    ]
-                }
-            }
-            stage('mygov-end-to-end') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'webdriverio-mygov-tests', parameters: [
-                        string(name: 'site', value: 'mygov'),
-                        string(name: 'testenv', value: 'int'),
-                        string(name: 'tests', value: 'webe2e')
                     ]
                 }
             }
@@ -497,11 +376,10 @@ jobs << pipelineJob('integration-test-mygov') {
                 }
             }
 
-            stage('tradingnation-webe2e') {
+            stage('tradingnation-end-to-end') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'mygov-e2e-tradingnation', parameters: [
                         string(name: 'env', value: 'int'),
-                        string(name: 'smoke_only', value: 'false')
                     ]
                 }
             }
@@ -565,20 +443,10 @@ jobs << pipelineJob('integration-test-gov') {
                 }
             }
             
-            stage('gov-webe2e') {
+            stage('gov-end-to-end') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'gov-e2e-gov', parameters: [
                         string(name: 'env', value: 'igv'),
-                        string(name: 'smoke_only', value: 'false')
-                    ]
-                }
-            }
-
-            stage('gov-end-to-end') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'webdriverio-gov-tests', parameters: [
-                        string(name: 'testenv', value: 'igv'),
-                        string(name: 'tests', value: 'webe2e')
                     ]
                 }
             }

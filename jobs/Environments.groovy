@@ -74,7 +74,6 @@ sites.collect { site ->
     jobs.addAll(vpc.build(site))
 
     if (site.id == 'mygov') {
-        jobs << endtoend.build(site.id, 'rubric', envNames)
         jobs << endtoend.build(site.id, 'mygov', envNames)
         jobs << endtoend.build(site.id, 'tradingnation', envNames)
     } else if (site.id == 'gov') {
