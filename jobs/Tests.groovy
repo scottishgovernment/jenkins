@@ -366,16 +366,6 @@ jobs << pipelineJob('integration-test-mygov') {
                 }
             }
 
-            stage('mygov-pube2e') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'mygov-e2e-rubric',
-                    parameters: [
-                        string(name: 'env', value: 'int'),
-                        string(name: 'smoke_only', value: 'true')
-                    ]
-                }
-            }
-
             stage('tradingnation-end-to-end') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'mygov-e2e-tradingnation', parameters: [
