@@ -38,6 +38,36 @@ def pipelineTriggerCron(WorkflowJob delegate, String value) {
     }
 }
 
+
+jobs << pipelineJob('scheduled-build-amis') {
+    displayName('Scheduled Build AMIs')
+    logRotator {
+        daysToKeep(90)
+    }
+    if (enabled) {
+        pipelineTriggerCron(delegate, '00 07 * * 2')
+    }
+    definition {
+      cps {
+        def pipeline = StringBuilder.newInstance()
+        pipeline << '''
+            stage('Build') {
+                def pipelines = ['gov', 'mygov']
+                def tasks = pipelines.collectEntries { name ->
+                    job = {
+                        build job: "${name}-ami"
+                    }
+                    [name, job]
+                }
+                parallel tasks
+            }
+        '''.stripIndent()
+        script(pipeline.toString())
+        sandbox()
+      }
+    }
+}
+
 jobs << pipelineJob('scheduled-build-dev-envs') {
     displayName('Scheduled Build Dev Environments')
     logRotator {
