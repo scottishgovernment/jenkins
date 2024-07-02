@@ -70,6 +70,7 @@ jobs:
     site: mygov
     debian: decommission-tool
     maven: org.mygovscot.decommission-tool:decommission-tool-deb
+    mirror: git@github.com:scottishgovernment/decommission-tool.git
 
   - name: Decommissioned Sites
     repo: decommissioned-sites
