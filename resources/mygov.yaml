@@ -2,7 +2,7 @@ jobs:
   - name: Authentication
     repo: basic-authentication
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     snapshot: 'authentication-api,authentication-client,authentication-spring'
     host: pubapp01
     site: both
@@ -20,6 +20,7 @@ jobs:
   - name: Beta Config
     repo: beta-config
     type: java
+    jdk: openjdk-17
     snapshot: .
 
   - name: Business Rates
