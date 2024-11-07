@@ -261,57 +261,6 @@ jobs << job('rubric-api-tests') {
     }
 }
 
-jobs << job('layout-tests') {
-    displayName('Layout Tests')
-    parameters {
-        choiceParam('site', ['mygov', 'gov'], 'Site to tests, either MyGov.scot or Gov.scot')
-        choiceParam('target_platform', ['www', 'pub'], 'To run the tests either on Informational Website or Publishing Platform')
-        choiceParam('test_env', ['int', 'dev', 'exp', 'per', 'uat', 'tst', 'blu', 'grn', 'dgv', 'igv', 'egv', 'pgv', 'ugv', 'tgv', 'bgv', 'ggv'], 'The test environment to be used')
-        choiceParam('browser', ['chrome', 'firefox', 'all'], 'Browser to test')
-        stringParam('webdriver_ip', '10.21.134.66', 'Use this option to specify the IP address of the machine running Selenium web driver')
-        stringParam('groups', '', 'Leave empty for all. MyGov - articlepage, corporghubpage, doccollectionpage, guidepage, homepage, orglistpage, searchpage; Gov - apspage, cabinetandministerspage, civilservicepage, directoratepage, featuredrolepage, grouppage, homepage, issuehubpage, newspage, nonapspage, policypage, publicationspage, rolepage, searchpage, topicpage, topicspage')
-    }
-    logRotator {
-        daysToKeep(60)
-    }
-    scm {
-        git(repo('beta-layout-tests'), 'master') {
-            clean(true)
-        }
-    }
-    steps {
-        shell(trim('''\
-            ./run.sh -s ${site} -t ${target_platform} -e ${test_env} -b ${browser} ${groups:+-g ${groups}} ${webdriver_ip:+-i ${webdriver_ip}}
-        '''))
-    }
-
-    publishers {
-        buildDescription('', '$site $target_platform - $test_env', '', '$site $target_platform - $test_env')
-        /*
-        archiveTestNG('reports/**/xml/*.xml'){
-          showFailedBuildsInTrendGraph()
-          markBuildAsFailureOnFailedConfiguration()
-        }
-        */
-        publishHtml {
-             report("reports/www/mygov/html") {
-                  reportName("MyGov Site HTML Report")
-                  reportFiles("index.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-             report("reports/www/gov/html") {
-                  reportName("Gov Site HTML Report")
-                  reportFiles("index.html")
-                  allowMissing()
-                  keepAll()
-                  alwaysLinkToLastBuild()
-             }
-        }
-    }
-}
-
 jobs << pipelineJob('integration-test-mygov') {
     displayName('Integration Test Mygov')
     logRotator {
