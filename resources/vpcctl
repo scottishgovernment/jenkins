@@ -82,7 +82,21 @@ build() {
   fi
 }
 
+live_environment() {
+  local live
+  live=$(dig +short txt "live.www.${domain}")
+  live=${live#\"}
+  live=${live%\"}
+  echo "$live"
+}
+
 teardown() {
+  local live_env
+  live_env=$(live_environment)
+  if [ "$env" = "$live_env" ]; then
+    echo "Refusing to tear down live environment"
+    return 1
+  fi
   resolve "$(vpc_version)"
   timestamp %teardown%
 }
