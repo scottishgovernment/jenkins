@@ -87,14 +87,6 @@ jobs << pipelineJob('integration-test-mygov') {
                 }
             }
 
-            stage('tradingnation-end-to-end') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'mygov-e2e-tradingnation', parameters: [
-                        string(name: 'env', value: 'int'),
-                    ]
-                }
-            }
-
             stage('teardown int') {
                 build job: 'mygov-int', parameters: [
                     string(name: 'action', value: 'teardown')
