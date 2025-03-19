@@ -74,7 +74,7 @@ sites.collect { site ->
     jobs.addAll(vpc.build(site))
 
     if (site.id == 'mygov') {
-        jobs << endtoend.build(site.id, 'publishing', envNames)
+        jobs << endtoend.build(site.id, 'mygov', envNames)
     } else if (site.id == 'gov') {
         jobs << endtoend.build(site.id, 'gov', envNames)
     }

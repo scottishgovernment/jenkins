@@ -81,7 +81,7 @@ jobs << pipelineJob('integration-test-mygov') {
 
             stage('mygov-end-to-end') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'mygov-e2e-publishing', parameters: [
+                    build job: 'mygov-e2e-mygov', parameters: [
                         string(name: 'env', value: 'int'),
                     ]
                 }
