@@ -4,7 +4,7 @@ import static build.Utils.repo
 import static build.Utils.trim
 
 def build(pipeline, site, envs) {
-    def e2eSite = site
+    def e2ePipeline = site
     def suite = 'webE2E'
 
     dsl.job("${pipeline}-e2e-${site}") {
@@ -27,7 +27,7 @@ def build(pipeline, site, envs) {
                       npm install &&
                       sha1sum package.json > "\$checksum"
                 fi
-                ./run.sh -m jenkins -s ${e2eSite} -t ${suite} -e "\$env"
+                ./run.sh -m jenkins -p ${e2ePipeline} -t ${suite} -e "\$env"
                 """))
         }
         publishers {
