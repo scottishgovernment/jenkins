@@ -10,6 +10,7 @@ def build(site, List<String> envs) {
         parameters {
             choiceParam('env', envs, 'Environment to run maintenance on')
             choiceParam('type', [
+                "clean",
                 "cleanvh",
                 "cleands"
             ], "The type of maintenance to perform")
