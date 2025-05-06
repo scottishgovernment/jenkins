@@ -9,8 +9,12 @@ if [ "$stop" = true ]; then
 fi
 set -- "$@" "$type"
 
-echo "Running \`$*\` on ${host}"
-echo 'Follow `syslog_program:checker` in Kibana for logs.'
+cat <<EOF
+Running \`$*\` on ${host}
+Follow \`syslog_program:checker\` in Kibana for logs.
+
+EOF
+set -x
 
 ssh "devops@${host}" \
   sudo systemd-run \

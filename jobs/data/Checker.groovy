@@ -19,9 +19,8 @@ def build(site, List<String> envs) {
         }
 
         steps {
-            def script = StringBuilder.newInstance()
-            script << "domain=${site.domain}\n"
-            script << dsl.readFileFromWorkspace('resources/checker')
+            def template = dsl.readFileFromWorkspace('resources/checker')
+            def script = template.replaceFirst("\n", "\ndomain=${site.domain}\n")
             shell(script.toString())
         }
 
