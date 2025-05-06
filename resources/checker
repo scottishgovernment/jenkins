@@ -1,15 +1,19 @@
 #!/bin/sh -eu
 
-cat <<'EOF'
-Starting maintenance.
-Follow `syslog_program: checker` in Kibana for logs.
-EOF
+host="${env}${host}.${env}.${domain}"
+progname=/opt/checker/checker
 
-ssh devops@${env}${host}.${env}.${domain} /bin/sh -eu <<EOS
-  exec </dev/null >&0 2>&1
-  (
-    [ "$stop" = true ] && sudo systemctl stop hippo || :
-    sudo -iu hippo /opt/checker/run ${type}
-    [ "$stop" = true ] && sudo systemctl start hippo || :
-  ) | logger -t checker &
-EOS
+set -- /opt/checker/checker
+if [ "$stop" = true ]; then
+  set -- "$@" "--stop"
+fi
+set -- "$@" "$type"
+
+echo "Running \`$*\` on ${host}"
+echo 'Follow `syslog_program:checker` in Kibana for logs.'
+
+ssh "devops@${host}" \
+  sudo systemd-run \
+    --unit=checker \
+    --collect \
+    "$@"
