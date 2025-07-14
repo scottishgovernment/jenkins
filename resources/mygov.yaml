@@ -46,7 +46,7 @@ jobs:
   - name: Config
     repo: config
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     snapshot: .
 
   - name: Hippo plugins
