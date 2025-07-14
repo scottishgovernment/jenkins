@@ -36,7 +36,7 @@ jobs:
   - name: Checker
     repo: hippo-checker
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     host: pubapp01
     site: both
     debian: checker
@@ -52,7 +52,7 @@ jobs:
   - name: Hippo plugins
     repo: hippo-govscot
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     snapshot: '*'
 
   - name: CSP Report
@@ -104,7 +104,7 @@ jobs:
   - name: Gov Scot
     repo: gov-scot
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     site: gov
     artifacts:
       gov-scot-cms:
@@ -168,7 +168,7 @@ jobs:
   - name: Migration
     repo: migration
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     host: pubapp01
     site: both
     debian: migration
@@ -195,7 +195,7 @@ jobs:
   - name: Press Releases
     repo: press-releases
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     host: pubapp01
     site: gov
     debian: press-releases
@@ -212,7 +212,7 @@ jobs:
   - name: Publications
     repo: publications
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     host: pubapp01
     site: gov
     debian: publications
@@ -222,7 +222,7 @@ jobs:
   - name: Publishing
     repo: publishing
     type: java
-    jdk: openjdk-11
+    jdk: openjdk-17
     site: mygov
     artifacts:
       publishing-cms:
