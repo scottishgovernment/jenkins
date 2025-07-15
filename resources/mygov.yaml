@@ -192,15 +192,6 @@ jobs:
     maven: scot.gov.publishing.payment:payment-deb
     mirror: git@github.com:scottishgovernment/payment.git
 
-  - name: Press Releases
-    repo: press-releases
-    type: java
-    jdk: openjdk-17
-    host: pubapp01
-    site: gov
-    debian: press-releases
-    maven: scot.mygov.pressreleases:pressreleases-deb
-
   - name: Proxette
     repo: proxette
     type: node
