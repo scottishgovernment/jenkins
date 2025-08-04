@@ -45,7 +45,7 @@ class MyGovProject {
     String mirror
 
     /* JDK version - name of JDK in Jenkins Global Tool Configuration */
-    String jdk = 'openjdk-8'
+    String jdk = 'openjdk-17'
 
     Job build(DslFactory dslFactory, sites, out) {
         this.dsl = dslFactory

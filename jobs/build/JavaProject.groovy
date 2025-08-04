@@ -22,8 +22,7 @@ class JavaProject extends MyGovProject {
             version: version,
             repo: repo,
             snapshot: snapshot,
-            snapshotAll: snapshot == '*',
-            sonarCompatibleJdk: this.jdk != 'openjdk-8'
+            snapshotAll: snapshot == '*'
         ])
 
         delegate.shell(script)
