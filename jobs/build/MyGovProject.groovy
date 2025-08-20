@@ -191,7 +191,7 @@ class MyGovProject {
             script << trim("""\
                 ssh devops@${env}${host} /bin/sh -eux <<EOS
                     sudo apt-get update \\
-                      -o Dir::Etc::sourcelist="sources.list.d/scotgov.list" \\
+                      -o Dir::Etc::sourcelist="sources.list.d/scotgov.sources" \\
                       -o Dir::Etc::sourceparts="-" \\
                       -o APT::Get::List-Cleanup="0"
                     sudo apt-get install \\
