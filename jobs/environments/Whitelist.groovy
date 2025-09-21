@@ -1,6 +1,7 @@
 package environments
 
 import static build.Utils.awsRepo
+import static build.Utils.usingAWS
 
 def build(site, List<String> envs) {
     dsl.job("whitelist-${site.id}") {
@@ -30,5 +31,6 @@ def build(site, List<String> envs) {
             shell('tools/whitelist "$env" "$resource" "$cidr"')
         }
 
+        usingAWS(delegate)
     }
 }

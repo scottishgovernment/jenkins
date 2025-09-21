@@ -2,6 +2,7 @@ package build
 
 import static build.Utils.repo
 import static build.Utils.trim
+import static build.Utils.usingAWS
 
 def build(site) {
     dsl.job("${site.id}-ami") {
@@ -82,5 +83,6 @@ def build(site) {
                 branch('refs/heads/master')
             }
         }
+        usingAWS(delegate)
     }
 }

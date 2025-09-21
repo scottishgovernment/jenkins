@@ -1,6 +1,7 @@
 package data
 
 import static build.Utils.awsRepo
+import static build.Utils.usingAWS
 
 def build(site, List<String> envs) {
     dsl.job("copy-s3-${site.id}") {
@@ -22,5 +23,6 @@ def build(site, List<String> envs) {
         publishers {
             buildDescription('', '${env}')
         }
+        usingAWS(delegate)
     }
 }

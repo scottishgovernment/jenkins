@@ -1,6 +1,7 @@
 package environments
 
 import static build.Utils.awsRepo
+import static build.Utils.usingAWS
 
 def build(site) {
     def list = []
@@ -55,5 +56,6 @@ def createJob(site, type, env, index) {
                 promotionProcessName('Default')
             })
         }
+        usingAWS(delegate)
     }
 }

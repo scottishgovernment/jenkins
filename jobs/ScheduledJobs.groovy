@@ -4,6 +4,7 @@ import javaposse.jobdsl.dsl.jobs.WorkflowJob
 
 import static build.Utils.trim
 import static build.Utils.awsRepo
+import static build.Utils.usingAWS
 
 def jobs = []
 def yaml = new Yaml().load(readFileFromWorkspace("resources/environments.yaml"))
@@ -179,6 +180,7 @@ jobs << job('backup-production-s3-buckets') {
             ./s3_restore gov.scot backup
         '''))
     }
+    usingAWS(delegate)
 }
 
 jobs << job('backup-git') {
@@ -251,6 +253,7 @@ jobs << job('backup-jenkins') {
     publishers {
         slack(delegate)
     }
+    usingAWS(delegate)
 }
 
 jobs << job('cleanup-builds') {

@@ -1,6 +1,7 @@
 package data
 
 import static build.Utils.trim
+import static build.Utils.usingAWS
 
 def build(site, List<String> envs) {
     def script = StringBuilder.newInstance()
@@ -32,5 +33,6 @@ def build(site, List<String> envs) {
         publishers {
             buildDescription('', '${env}')
         }
+        usingAWS(delegate)
     }
 }

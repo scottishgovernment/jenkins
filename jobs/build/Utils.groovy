@@ -1,5 +1,6 @@
 package build
 
+import javaposse.jobdsl.dsl.Project
 import javaposse.jobdsl.dsl.helpers.ScmContext
 import java.util.regex.*
 
@@ -41,4 +42,18 @@ class Utils {
             branch('refs/heads/master')
         }
     }
+
+    static def usingAWS(def Project delegate) {
+        delegate.wrappers {
+            credentialsBinding {
+                addExtensionNode(new NodeBuilder().'com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding' {
+                   credentialsId('aws')
+                    accessKeyVariable('AWS_ACCESS_KEY_ID')
+                    secretKeyVariable('AWS_SECRET_ACCESS_KEY')
+                    roleSessionDurationSeconds('0')
+                })
+            }
+        }
+    }
+
 }

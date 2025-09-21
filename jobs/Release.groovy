@@ -1,6 +1,7 @@
 import static build.Utils.repo
 import static build.Utils.trim
 import static build.Utils.awsRepo
+import static build.Utils.usingAWS
 
 import org.yaml.snakeyaml.Yaml
 
@@ -32,6 +33,7 @@ view << job('blue-green-switch') {
     publishers {
         buildDescription('', '$env')
     }
+    usingAWS(delegate)
 }
 
 view << job('bgv-ggv-govscot-switch') {
@@ -58,6 +60,7 @@ view << job('bgv-ggv-govscot-switch') {
     publishers {
         buildDescription('', '$env')
     }
+    usingAWS(delegate)
 }
 
 view << job('mygov-site-fail-trigger') {
@@ -79,6 +82,7 @@ view << job('mygov-site-fail-trigger') {
             ./mygov_sitefail_trigger ${env}
         '''))
     }
+    usingAWS(delegate)
 }
 
 view << job('gov-site-fail-trigger') {
@@ -100,6 +104,7 @@ view << job('gov-site-fail-trigger') {
               ./gov_sitefail_trigger ${env}
           '''))
       }
+    usingAWS(delegate)
 }
 
 
@@ -125,6 +130,7 @@ view << job('mygov-site-fail-recover') {
             ./mygov_sitefail_recover ${env}
             '''))
     }
+    usingAWS(delegate)
 }
 
 view << job('gov-site-fail-recover') {
@@ -149,6 +155,7 @@ view << job('gov-site-fail-recover') {
             ./gov_sitefail_recover ${env}
             '''))
     }
+    usingAWS(delegate)
 }
 
 sites.collect { site ->

@@ -2,6 +2,7 @@ package services
 
 import static build.Utils.repo
 import static build.Utils.trim
+import static build.Utils.usingAWS
 
 def build() {
     dsl.job("devnet") {
@@ -28,5 +29,6 @@ def build() {
             '''))
             shell(script.toString())
           }
+          usingAWS(delegate)
         }
       }
