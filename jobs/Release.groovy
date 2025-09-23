@@ -183,6 +183,7 @@ sites.collect { site ->
         publishers {
             buildDescription('', '$env')
         }
+        usingAWS(delegate)
     }
 
     view << job("${site.id}-rollback") {
@@ -215,6 +216,7 @@ sites.collect { site ->
         publishers {
             buildDescription('', '$env')
         }
+        usingAWS(delegate)
     }
 
 }
