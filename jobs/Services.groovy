@@ -1,6 +1,7 @@
 import services.Promotion
 import services.Apply
 import services.Devnet
+import build.devnetAMI
 
 Binding binding = new Binding()
 binding.setVariable("dsl", this)
@@ -9,11 +10,13 @@ binding.setVariable("out", out)
 def promotion = new Promotion()
 def apply = new Apply()
 def devnet = new Devnet()
+def devnetami = new devnetAMI()
 
 def jobs = []
 [promotion, apply, devnet].each { job ->
   job.setBinding(binding)
   jobs << job.build()
+  jobs << devnetAMI.buildStandalone(this)
 }
 
 listView('Services') {
