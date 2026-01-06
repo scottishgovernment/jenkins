@@ -8,7 +8,7 @@ static def buildStandalone(dsl) {
         displayName("Build Devnet AMI")
         steps {
             def script = StringBuilder.newInstance()
-            script << trim("""\
+            script << trim('''\
                 set -e
                 set +x
                 echo "Assuming AmiBuild role..."
@@ -22,7 +22,7 @@ static def buildStandalone(dsl) {
                 repo=packer
                 site=services
                 version=services-\${override:-\$BUILD_ID}
-            """)
+           ''')
             script << trim('''\
                 git clean -fdx
                 git update-ref --no-deref HEAD HEAD
