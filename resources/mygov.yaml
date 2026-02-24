@@ -180,6 +180,14 @@ jobs:
     maven: scot.gov.publishing.payment:payment-deb
     mirror: git@github.com:scottishgovernment/payment.git
 
+  - name: Permissions Tests
+    repo: permissions-tests
+    type: java
+    jdk: openjdk-17
+    site: both
+    debian: permissions-tests
+    maven: scot.gov.publishing.test.permissions:tests-deb
+
   - name: Proxette
     repo: proxette
     type: node
