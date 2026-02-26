@@ -47,6 +47,9 @@ class MyGovProject {
     /* JDK version - name of JDK in Jenkins Global Tool Configuration */
     String jdk = 'openjdk-17'
 
+    /* Primary branch name - default (master) */
+    String branch = 'master'
+
     Job build(DslFactory dslFactory, sites, out) {
         this.dsl = dslFactory
         this.sites = sites
@@ -71,7 +74,7 @@ class MyGovProject {
                         name('origin')
                         url(repo(this.repo))
                     }
-                    branch('refs/heads/master')
+                    branch('refs/heads/' + this.branch)
                 }
             }
             jdk(this.jdk)

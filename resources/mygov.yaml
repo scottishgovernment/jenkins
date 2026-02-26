@@ -187,6 +187,7 @@ jobs:
     site: both
     debian: permissions-tests
     maven: scot.gov.publishing.test.permissions:tests-deb
+    branch: main
 
   - name: Proxette
     repo: proxette
