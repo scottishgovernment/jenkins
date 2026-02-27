@@ -31,7 +31,7 @@ def build(pipeline, site, envs) {
                 """))
         }
         publishers {
-            buildDescription('', '$env', '', '$env')
+            buildDescription('', '$env - $suite', '', '$env - $suite')
             archiveJunit('reports/junit/results-*.xml')
             publishHtml {
                 report("reports/html-reports/") {
