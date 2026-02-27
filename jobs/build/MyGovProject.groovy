@@ -74,7 +74,7 @@ class MyGovProject {
                         name('origin')
                         url(repo(this.repo))
                     }
-                    branch('refs/heads/' + this.branch)
+                    branch("refs/heads/${this.branch}")
                 }
             }
             jdk(this.jdk)
