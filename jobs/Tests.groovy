@@ -83,6 +83,7 @@ jobs << pipelineJob('integration-test-mygov') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'mygov-e2e-mygov', parameters: [
                         string(name: 'env', value: 'int'),
+                        string(name: 'suite', value: 'webE2E')
                     ]
                 }
             }
@@ -150,6 +151,7 @@ jobs << pipelineJob('integration-test-gov') {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     build job: 'gov-e2e-gov', parameters: [
                         string(name: 'env', value: 'igv'),
+                        string(name: 'suite', value: 'webE2E')
                     ]
                 }
             }

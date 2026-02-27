@@ -5,12 +5,12 @@ import static build.Utils.trim
 
 def build(pipeline, site, envs) {
     def e2eSite = site
-    def suite = 'webE2E'
 
     dsl.job("${pipeline}-e2e-${site}") {
         displayName("Site tests for ${site}")
         parameters {
             choiceParam('env', envs, 'Use this option to select test environment against which tests shall be executed')
+            choiceParam('suite', ['webE2E', 'housing', 'feedback', 'mygovSearch', 'govSearch'], 'Use this option to select the test suite to be ran')
         }
         logRotator {
             daysToKeep(60)
@@ -27,7 +27,7 @@ def build(pipeline, site, envs) {
                       npm install &&
                       sha1sum package.json > "\$checksum"
                 fi
-                ./run.sh -m jenkins -s ${e2eSite} -t ${suite} -e "\$env"
+                ./run.sh -m jenkins -s ${e2eSite} -t "\$suite" -e "\$env"
                 """))
         }
         publishers {
