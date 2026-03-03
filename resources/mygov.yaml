@@ -184,6 +184,7 @@ jobs:
     repo: permissions-tests
     type: java
     jdk: openjdk-17
+    host: pubapp01
     site: both
     debian: permissions-tests
     maven: scot.gov.publishing.test.permissions:tests-deb
