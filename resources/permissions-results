@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+PIPELINE=%pipeline%
+hostname="${testEnv}.publishing.${PIPELINE}.scot"
+
+if [ "$PIPELINE" = "gov" ]; then
+  case "$testEnv" in
+    dgv) name=dev;;
+    igv) name=int;;
+  esac
+  hostname="${name}.publishing.${PIPELINE}.scot"
+fi
+
+curl \
+  --silent \
+  --show-error \
+  --fail \
+  --output test-results.xml \
+  "https://${testEnv}.publishing.${PIPELINE}.scot/permissions-tests/get-results"

@@ -69,25 +69,40 @@ jobs << pipelineJob('integration-test-mygov') {
                     string(name: 'host', value: 'pubapp01')
                 ]
             }
-
-            stage('mygov-perceptual') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'mygov-perceptual-tests', parameters: [
-                        string(name: 'testEnv', value: 'int'),
-                        string(name: 'referenceEnv', value: 'live')
-                    ]
-                }
+            
+            stage('Integration tests') {
+                parallel (
+                    'mygov-permissions': {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                            build job: 'mygov-permissions', parameters: [
+                                string(name: 'testEnv', value: 'int'),
+                            ]
+                        }
+                    },
+                    
+                    'mygov-perceptual-and-e2e': {
+                        stage('mygov-perceptual') {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                                build job: 'mygov-perceptual-tests', parameters: [
+                                    string(name: 'testEnv', value: 'int'),
+                                    string(name: 'referenceEnv', value: 'live')
+                                ]
+                            }
+                        }
+            
+                        stage('mygov-end-to-end') {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                                build job: 'mygov-e2e-mygov', parameters: [
+                                    string(name: 'env', value: 'int'),
+                                    string(name: 'suite', value: 'webE2E')
+                                ]
+                            }
+                        }
+                    }
+                )  
             }
 
-            stage('mygov-end-to-end') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'mygov-e2e-mygov', parameters: [
-                        string(name: 'env', value: 'int'),
-                        string(name: 'suite', value: 'webE2E')
-                    ]
-                }
-            }
-
+            
             stage('teardown int') {
                 build job: 'mygov-int', parameters: [
                     string(name: 'action', value: 'teardown')
@@ -137,23 +152,35 @@ jobs << pipelineJob('integration-test-gov') {
                     string(name: 'host', value: 'pubapp01')
                 ]
             }
-
-            stage('gov-perceptual') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'gov-perceptual-tests', parameters: [
-                        string(name: 'testEnv', value: 'igv'),
-                        string(name: 'referenceEnv', value: 'live')
-                    ]
-                }
-            }
             
-            stage('gov-end-to-end') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    build job: 'gov-e2e-gov', parameters: [
-                        string(name: 'env', value: 'igv'),
-                        string(name: 'suite', value: 'webE2E')
-                    ]
-                }
+            stage('Integration Tests') {
+                parallel (
+                    'gov-permissions': {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                            build job: 'gov-permissions', parameters: [
+                                string(name: 'testEnv', value: 'igv')
+                            ]
+                    },
+                    'gov-perceptuals-and-e2e': {
+                        stage('gov-perceptual') {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                                build job: 'gov-perceptual-tests', parameters: [
+                                    string(name: 'testEnv', value: 'igv'),
+                                    string(name: 'referenceEnv', value: 'live')
+                                ]
+                            }
+                        }
+            
+                        stage('gov-end-to-end') {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                                build job: 'gov-e2e-gov', parameters: [
+                                    string(name: 'env', value: 'igv'),
+                                    string(name: 'suite', value: 'webE2E')
+                                ]
+                            }
+                        }
+                    }
+                )
             }
 
             stage('teardown igv') {
