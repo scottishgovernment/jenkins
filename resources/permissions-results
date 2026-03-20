@@ -17,4 +17,4 @@ curl \
   --show-error \
   --fail \
   --output test-results.xml \
-  "https://${testEnv}.publishing.${PIPELINE}.scot/permissions-tests/get-results"
+  "https://${hostname}/permissions-tests/get-results"
