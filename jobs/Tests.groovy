@@ -160,6 +160,7 @@ jobs << pipelineJob('integration-test-gov') {
                             build job: 'gov-permissions', parameters: [
                                 string(name: 'testEnv', value: 'igv')
                             ]
+                        }
                     },
                     'gov-perceptuals-and-e2e': {
                         stage('gov-perceptual') {
