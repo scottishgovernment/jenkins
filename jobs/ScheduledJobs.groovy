@@ -217,6 +217,7 @@ jobs << job('backup-sonar') {
     publishers {
         slack(delegate)
     }
+    usingAWS(delegate)
 }
 
 jobs << job('backup-repo') {
