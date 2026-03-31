@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+PIPELINE=%pipeline%
+FLAG=""
+if [ "${isSearch}" = "true" ]; then
+  FLAG="-f"
+  echo "##description## ${testEnv} vs ${referenceEnv} - search"
+else
+  echo "##description## ${testEnv} vs ${referenceEnv}"
+fi
+
+./run.sh -s ${PIPELINE} -r ${referenceEnv} -t ${testEnv} $FLAG

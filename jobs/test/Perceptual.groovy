@@ -14,6 +14,7 @@ def build(pipeline, envs) {
         parameters {
             choiceParam('testEnv', testEnvs, 'Test environment')
             choiceParam('referenceEnv', referenceEnvs, 'Reference environment')
+            booleanParam('isSearch', false, 'Use true to run search tests only' )
         }
         logRotator {
             daysToKeep(10)
@@ -22,12 +23,12 @@ def build(pipeline, envs) {
             git(repo('perceptual-testing'), 'master')
         }
         steps {
-            shell(trim("""\
-                ./run.sh -s ${pipeline} -r \${referenceEnv} -t \${testEnv}
-            """))
+            def script = dsl.readFileFromWorkspace('resources/perceptuals').
+                    replace('%pipeline%', pipeline)
+            shell(script.toString())
         }
         publishers {
-            buildDescription('', '$testEnv vs $referenceEnv', '', '$testEnv vs $referenceEnv')
+            buildDescription('##description## (.*)', '', '##description## (.*)', '')
             archiveJunit('backstop_data/**/ci_report/*.xml')
             publishHtml {
                 report("backstop_data/www/${pipeline}") {
@@ -47,5 +48,4 @@ def build(pipeline, envs) {
             }
         }
     }
-
 }

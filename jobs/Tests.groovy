@@ -85,7 +85,18 @@ jobs << pipelineJob('integration-test-mygov') {
                             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 build job: 'mygov-perceptual-tests', parameters: [
                                     string(name: 'testEnv', value: 'int'),
-                                    string(name: 'referenceEnv', value: 'live')
+                                    string(name: 'referenceEnv', value: 'live'),
+                                    booleanParam(name: 'isSearch', value: false)
+                                ]
+                            }
+                        }                        
+                        
+                        stage('mygov-search-perceptual') {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                                build job: 'mygov-perceptual-tests', parameters: [
+                                    string(name: 'testEnv', value: 'int'),
+                                    string(name: 'referenceEnv', value: 'live'),
+                                    booleanParam(name: 'isSearch', value: true)
                                 ]
                             }
                         }
@@ -167,7 +178,18 @@ jobs << pipelineJob('integration-test-gov') {
                             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 build job: 'gov-perceptual-tests', parameters: [
                                     string(name: 'testEnv', value: 'igv'),
-                                    string(name: 'referenceEnv', value: 'live')
+                                    string(name: 'referenceEnv', value: 'live'),
+                                    booleanParam(name: 'isSearch', value: false)
+                                ]
+                            }
+                        }                        
+                        
+                        stage('gov-search-perceptual') {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                                build job: 'gov-perceptual-tests', parameters: [
+                                    string(name: 'testEnv', value: 'igv'),
+                                    string(name: 'referenceEnv', value: 'live'),
+                                    booleanParam(name: 'isSearch', value: true)
                                 ]
                             }
                         }
